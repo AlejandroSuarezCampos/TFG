@@ -1,8 +1,9 @@
 <?php
 include_once("cabezera.php");
 
-
 $listaProductosVendidos=$db->listarProductosVendidos();
+
+
 
 ?>
 <div class="container-fluid">
@@ -13,7 +14,7 @@ $listaProductosVendidos=$db->listarProductosVendidos();
       <section class="mb-5">
         <h1 class="fw-bold">Alquila videojuegos digitales</h1>
         <p class="lead">Accede a tus juegos favoritos sin pagar el precio completo.</p>
-        <a href="juegos.php" class="btn btn-steam btn-lg">Explorar catálogo</a>
+        <a href="buscador.php" class="btn btn-steam btn-lg">Explorar catálogo</a>
       </section>
       <!-- DESTACADOS -->
       <section id="catalogo">
@@ -28,7 +29,6 @@ $listaProductosVendidos=$db->listarProductosVendidos();
                 <img src="<?=$producto["imagen"]?>" class="card-img-top">
                 <div class="card-body">
                   <h5 class="card-title"><?= $producto["titulo"]?></h5>
-                  <p><?=$producto["tiempo"]?></p>
                   <div class="d-flex justify-content-between">
                     <span class="price"><?=$producto["precio_alquiler"]?></span>
                     <button href="carrito.php" class="btn btn-steam btn-sm">Añadir al carrito</button>

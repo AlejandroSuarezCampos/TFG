@@ -1,7 +1,7 @@
 <?php
   include_once("consultas.php");
 
-  $db = new Tienda("localhost",3306,"TFG","root","");
+  $db = new Tienda("localhost",3306,"tfg_videoclub","root","");
 
 ?>
 
@@ -77,7 +77,7 @@
           </a>
           <ul class="dropdown-menu dropdown-menu-dark">
             <li><a class="dropdown-item" href="index.php">General</a></li>
-            <li><a class="dropdown-item" href="juego.php">Juegos</a></li>
+            <li><a class="dropdown-item" href="juegos.php">Juegos</a></li>
             <li><a class="dropdown-item" href="soporte.php">Soporte</a></li>
           </ul>
         </li>

@@ -1,8 +1,4 @@
-<?php 
-            include_once("cabezera.php");
-            include_once("consultas.php");
-      
-?>
+
 <div class="container-fluid">
   <div class="row">
 
@@ -40,10 +36,10 @@
             <div class="card game-card h-100">
               <img src="./img/Juego_1.jpg" class="card-img-top">
               <div class="card-body">
-                <h5 class="card-title">Juego Ejemplo</h5>
+                <h5 class="card-title"><?=$juego["titulo"]?></h5>
                 <p>Alquiler 48h</p>
                 <div class="d-flex justify-content-between">
-                  <span class="price">3,99 €</span>
+                  <span class="price"><?=$juego["precio_alquiler"]?>€</span>
                   <button class="btn btn-steam btn-sm">Alquilar</button>
                 </div>
               </div>
