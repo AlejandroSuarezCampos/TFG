@@ -12,44 +12,7 @@
   <title>Maqueta TFG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-  <style>
-    body {
-      background-color: #1b2838;
-      color: #c7d5e0;
-    }
-    .navbar, footer {
-      background-color: #171a21;
-    }
-    .sidebar {
-      background-color: #171a21;
-      min-height: 100vh;
-    }
-    .game-card {
-      background-color: #2a475e;
-      transition: transform .2s;
-    }
-    .game-card:hover {
-      transform: scale(1.03);
-    }
-    .price {
-      color: #66c0f4;
-      font-weight: bold;
-    }
-    .btn-steam {
-      background-color: #66c0f4;
-      color: #000;
-      border: none;
-    }
-    .btn-steam:hover {
-      background-color: #417a9b;
-      color: #fff;
-    }
-
-    .card-body{
-      color: white;
-    }
-  </style>
+  <link href="css.css" rel="stylesheet">
 </head>
 
 <body>

@@ -1,9 +1,24 @@
 <?php 
-            include_once("cabezera.php");
-            
-            $categorias=$db->listarCategorias();
+  include_once("cabezera.php");
+  
+  $categorias=$db->listarCategorias();
 
-            $juegos=$db->listarProductos();
+  if(isset($_GET["id"])){
+    
+    $id=$_GET["id"];
+    $juegosTodos=$db->listarProductos();
+    $juegos=[];
+    foreach($juegosTodos as $juego){
+      if($juego["id_categoria"]==$id){
+        $juegos[]=$juego;
+      }
+    }
+
+  }else{
+    $juegos=$db->listarProductos();
+  }
+            
+            
 ?>
 <div class="container-fluid">
   <div class="row">
@@ -13,7 +28,7 @@
         <?php
           foreach($categorias as $categoria){
         ?>
-        <li class="nav-item"><a class="nav-link text-light" href="#"><?=$categoria["nombre"]?></a></li>
+        <li class="nav-item"><a class="nav-link text-light" href="buscador.php?id=<?=$categoria["id_categoria"]?>"><?=$categoria["nombre"]?></a></li>
         <?php
           }
         ?>
