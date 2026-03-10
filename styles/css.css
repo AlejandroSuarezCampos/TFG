@@ -1,35 +1,78 @@
 body {
-    background-color: #1b2838;
-    color: #c7d5e0;
-}
-.navbar, footer {
-    background-color: #171a21;
-}
-.sidebar {
-    background-color: #171a21;
-    min-height: 100vh;
-}
-.game-card {
-    background-color: #2a475e;
-    transition: transform .2s;
-}
-.game-card:hover {
-    transform: scale(1.03);
-}
-.price {
-    color: #66c0f4;
-    font-weight: bold;
-}
-.btn-steam {
-    background-color: #66c0f4;
-    color: #000;
-    border: none;
-}
-.btn-steam:hover {
-    background-color: #417a9b;
-    color: #fff;
+  background-color: #1b2838;
+  color: #c7d5e0;
 }
 
-.card-body{
-    color: white;
+.navbar, footer {
+  background-color: #171a21;
+}
+
+.sidebar {
+  background-color: #171a21;
+  min-height: 100vh;
+}
+
+.game-card {
+  background-color: #2a475e;
+  transition: transform .2s;
+}
+
+.game-card:hover {
+  transform: scale(1.03);
+}
+
+.price {
+  color: #66c0f4;
+  font-weight: bold;
+}
+
+.btn-steam {
+  background-color: #66c0f4;
+  color: #000;
+  border: none;
+}
+
+.btn-steam:hover {
+  background-color: #417a9b;
+  color: #fff;
+}
+
+.card-body {
+  color: white;
+}
+
+.modern-select {
+  background-color: #2a475e;
+  color: #fff;
+  border: 1px solid #66c0f4;
+  border-radius: 6px;
+  padding: 8px 12px;
+  width: 100%;
+  cursor: pointer;
+  font-size: 14px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2366c0f4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.modern-select:hover {
+  background-color: #345b75;
+  border-color: #fff;
+}
+
+.modern-select:focus {
+  outline: none;
+  border-color: #fff;
+  box-shadow: 0 0 0 2px rgba(102, 192, 244, 0.2);
+}
+
+.modern-select option {
+  background-color: #171a21;
+  color: #fff;
+  padding: 8px;
 }

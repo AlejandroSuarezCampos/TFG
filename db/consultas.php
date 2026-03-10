@@ -56,5 +56,19 @@ class Tienda{
 		return $registros;
 
 	}
+
+	public function buscarJuego($texto){
+	
+		$texto="%".$texto."%";
+	
+		$sql="SELECT * FROM juegos WHERE titulo LIKE :texto";
+		$sentencia = $this->pdo->prepare($sql);
+		$sentencia->execute(array(
+			":texto" => $texto
+		));
+		
+		return $sentencia;
+	
+	}
 }
 ?>
