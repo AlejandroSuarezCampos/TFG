@@ -3,22 +3,8 @@
   
   $categorias=$db->listarCategorias();
 
-  if(isset($_GET["id"])){
-    
-    $id=$_GET["id"];
-    $juegosTodos=$db->listarProductos();
-    $juegos=[];
-    foreach($juegosTodos as $juego){
-      if($juego["id_categoria"]==$id){
-        $juegos[]=$juego;
-      }
-    }
-
-  }else{
-    $juegos=$db->listarProductos();
-  }
-            
-            
+  $juegos=$db->listarProductos();
+  var_dump($juegos);
 ?>
 <div class="container-fluid">
   <div class="row">
@@ -28,7 +14,7 @@
         <?php
           foreach($categorias as $categoria){
         ?>
-        <li class="nav-item"><a class="nav-link text-light" href="buscador.php?id=<?=$categoria["id_categoria"]?>"><?=$categoria["nombre"]?></a></li>
+        <li class="nav-item"><a class="nav-link text-light" onclick="filtrarCat(<?=$categoria['id_categoria']?>)"><?=$categoria["nombre"]?></a></li>
         <?php
           }
         ?>
@@ -50,7 +36,7 @@
       </form>
 
       <!-- GRID DE RESULTADOS -->
-        <div class="row g-4">
+        <div class="row g-4"  id="visorJuegos">
           <?php
             foreach($juegos as $juego){
           ?>

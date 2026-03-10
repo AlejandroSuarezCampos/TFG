@@ -1,8 +1,5 @@
-<?php
-  include_once("consultas.php");
-
-  $db = new Tienda("localhost",3306,"tfg_videoclub","root","");
-
+<?php 
+  include_once("./db/conexion.php");
 ?>
 
 <!DOCTYPE html>
@@ -12,7 +9,8 @@
   <title>Maqueta TFG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="css.css" rel="stylesheet">
+  <link href="./styles/css.css" rel="stylesheet">
+  <script src="./js/async.js"></script>
 </head>
 
 <body>

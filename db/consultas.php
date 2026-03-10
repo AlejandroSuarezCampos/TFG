@@ -39,12 +39,19 @@ class Tienda{
 
 
 	public function listarProductos(){
-		$sentencia = "SELECT juegos.*, juego_categoria.id_categoria
-                  FROM juegos
-                  LEFT JOIN juego_categoria
-                  ON juegos.id_juego = juego_categoria.id_juego";
+		$sentencia="SELECT * FROM juegos";
 		$ejecucion= $this->pdo->prepare($sentencia);
 		$ejecucion->execute();
+		$registros=$ejecucion->fetchAll(PDO::FETCH_ASSOC);
+		return $registros;
+	}
+
+	public function listarProductosFiltradosCategoria($id){
+		$sentencia="SELECT juegos.* FROM juegos LEFT JOIN juego_categoria ON juegos.id_juego = juego_categoria.id_juego WHERE juego_categoria.id_categoria=:id";
+		$ejecucion= $this->pdo->prepare($sentencia);
+		$ejecucion->execute([
+			":id"=> $id
+		]);
 		$registros=$ejecucion->fetchAll(PDO::FETCH_ASSOC);
 		return $registros;
 
