@@ -7,8 +7,7 @@
 
     foreach($sentencia as $senten){
         echo"<div class='col-md-3 col-lg-2'>";
-        echo    "<a href='producto.php?id='.".$senten['id_juego'].".' class='text-decoration-none'>";
-        echo    "<div class='card game-card h-100'>";
+        echo "<a href='producto.php?id=" . $senten['id_juego'] . "' class='text-decoration-none'>";        echo    "<div class='card game-card h-100'>";
         echo        "<img src='".$senten['imagen']."' class='card-img-top'>";
         echo          "<div class='card-body'>";
         echo             "<h5 class='card-title'>".$senten['titulo']."</h5>";
