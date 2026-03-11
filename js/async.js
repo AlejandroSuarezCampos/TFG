@@ -1,3 +1,11 @@
+document.addEventListener("DOMContentLoaded", function(){
+    document.getElementById("buscador").addEventListener("keydown", function(e){
+        if (e.key === "Enter") {
+            buscarJuego();
+        }
+    });
+});
+
 function filtrarCat(id){
     let xmlhttp = new XMLHttpRequest();
 
@@ -29,10 +37,210 @@ function buscarJuego(){
 		  capa.innerText="Error al Buscar";
 		}
 }
-document.addEventListener("DOMContentLoaded", function(){
-    document.getElementById("buscador").addEventListener("keydown", function(e){
-        if (e.key === "Enter") {
-            buscarJuego();
+
+function registrar(){
+    limpiarErrores();
+
+    let xmlhttp = new XMLHttpRequest();
+
+    let nombre = document.getElementById("username").value.trim();
+    let correo = document.getElementById("email").value.trim();
+    let contrasena = document.getElementById("password").value;
+    let contrasena2 = document.getElementById("confirm_password").value;
+
+    if (nombre == "" || correo == "" || contrasena == "" || contrasena2 == "") {
+        mostrarError("Todos los campos son obligatorios");
+        return;
+    }
+
+    if (contrasena != contrasena2) {
+        mostrarError("Las contraseñas no coinciden");
+        return;
+    }
+
+    if (contrasena.length < 8) {
+        mostrarError("La contraseña debe tener al menos 8 caracteres");
+        return;
+    }
+
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            let respuesta = JSON.parse(this.responseText);
+            if (respuesta.exito) {
+                document.getElementById("errorCampos").innerText = respuesta.mensaje;
+                document.getElementById("errorCampos").innerText = "¡Registro completado! Redirigiendo...";
+                document.getElementById("errorCampos").style.color = "#66c0f4";
+
+                document.getElementById("username").value = "";
+                document.getElementById("email").value = "";
+                document.getElementById("password").value = "";
+                document.getElementById("confirm_password").value = "";
+
+                setTimeout(function() {
+                    window.location.href = "login.php";
+                }, 2000);
+                
+            } else {
+                switch (respuesta.error) {
+                    case "campos_vacios":
+                        document.getElementById("errorCampos").classList.remove("oculto");
+                        document.getElementById("errorCampos").innerText = respuesta.mensaje;
+                        break;
+                    case "contrasenas_no_coinciden":
+                        document.getElementById("errorContrasena2").classList.remove("oculto");
+                        document.getElementById("errorContrasena2").innerText = respuesta.mensaje;
+                        break;
+                    case "contrasena_corta":
+                        document.getElementById("errorContrasena").classList.remove("oculto");
+                        document.getElementById("errorContrasena").innerText = respuesta.mensaje;
+                        break;
+                    case "correo_invalido":
+                        document.getElementById("errorEmail").classList.remove("oculto");
+                        document.getElementById("errorEmail").innerText = respuesta.mensaje;
+                        break;
+                    case "email_existe":
+                        document.getElementById("errorEmail").classList.remove("oculto");
+                        document.getElementById("errorEmail").innerText = respuesta.mensaje;
+                        break;
+                    default:
+                        document.getElementById("errorCampos").innerText = respuesta.mensaje || "Error en el registro";
+                }
+            }
         }
-    });
-})
+    };
+
+    let url="./async/registro.php?nombre="+encodeURIComponent(nombre)+"&correo=" + encodeURIComponent(correo)+"&contrasena=" + encodeURIComponent(contrasena)+"&contrasena2=" + encodeURIComponent(contrasena2);
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+}
+
+function mostrarError(cadena) {
+    switch (cadena) {
+        case "Todos los campos son obligatorios":
+            document.getElementById("errorCampos").classList.remove("oculto");
+            document.getElementById("errorCampos").innerText = "Todos los campos son obligatorios";
+            break;
+        case "Las contraseñas no coinciden":
+            document.getElementById("errorContrasena2").classList.remove("oculto");
+            document.getElementById("errorContrasena2").innerText = "Las contraseñas no coinciden";
+            break;
+        case "La contraseña debe tener al menos 8 caracteres":
+            document.getElementById("errorContrasena").classList.remove("oculto");
+            document.getElementById("errorContrasena").innerText = "La contraseña debe tener al menos 8 caracteres";
+            break;
+    }
+}
+
+function limpiarErrores() {
+    document.getElementById("errorCampos").innerText = "";
+    document.getElementById("errorCampos").classList.add("oculto");
+    document.getElementById("errorEmail").innerText = "";
+    document.getElementById("errorEmail").classList.add("oculto");
+    document.getElementById("errorContrasena").innerText = "";
+    document.getElementById("errorContrasena").classList.add("oculto");
+    document.getElementById("errorContrasena2").innerText = "";
+    document.getElementById("errorContrasena2").classList.add("oculto");
+
+    document.getElementById("errorCampos").style.color = "#ff4444";
+}
+
+function iniciarSesion() {
+    limpiarErroresLogin();
+
+    let xmlhttp=new XMLHttpRequest();
+
+    let correo=document.getElementById("email").value.trim();
+    let contrasena=document.getElementById("password").value.trim();
+
+    if(correo=="" || contrasena==""){
+        mostrarErrorLogin("campos_vacios", "Todos los campos son obligatorios");
+        return;
+    }
+
+    xmlhttp.onreadystatechange=function(){
+        if (this.readyState==4 && this.status==200) {
+
+            let respuesta=JSON.parse(this.responseText);
+            
+            console.log("Respuesta del servidor:", respuesta);
+            
+            if(respuesta.exito){
+                document.getElementById("errorCampos").classList.remove("oculto");
+                document.getElementById("errorCampos").innerText="¡Login correcto! Redirigiendo...";
+                document.getElementById("errorCampos").style.color="#66c0f4";
+                document.getElementById("errorCampos").style.borderColor="#66c0f4";
+
+                document.getElementById("email").value="";
+                document.getElementById("password").value="";
+
+                setTimeout(function(){
+                    window.location.href="index.php";
+                }, 2000);
+                
+            } else {
+                ocultarTodosLosErroresLogin();
+
+                switch(respuesta.error){
+                    case "campos_vacios":
+                        document.getElementById("errorCampos").classList.remove("oculto");
+                        document.getElementById("errorCampos").innerText = respuesta.mensaje;
+                        break;
+                    case "correo_invalido":
+                        document.getElementById("errorEmail").classList.remove("oculto");
+                        document.getElementById("errorEmail").innerText=respuesta.mensaje;
+                        break;
+                    case "credenciales_incorrectas":
+                        document.getElementById("errorCampos").classList.remove("oculto");
+                        document.getElementById("errorCampos").innerText=respuesta.mensaje;
+                        break;
+                    case "usuario_no_encontrado":
+                        document.getElementById("errorEmail").classList.remove("oculto");
+                        document.getElementById("errorEmail").innerText=respuesta.mensaje;
+                        break;
+                    default:
+                        document.getElementById("errorCampos").classList.remove("oculto");
+                        document.getElementById("errorCampos").innerText=respuesta.mensaje || "Error en el login";
+                }
+            }
+        }
+    };
+
+    let url="./async/login.php?correo=" + encodeURIComponent(correo)+"&contrasena="+encodeURIComponent(contrasena);
+    
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+}
+
+function mostrarErrorLogin(tipo, mensaje){
+    ocultarTodosLosErroresLogin();
+    
+    switch(tipo){
+        case "campos_vacios":
+            document.getElementById("errorCampos").classList.remove("oculto");
+            document.getElementById("errorCampos").innerText = mensaje;
+            break;
+    }
+}
+
+function limpiarErroresLogin(){
+    ocultarTodosLosErroresLogin();
+    document.getElementById("errorCampos").style.color = "#ff4444";
+    document.getElementById("errorCampos").style.borderColor = "#ff4444";
+}
+
+function ocultarTodosLosErroresLogin(){
+    document.getElementById("errorCampos").classList.add("oculto");
+    document.getElementById("errorEmail").classList.add("oculto");
+    document.getElementById("errorContrasena").classList.add("oculto");
+}
+
+function logOut(){
+    let xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.onreadystatechange = function() {
+        document.location.reload();
+    };
+
+    xmlhttp.open("GET", "./async/logOut.php", true);
+    xmlhttp.send();
+}

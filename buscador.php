@@ -37,10 +37,6 @@
         </div>
       </div>
 
-      <!-- Mensaje Error -->
-
-      <div id="mensajeError"></div>
-
       <!-- GRID DE RESULTADOS -->
         <div class="row g-4"  id="visorJuegos">
           <?php

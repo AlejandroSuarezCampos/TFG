@@ -1,12 +1,14 @@
 <?php 
   include_once("./db/conexion.php");
+
+  session_start();
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Maqueta TFG</title>
+  <title>Steam Killer</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="./styles/css.css" rel="stylesheet">
@@ -46,10 +48,22 @@
         <li class="nav-item">
           <a class="nav-link" href="perfil.php">Perfil</a>
         </li>
-
+        
+        <?php
+        if(isset($_SESSION["usuario_id"])){
+        ?>
+          <li class="nav-item ms-lg-3">
+            <a class="btn btn-steam btn-sm" onclick="logOut()">Cerrar sesión</a>
+          </li>
+        <?php
+        }else{
+        ?>
         <li class="nav-item ms-lg-3">
           <a class="btn btn-steam btn-sm" href="login.php">Iniciar sesión</a>
         </li>
+        <?php
+        }
+        ?>
 
       </ul>
     </div>
