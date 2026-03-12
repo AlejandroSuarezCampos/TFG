@@ -96,7 +96,7 @@ class Tienda{
 	}
 
 	public function obtenerUsuarioPorEmail($correo) {
-    $sentencia="SELECT id_usuario, nombre, email, password FROM usuarios WHERE email = :email";
+    $sentencia="SELECT id_usuario, nombre, email,id_rol, password FROM usuarios WHERE email = :email";
     $ejecucion=$this->pdo->prepare($sentencia);
     $ejecucion->execute(
         array(
@@ -104,6 +104,24 @@ class Tienda{
         )
     );
     return $ejecucion->fetch(PDO::FETCH_ASSOC);
+}
+public function comprobarCatExiste($nombre){
+    $sentencia = "SELECT COUNT(*) as total FROM categorias WHERE nombre = :nombre";
+    $ejecucion = $this->pdo->prepare($sentencia);
+    $ejecucion->execute([
+        ":nombre"=>$nombre
+    ]);
+    $resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
+    
+    return $resultado['total'] > 0;
+}
+
+public function crearCat($nombre){
+    $sentencia="INSERT INTO categorias(nombre) VALUES (:nombre)";
+    $ejecucion = $this->pdo->prepare($sentencia);
+    $ejecucion->execute([
+        ":nombre"=>$nombre
+    ]);
 }
 }
 ?>
