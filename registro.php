@@ -21,7 +21,7 @@ include_once("cabezera.php");
             <!-- Nombre de usuario -->
             <div class="mb-3">
               <label for="username" class="form-label text">Nombre de usuario</label>
-              <input type="text" class="form-control modern-input" id="username" placeholder="Ej: Cana Gay">
+              <input type="text" class="form-control modern-input" id="username" placeholder="Ej: Usu1">
             </div>
 
             <div class="alert error-message mt-4 oculto" id="errorUsuario"></div>

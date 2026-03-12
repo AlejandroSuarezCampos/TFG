@@ -238,7 +238,9 @@ function logOut(){
     let xmlhttp = new XMLHttpRequest();
 
     xmlhttp.onreadystatechange = function() {
-        document.location.reload();
+        if (this.readyState==4 && this.status==200) {
+            document.location.reload();
+        }
     };
 
     xmlhttp.open("GET", "./async/logOut.php", true);
