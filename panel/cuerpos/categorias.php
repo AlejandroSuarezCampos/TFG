@@ -10,7 +10,7 @@
 ?>
 
 <h2>Gestión de Categorías</h2>
-<a href="crear_categoria.php"><button class="btn btn-primary mb-3">Nueva categoría</button></a>
+<a href="../crear/crear_categoria.php"><button class="btn btn-primary mb-3">Nueva categoría</button></a>
 <table class="table">
   
 <tr><th>ID</th><th>Nombre</th><th>Acciones</th></tr>

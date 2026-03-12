@@ -46,7 +46,7 @@
             <li><a class="dropdown-item" href="juegos.php">Juegos</a></li>
             <li><a class="dropdown-item" href="soporte.php">Soporte</a></li>
           </ul>
-            <li><a class="nav-link" href="panel/Panelindex.php">Panel De administrador</a></li>
+            <li><a class="nav-link" href="panel/cuerpos/Panelindex.php">Panel De administrador</a></li>
         </li>
 
         <li class="nav-item">

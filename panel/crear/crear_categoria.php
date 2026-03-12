@@ -1,6 +1,6 @@
 <?php
 
-include_once("PanelIndex.php");
+include_once("../cuerpos/PanelIndex.php");
 
 ?>
 <div class="container mt-5">
