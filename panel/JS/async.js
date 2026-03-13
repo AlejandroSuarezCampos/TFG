@@ -144,3 +144,142 @@ function ocultarTodosLosErroresCat(){
     document.getElementById("errorCampos").classList.add("oculto");
     document.getElementById("errorNombre").classList.add("oculto");
 }
+
+
+function crearUsu(){
+    limpiarErrores();
+
+    let xmlhttp = new XMLHttpRequest();
+
+    let nombre = document.getElementById("username").value.trim();
+    let correo = document.getElementById("email").value.trim();
+    let contrasena = document.getElementById("password").value;
+    if (nombre == "" || correo == "" || contrasena == "") {
+        mostrarError("Todos los campos son obligatorios");
+        return;
+    }
+
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            let respuesta = JSON.parse(this.responseText);
+            if (respuesta.exito) {
+                document.getElementById("errorCampos").innerText = respuesta.mensaje;
+                document.getElementById("errorCampos").innerText = "¡Creacion completada con exito!";
+                document.getElementById("errorCampos").style.color = "#66c0f4";
+
+                document.getElementById("username").value = "";
+                document.getElementById("email").value = "";
+                document.getElementById("password").value = "";
+                
+            } else {
+                switch (respuesta.error) {
+                    case "Usaurio_existe":
+                        document.getElementById("errorUsuario").classList.remove("oculto");
+                        document.getElementById("errorUsuario").innerText = respuesta.mensaje;
+                        break;
+                    case "campos_vacios":
+                        document.getElementById("errorCampos").classList.remove("oculto");
+                        document.getElementById("errorCampos").innerText = respuesta.mensaje;
+                        break;
+                    case "correo_invalido":
+                        document.getElementById("errorEmail").classList.remove("oculto");
+                        document.getElementById("errorEmail").innerText = respuesta.mensaje;
+                        break;
+                    default:
+                        document.getElementById("errorCampos").innerText = respuesta.mensaje || "Error en la creacion de usuario";
+                }
+            }
+        }
+    };
+
+    let url="../async/crearUsuarios.php?nombre="+encodeURIComponent(nombre)+"&correo=" + encodeURIComponent(correo)+"&contrasena=" + encodeURIComponent(contrasena);
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+}
+
+function limpiarErrores() {
+    document.getElementById("errorCampos").innerText = "";
+    document.getElementById("errorCampos").classList.add("oculto");
+    document.getElementById("errorEmail").innerText = "";
+    document.getElementById("errorEmail").classList.add("oculto");
+    document.getElementById("errorContrasena").innerText = "";
+    document.getElementById("errorContrasena").classList.add("oculto");
+
+    document.getElementById("errorCampos").style.color = "#ff4444";
+}
+
+function ModificarCat(modificar) {
+    limpiarErroresCat();
+
+    let xmlhttp=new XMLHttpRequest();
+
+    let nombre=document.getElementById("nombre").value.trim();
+    if(nombre=="" || modificar==""){
+        mostrarErrorCat("campos_vacios", "Todos los campos son obligatorios");
+        return;
+    }
+        
+        xmlhttp.onreadystatechange=function(){
+            if (this.readyState==4 && this.status==200) {
+                console.log(this.responseText)
+                let respuesta=JSON.parse(this.responseText);
+                
+                
+                if(respuesta.exito){
+                    document.getElementById("errorCampos").classList.remove("oculto");
+                    document.getElementById("errorCampos").innerText="¡Editado correctamente!";
+                    document.getElementById("errorCampos").style.color="#66c0f4";
+                    document.getElementById("errorCampos").style.borderColor="#66c0f4";
+
+
+                    document.getElementById("nombre").value="";
+                
+                    
+                }else{
+                    ocultarTodosLosErroresCat();
+
+                    switch(respuesta.error){
+                        case "campos_vacios":
+                            document.getElementById("errorCampos").classList.remove("oculto");
+                            document.getElementById("errorCampos").innerText = respuesta.mensaje;
+                            break;
+                        case "categoria_existe":
+                            document.getElementById("errorNombre").classList.remove("oculto");
+                            document.getElementById("errorNombre").innerText = respuesta.mensaje;
+                            break;
+                        default:
+                             document.getElementById("errorCampos").classList.remove("oculto");
+                             document.getElementById("errorCampos").innerText=respuesta.mensaje || "Error Al crear Cateogira";
+
+                }
+            }
+        }
+        };
+        let url="../async/EditarCategoria.php?nombre=" + encodeURIComponent(nombre)+"&modificar="+encodeURIComponent(modificar);
+        
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+    }
+
+    function eliminarCategoria(id){
+    if(!confirm("¿Seguro que deseas eliminar esta categoría?")) return;
+
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if(this.readyState == 4 && this.status == 200){
+            let respuesta = JSON.parse(this.responseText);
+            if(respuesta.exito){
+                // Eliminar la fila de la tabla
+                let fila = document.getElementById("fila-" + id);
+                fila.parentNode.removeChild(fila);
+                alert(respuesta.mensaje);
+            } else {
+                alert(respuesta.mensaje);
+            }
+        }
+    };
+    let url="../async/eliminar_categoria.php?id=" + encodeURIComponent(id);
+
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+}

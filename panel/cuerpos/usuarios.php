@@ -1,8 +1,11 @@
 <?php
-  include_once("cabecera.php");
+  include_once("PanelIndex.php");
 
-  $listarUsuario=$db->listarUsuario();
+  $listarUsuario=$db->listarUsuarios();
 ?>
+
+<a href="../crear/crear_Usuarios.php"><button class="btn btn-primary mb-3">Nuevo Usaurio</button></a>
+<table class="table">
 
 <h2>Gestión de Usuarios</h2>
 <table class="table">
@@ -11,8 +14,8 @@
     foreach($listarUsuario as $usuario){
   ?>
 <tr>
-<td><?=$usuario["id_users"]?></td><td><?=$usuario["nombre"]?></td><td><?=$usuario["mail"]?></td><td><?=$db->rolUsu($usuario["id_users"])?></td>
-<td><a href="editar_usuario.php?modificar=<?= $usuario["id_users"]?>"><button class="btn btn-sm btn-warning">Editar</button></a></td>
+<td><?=$usuario["id_usuario"]?></td><td><?=$usuario["nombre"]?></td><td><?=$usuario["email"]?></td><td><?=$usuario["id_rol"]?></td>
+<td><a href="../editar/editar_usuario.php?modificar=<?= $usuario["id_usuario"]?>"><button class="btn btn-sm btn-warning">Editar</button></a></td>
 </tr>
 <?php
     }

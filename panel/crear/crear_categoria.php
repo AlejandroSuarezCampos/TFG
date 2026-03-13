@@ -1,7 +1,5 @@
 <?php
-
 include_once("../cuerpos/PanelIndex.php");
-
 ?>
 <div class="container mt-5">
   <div class="row justify-content-center">
@@ -18,7 +16,7 @@ include_once("../cuerpos/PanelIndex.php");
 
           <!-- Formulario de Categoria -->
           <form>
-            <!-- Email -->
+            <!-- nombre -->
             <div class="mb-3">
               <label for="nombre" class="form-label text">Nombre de la categoria nueva</label>
               <input type="text" class="form-control modern-input" id="nombre" placeholder="Nombre">

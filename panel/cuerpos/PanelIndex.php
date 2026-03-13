@@ -11,17 +11,17 @@ require_once("puerta.php");
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 <link rel="stylesheet" href="../admin-style.css">
-<script src="../js/async.js"></script>
+<script src="../JS/async.js"></script>
 </head>
 <body>
 <div class="d-flex">
 <nav id="sidebar">
   <div class="sidebar-brand"><i class="bi bi-shop"></i> Admin</div>
   <ul class="nav flex-column">
-    <li class="nav-item"><a class="nav-link" href="./productos.php">Productos</a></li>
-    <li class="nav-item"><a class="nav-link" href="./categorias.php">Categorías</a></li>
-    <li class="nav-item"><a class="nav-link" href="./usuarios.php">Usuarios</a></li>
-    <li class="nav-item"><a class="nav-link" href="./carritos.php">Carritos</a></li>
+    <li class="nav-item"><a class="nav-link" href="../cuerpos/productos.php">Productos</a></li>
+    <li class="nav-item"><a class="nav-link" href="../cuerpos/categorias.php">Categorías</a></li>
+    <li class="nav-item"><a class="nav-link" href="../cuerpos/usuarios.php">Usuarios</a></li>
+    <li class="nav-item"><a class="nav-link" href="../cuerpos/carritos.php">Carritos</a></li>
   </ul>
 </nav>
 <main class="content">

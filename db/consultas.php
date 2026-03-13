@@ -123,5 +123,47 @@ public function crearCat($nombre){
         ":nombre"=>$nombre
     ]);
 }
+
+public function listarUsuarios(){
+		$sentencia="SELECT * FROM usuarios";
+		$ejecucion= $this->pdo->prepare($sentencia);
+		$ejecucion->execute();
+		$registros=$ejecucion->fetchAll(PDO::FETCH_ASSOC);
+		return $registros;
+
+	}
+
+public function modificarCat($modificar,$nombre){
+		$sentencia="UPDATE categorias SET nombre=:nombre WHERE id_categoria=:id_cat";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute(
+			array(
+				":nombre" => $nombre,
+                ":id_cat"=> $modificar
+			)
+		);
+	}
+
+	public function comprobarCatExistePorID($id){
+    $sentencia = "SELECT COUNT(*) as total FROM categorias WHERE id_categoria = :id_Cat";
+    $ejecucion = $this->pdo->prepare($sentencia);
+    $ejecucion->execute([
+        ":id_Cat"=>$id
+    ]);
+    $resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
+    
+    return $resultado['total'] > 0;
+}
+
+public function eliminarCat($id){
+		$sentencia="DELETE FROM categorias where id_categoria=:id";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute(
+			array(
+				":id" => $id
+			)
+		);
+	}
+
 }
 ?>
