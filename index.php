@@ -23,7 +23,7 @@ $listaProductosVendidos=$db->listarProductosVendidos();
           <?php
             foreach($listaProductosVendidos as $producto){
           ?>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <a href="producto.php?id=<?=$producto["id_juego"]?>" class="text-decoration-none">
               <div class="card game-card h-100">
                 <img src="<?=$producto["imagen"]?>" class="card-img-top">

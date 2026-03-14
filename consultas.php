@@ -10,7 +10,7 @@ class Tienda{
 	}
 
     public function listarProductosVendidos(){
-		$sentencia="SELECT * FROM juegos ORDER BY ventas DESC LIMIT 4";
+		$sentencia="SELECT * FROM juegos ORDER BY ventas DESC LIMIT 6";
 		$ejecucion= $this->pdo->prepare($sentencia);
 		$ejecucion->execute();
 		$registros=$ejecucion->fetchAll(PDO::FETCH_ASSOC);

@@ -1,9 +1,9 @@
 <?php 
-            include_once("cabezera.php");
-            include_once("consultas.php");
+  include_once("cabezera.php");
+  include_once("./db/consultas.php");
 
-            if(isset($_GET["id"])){
-    $id=$_GET["id"];
+  if(isset($_GET["id"])){
+  $id=$_GET["id"];
   }else{
     header("location: index.php");
   }

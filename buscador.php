@@ -1,23 +1,26 @@
 <?php 
-            include_once("cabezera.php");
-            
-            $categorias=$db->listarCategorias();
+  include_once("cabezera.php");
+  
+  $categorias=$db->listarCategorias();
 
-            $juegos=$db->listarProductos();
+  $juegos=$db->listarProductos();
 ?>
 <div class="container-fluid">
   <div class="row">
     <aside class="col-md-2 sidebar p-3 d-none d-md-block">
       <h6 class="text-uppercase text-secondary">Categorías</h6>
-      <ul class="nav flex-column mb-4">
+      
+      <select class="form-select modern-select mb-4" onchange="filtrarCat(this.value)">
+        <option value="">Todas las categorías</option>
         <?php
           foreach($categorias as $categoria){
         ?>
-        <li class="nav-item"><a class="nav-link text-light" href="#"><?=$categoria["nombre"]?></a></li>
+        <option value="<?=$categoria['id_categoria']?>"><?=$categoria["nombre"]?></option>
         <?php
           }
         ?>
-      </ul>
+      </select>
+      
       <h6 class="text-uppercase text-secondary">Precio máximo</h6>
       <input type="range" class="form-range" min="1" max="10">
     </aside>
@@ -27,15 +30,15 @@
       <h1 class="mb-4">Resultados de búsqueda</h1>
 
       <!-- BARRA DE BÚSQUEDA -->
-      <form class="mb-4">
+      <div class="mb-4">
         <div class="input-group">
-          <input type="text" class="form-control" placeholder="Buscar juegos...">
-          <button class="btn btn-steam" type="submit">Buscar</button>
+          <input type="text" class="form-control" placeholder="Buscar juegos..." id="buscador">
+          <button class="btn btn-steam" onclick="buscarJuego()">Buscar</button>
         </div>
-      </form>
+      </div>
 
       <!-- GRID DE RESULTADOS -->
-        <div class="row g-4">
+        <div class="row g-4"  id="visorJuegos">
           <?php
             foreach($juegos as $juego){
           ?>
