@@ -230,10 +230,11 @@ function ModificarCat(modificar) {
                     document.getElementById("errorCampos").innerText="¡Editado correctamente!";
                     document.getElementById("errorCampos").style.color="#66c0f4";
                     document.getElementById("errorCampos").style.borderColor="#66c0f4";
-
-
                     document.getElementById("nombre").value="";
                 
+                    setTimeout(function(){
+                    window.location.href="../cuerpos/categorias.php";
+                }, 2000);
                     
                 }else{
                     ocultarTodosLosErroresCat();

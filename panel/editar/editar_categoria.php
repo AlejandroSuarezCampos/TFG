@@ -1,5 +1,15 @@
 <?php
 include_once("../cuerpos/PanelIndex.php");
+
+if(isset($_GET["modificar"])){
+  $modificar=$_GET["modificar"];
+}else{
+  $modificar="";
+}
+
+if($modificar==""){
+  header("Location:../cuerpos/categorias.php");
+}
 ?>
 <div class="container mt-5">
   <div class="row justify-content-center">
@@ -22,14 +32,8 @@ include_once("../cuerpos/PanelIndex.php");
               <input type="text" class="form-control modern-input" id="nombre" placeholder="Nombre">
             </div>
             <div class="alert error-message mt-4 oculto" id="errorNombre"></div>
-
-            <div class="mb-3">
-              <label for="id" class="form-label text">ID de la categoria a editar</label>
-              <input type="text" class="form-control modern-input" id="id" placeholder="id">
-            </div>
-            <div class="alert error-message mt-4 oculto" id="errorID"></div>
             <!-- Botón Crear Cat -->
-            <button type="button" class="btn btn-steam w-100 py-2 mb-3" onclick="ModificarCat()">Crear</button>
+            <button type="button" class="btn btn-steam w-100 py-2 mb-3" onclick="ModificarCat(<?=$modificar?>)">Editar</button>
           </form>
 
           <!-- Mensaje de error -->

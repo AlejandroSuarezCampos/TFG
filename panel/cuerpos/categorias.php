@@ -12,8 +12,6 @@
 <h2>Gestión de Categorías</h2>
 <a href="../crear/crear_categoria.php"><button class="btn btn-primary mb-3">Nueva categoría</button></a>
 <table class="table">
-<a href="../editar/editar_categoria.php"><button class="btn btn-primary mb-3">Editar categoría</button></a>
-<table class="table">
   
 <tr><th>ID</th><th>Nombre</th><th>Acciones</th></tr>
 <?php
@@ -21,7 +19,9 @@
   ?>
     <tr><td><?= $categoria["id_categoria"] ?></td><td><?= $categoria["nombre"] ?></td>
     <td>
-    <button class="btn btn-sm btn-danger" onclick="eliminarCategoria(<?= $categoria['id_categoria'] ?>)">Eliminar</button>
+      <a href="../editar/editar_categoria.php?modificar=<?=$categoria["id_categoria"]?>"><button class="btn btn-sm btn-warning">Editar</button></a>
+      <button class="btn btn-sm btn-danger" onclick="eliminarCategoria(<?= $categoria['id_categoria'] ?>)">Eliminar</button>
+    </td>
   <?php
     }
   ?>
