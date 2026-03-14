@@ -96,7 +96,7 @@ class Tienda{
 	}
 
 	public function obtenerUsuarioPorEmail($correo) {
-    $sentencia="SELECT id_usuario, nombre, email, password FROM usuarios WHERE email = :email";
+    $sentencia="SELECT id_usuario, nombre, email,id_rol, password FROM usuarios WHERE email = :email";
     $ejecucion=$this->pdo->prepare($sentencia);
     $ejecucion->execute(
         array(
@@ -105,5 +105,65 @@ class Tienda{
     );
     return $ejecucion->fetch(PDO::FETCH_ASSOC);
 }
+public function comprobarCatExiste($nombre){
+    $sentencia = "SELECT COUNT(*) as total FROM categorias WHERE nombre = :nombre";
+    $ejecucion = $this->pdo->prepare($sentencia);
+    $ejecucion->execute([
+        ":nombre"=>$nombre
+    ]);
+    $resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
+    
+    return $resultado['total'] > 0;
+}
+
+public function crearCat($nombre){
+    $sentencia="INSERT INTO categorias(nombre) VALUES (:nombre)";
+    $ejecucion = $this->pdo->prepare($sentencia);
+    $ejecucion->execute([
+        ":nombre"=>$nombre
+    ]);
+}
+
+public function listarUsuarios(){
+		$sentencia="SELECT * FROM usuarios";
+		$ejecucion= $this->pdo->prepare($sentencia);
+		$ejecucion->execute();
+		$registros=$ejecucion->fetchAll(PDO::FETCH_ASSOC);
+		return $registros;
+
+	}
+
+public function modificarCat($modificar,$nombre){
+		$sentencia="UPDATE categorias SET nombre=:nombre WHERE id_categoria=:id_cat";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute(
+			array(
+				":nombre" => $nombre,
+                ":id_cat"=> $modificar
+			)
+		);
+	}
+
+	public function comprobarCatExistePorID($id){
+    $sentencia = "SELECT COUNT(*) as total FROM categorias WHERE id_categoria = :id_Cat";
+    $ejecucion = $this->pdo->prepare($sentencia);
+    $ejecucion->execute([
+        ":id_Cat"=>$id
+    ]);
+    $resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
+    
+    return $resultado['total'] > 0;
+}
+
+public function eliminarCat($id){
+		$sentencia="DELETE FROM categorias where id_categoria=:id";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute(
+			array(
+				":id" => $id
+			)
+		);
+	}
+
 }
 ?>

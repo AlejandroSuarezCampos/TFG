@@ -228,6 +228,7 @@ function limpiarErroresLogin(){
     document.getElementById("errorCampos").style.borderColor = "#ff4444";
 }
 
+
 function ocultarTodosLosErroresLogin(){
     document.getElementById("errorCampos").classList.add("oculto");
     document.getElementById("errorEmail").classList.add("oculto");

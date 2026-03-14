@@ -26,6 +26,35 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
+    <?php
+      if (isset($_SESSION["Rol"])&& $_SESSION["Rol"]==1){
+      ?>
+      <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto align-items-lg-center">
+
+        <li class="nav-item">
+          <a class="nav-link" href="buscador.php">Catalogo</a>
+        </li>
+
+        <!-- FOROS -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="foros.php" data-bs-toggle="dropdown">
+            Foros
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark">
+            <li><a class="dropdown-item" href="index.php">General</a></li>
+            <li><a class="dropdown-item" href="juegos.php">Juegos</a></li>
+            <li><a class="dropdown-item" href="soporte.php">Soporte</a></li>
+          </ul>
+            <li><a class="nav-link" href="panel/cuerpos/Panelindex.php">Panel De administrador</a></li>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="perfil.php">Perfil</a>
+        </li>
+      <?php
+      }else{
+    ?>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto align-items-lg-center">
 
@@ -48,7 +77,11 @@
         <li class="nav-item">
           <a class="nav-link" href="perfil.php">Perfil</a>
         </li>
+        <?php
         
+      }
+        
+        ?>
         <?php
         if(isset($_SESSION["usuario_id"])){
         ?>
