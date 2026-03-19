@@ -1,5 +1,5 @@
 <?php
-    require_once("../../db/conexion.php");
+    require_once("../db/conexion.php");
 
     $nombre=trim($_GET["nombre"]);
     $correo=trim($_GET["correo"]);
@@ -22,7 +22,6 @@
         ];
     }else{
         $existe=$db->comprobarEmailExiste($correo);
-            
         if($existe){
             $respuesta=[
                 "exito"=>false,

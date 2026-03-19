@@ -1,42 +1,50 @@
 <?php
-    include_once("cabecera.php");
+include_once("../cuerpos/PanelIndex.php");
 
-    $modificar = $_GET["modificar"];
-
-// Procesar formulario
-if (isset($_POST["modificar"]) && $modificar !== null) {
-
-    $nombre = $_POST["nombre"];
-    $mail = $_POST["mail"];
-    if ($nombre === "" || $mail=="") {
-        $error = "No pueden estar vacío";
-    } else {
-        $db->modificarUsu($modificar, $nombre,$mail);
-        header("Location: usuarios.php");
-    }
-}
+$id=$_GET["modificar"];
 ?>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      
+      <!-- Tarjeta de Registro -->
+      <div class="card game-card border-0 shadow-lg">
+        <div class="card-body p-5">
+          <!-- Formulario de Registro -->
+          <form>
+            <!-- Nombre de usuario -->
+            <div class="mb-3">
+              <label for="username" class="form-label text">Nombre de usuario</label>
+              <input type="text" class="form-control modern-input" id="username" placeholder="Ej: Usu1">
+            </div>
 
-<h2>Editar Uusario</h2>
+            <div class="alert error-message mt-4 oculto" id="errorUsuario"></div>
 
-<?php if (isset($error)): ?>
-    <div class="alert alert-danger"><?= $error ?></div>
-<?php endif; ?>
+            <!-- Email -->
+            <div class="mb-3">
+              <label for="email" class="form-label text">Correo electrónico</label>
+              <input type="email" class="form-control modern-input" id="email" placeholder="tucorreo@ejemplo.com">
+            </div>
 
-<form class="card p-4" method="POST">
-    <div class="mb-3">
-        <label>Nombre del usuario</label>
-        <input class="form-control" name="nombre" required>
+            <div class="alert error-message mt-4 oculto" id="errorEmail"></div>
+
+            <!-- Contraseña -->
+            <div class="mb-3">
+              <label for="password" class="form-label text">Contraseña</label>
+              <input type="password" class="form-control modern-input" id="password" placeholder="******">
+            </div>
+
+            <div class="alert error-message mt-4 oculto" id="errorContrasena"></div>
+
+            <!-- Botón De crear Usuario -->
+            <button type="button" class="btn btn-steam w-100 py-2 mb-3" onclick="ModificarUsu(<?=$id?>)">Editar Usuario</button>
+          </form>
+
+          <div class="alert error-message mt-4 oculto" id="errorCampos"></div>
+
+        </div>
+      </div>
+
     </div>
-
-    <div class="mb-3">
-        <label>Mail del usuario</label>
-        <input class="form-control" name="mail" required>
-    </div>
-
-    <button type="submit" name="modificar" class="btn btn-primary">
-        Guardar cambios
-    </button>
-
-    <a href="categorias.php" class="btn btn-secondary">Cancelar</a>
-</form>
+  </div>
+</div>

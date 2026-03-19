@@ -13,9 +13,11 @@
 <?php
     foreach($listarUsuario as $usuario){
   ?>
-<tr>
+<tr id="fila-<?= $usuario["id_usuario"] ?>">
 <td><?=$usuario["id_usuario"]?></td><td><?=$usuario["nombre"]?></td><td><?=$usuario["email"]?></td><td><?=$usuario["id_rol"]?></td>
-<td><a href="../editar/editar_usuario.php?modificar=<?= $usuario["id_usuario"]?>"><button class="btn btn-sm btn-warning">Editar</button></a></td>
+<td><a href="../editar/editar_usuario.php?modificar=<?= $usuario["id_usuario"]?>"><button class="btn btn-sm btn-warning">Editar</button></a>
+<button class="btn btn-sm btn-danger" onclick="EliminarUsuario(<?= $usuario['id_usuario'] ?>)">Eliminar</button></td>
+</td>
 </tr>
 <?php
     }

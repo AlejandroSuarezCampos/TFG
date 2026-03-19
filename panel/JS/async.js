@@ -164,6 +164,7 @@ function crearUsu(){
             let respuesta = JSON.parse(this.responseText);
             if (respuesta.exito) {
                 document.getElementById("errorCampos").innerText = respuesta.mensaje;
+                document.getElementById("errorCampos").classList.remove("oculto");
                 document.getElementById("errorCampos").innerText = "¡Creacion completada con exito!";
                 document.getElementById("errorCampos").style.color = "#66c0f4";
 
@@ -262,7 +263,7 @@ function ModificarCat(modificar) {
         xmlhttp.send();
     }
 
-    function eliminarCategoria(id){
+function eliminarCategoria(id){
     if(!confirm("¿Seguro que deseas eliminar esta categoría?")) return;
 
     let xmlhttp = new XMLHttpRequest();
@@ -283,4 +284,110 @@ function ModificarCat(modificar) {
 
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
+}
+
+function EliminarUsuario(id){
+    if(!confirm("¿Seguro que deseas eliminar este usuario?")) return;
+
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if(this.readyState == 4 && this.status == 200){
+            let respuesta = JSON.parse(this.responseText);
+            if(respuesta.exito){
+                // Eliminar la fila de la tabla
+                let fila = document.getElementById("fila-" + id);
+                fila.parentNode.removeChild(fila);
+                alert(respuesta.mensaje);
+            } else {
+                alert(respuesta.mensaje);
+            }
+        }
+    };
+    let url="../async/eliminar_Usuario.php?id=" + encodeURIComponent(id);
+
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+}
+
+function ModificarUsu(modificar) {
+    limpiarErroresUsu();
+
+    let xmlhttp=new XMLHttpRequest();
+
+    let Usuario=document.getElementById("username").value.trim();
+    let email=document.getElementById("email").value.trim();
+    let pass=document.getElementById("password").value.trim();
+    if(Usuario=="" ||email==""||pass==""|| modificar==""){
+        mostrarErrorUsu("campos_vacios", "Todos los campos son obligatorios");
+        return;
+    }
+        
+        xmlhttp.onreadystatechange=function(){
+            if (this.readyState==4 && this.status==200) {
+                console.log(this.responseText)
+                let respuesta=JSON.parse(this.responseText);
+                
+                
+                if(respuesta.exito){
+                    document.getElementById("errorCampos").classList.remove("oculto");
+                    document.getElementById("errorCampos").innerText="¡Editado correctamente!";
+                    document.getElementById("errorCampos").style.color="#66c0f4";
+                    document.getElementById("errorCampos").style.borderColor="#66c0f4";
+                    document.getElementById("username").value="";
+                    document.getElementById("email").value="";
+                    document.getElementById("password").value="";
+                
+                    setTimeout(function(){
+                    window.location.href="../cuerpos/categorias.php";
+                }, 2000);
+                    
+                }else{
+                    ocultarTodosLosErroresUsu();
+
+                    switch(respuesta.error){
+                        case "campos_vacios":
+                            document.getElementById("errorCampos").classList.remove("oculto");
+                            document.getElementById("errorCampos").innerText = respuesta.mensaje;
+                            break;
+                        case "categoria_existe":
+                            document.getElementById("errorNombre").classList.remove("oculto");
+                            document.getElementById("errorNombre").innerText = respuesta.mensaje;
+                            break;
+                        default:
+                             document.getElementById("errorCampos").classList.remove("oculto");
+                             document.getElementById("errorCampos").innerText=respuesta.mensaje || "Error Al crear Cateogira";
+
+                }
+            }
+        }
+        };
+        let url="../async/Editar_Usuario.php?modificar="+encodeURIComponent(modificar)+"&nombre=" + encodeURIComponent(Usuario)+"&email="+encodeURIComponent(email)+"&contraseña="+encodeURIComponent(pass);
+        
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+    }
+
+    function mostrarErrorUsu(tipo, mensaje){
+    ocultarTodosLosErroresUsu();
+    switch(tipo){
+        case "campos_vacios":
+            document.getElementById("errorCampos").classList.remove("oculto");
+            document.getElementById("errorCampos").innerText = mensaje;
+            break;
+    }
+}
+
+
+function limpiarErroresUsu(){
+    ocultarTodosLosErroresUsu();
+    document.getElementById("errorCampos").style.color = "#ff4444";
+    document.getElementById("errorCampos").style.borderColor = "#ff4444";
+}
+
+
+function ocultarTodosLosErroresUsu(){
+    document.getElementById("errorCampos").classList.add("oculto");
+    document.getElementById("errorUsuario").classList.add("oculto");
+    document.getElementById("errorEmail").classList.add("oculto");
+    document.getElementById("errorContrasena").classList.add("oculto");
 }
