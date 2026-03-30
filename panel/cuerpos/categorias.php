@@ -17,7 +17,8 @@
 <?php
     foreach($listaCategorias as $categoria){
   ?>
-    <tr><td><?= $categoria["id_categoria"] ?></td><td><?= $categoria["nombre"] ?></td>
+    <tr id="fila-<?= $categoria["id_categoria"] ?>">
+      <td><?= $categoria["id_categoria"] ?></td><td><?= $categoria["nombre"] ?></td>
     <td>
       <a href="../editar/editar_categoria.php?modificar=<?=$categoria["id_categoria"]?>"><button class="btn btn-sm btn-warning">Editar</button></a>
       <button class="btn btn-sm btn-danger" onclick="eliminarCategoria(<?= $categoria['id_categoria'] ?>)">Eliminar</button>

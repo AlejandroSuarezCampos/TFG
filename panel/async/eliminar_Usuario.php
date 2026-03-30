@@ -6,18 +6,18 @@ $respuesta = [];
 // Comprobar que venga el ID
 if(isset($_GET['id']) && $_GET['id'] != ''){
     $id = $_GET['id'];
-    $existe = $db->comprobarCatExistePorID($id);
+    $existe = $db->comprobarUsuExistePorID($id);
 
     if($existe > 0){
-        $db->eliminarCat($id);
+        $db->eliminarUsu($id);  
         $respuesta = [
             "exito" => true,
-            "mensaje" => "Categoría eliminada correctamente"
+            "mensaje" => "Usuario eliminado correctamente"
         ];
     } else {
         $respuesta = [
             "exito" => false,
-            "mensaje" => "La categoría no existe"
+            "mensaje" => "El usuario no existe"
         ];
     }
 } else {
