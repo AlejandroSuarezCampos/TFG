@@ -24,9 +24,10 @@ $listaProductosVendidos=$db->listarProductosVendidos();
             foreach($listaProductosVendidos as $producto){
           ?>
           <div class="col-md-3">
-            <a href="producto.php?id=<?=$producto["id_juego"]?>" class="text-decoration-none">
               <div class="card game-card h-100">
+                <a href="producto.php?id=<?=$producto["id_juego"]?>" class="text-decoration-none">
                 <img src="<?=$producto["imagen"]?>" class="card-img-top">
+                </a>
                 <div class="card-body">
                   <h5 class="card-title"><?= $producto["titulo"]?></h5>
                   <div class="d-flex justify-content-between">
@@ -35,7 +36,7 @@ $listaProductosVendidos=$db->listarProductosVendidos();
                   </div>
                 </div>
               </div>
-            </a>
+            
           </div>
             <?php
             } 

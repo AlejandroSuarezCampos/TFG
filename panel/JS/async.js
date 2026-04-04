@@ -1,9 +1,20 @@
-document.addEventListener("DOMContentLoaded", function(){
+/*document.addEventListener("DOMContentLoaded", function(){
     document.getElementById("buscador").addEventListener("keydown", function(e){
         if (e.key === "Enter") {
             buscarJuego();
         }
     });
+});*/
+document.addEventListener("DOMContentLoaded", function(){
+    const buscador = document.getElementById("buscador");
+
+    if (buscador !== null) {
+        buscador.addEventListener("keydown", function(e){
+            if (e.key === "Enter") {
+                buscarJuego();
+            }
+        });
+    }
 });
 
 function filtrarCat(id){
@@ -390,4 +401,9 @@ function ocultarTodosLosErroresUsu(){
     document.getElementById("errorUsuario").classList.add("oculto");
     document.getElementById("errorEmail").classList.add("oculto");
     document.getElementById("errorContrasena").classList.add("oculto");
+}
+
+//Funciones para carrito
+function AnadirCarrito(id){
+    alert(`El id del juego essasas: ${id}`);
 }

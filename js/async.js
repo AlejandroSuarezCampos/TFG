@@ -1,9 +1,22 @@
-document.addEventListener("DOMContentLoaded", function(){
+/*document.addEventListener("DOMContentLoaded", function(){
     document.getElementById("buscador").addEventListener("keydown", function(e){
         if (e.key === "Enter") {
             buscarJuego();
         }
     });
+});
+*/
+document.addEventListener("DOMContentLoaded", function(){
+    const buscador = document.getElementById("buscador");
+
+    if (buscador !== null) {
+        buscador.addEventListener("keydown", function(e){
+            if (e.key === "Enter") {
+                buscarJuego();
+            }
+        });
+    }
+    cargarCarrito();
 });
 
 function filtrarCat(id){
@@ -246,4 +259,80 @@ function logOut(){
 
     xmlhttp.open("GET", "./async/logOut.php", true);
     xmlhttp.send();
+}
+
+//Funciones para carrito
+
+
+function cargarCarrito(){
+     let xmlhttp= new XMLHttpRequest();
+            xmlhttp.onreadystatechange=function(){
+                 if(this.readyState==4 && this.status==200){
+                    let campo=document.getElementById("carrito");
+                    campo.innerHTML=this.responseText;
+                    calcularTotal();
+
+                 }
+            };
+            var valor=1;
+            var variable="valor="+valor;
+            xmlhttp.open("POST","./panel/async/cargarCarrito.php",true);
+            xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+            xmlhttp.send(variable);
+}
+
+function AnadirCarrito(id){
+    let xmlhttp = new XMLHttpRequest();
+    let horas=document.getElementById('horas').value
+    //alert(`El id del juego esss: ${id} y lo alquilaste por ${horas} horas`); 
+
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState==4 && this.status==200) {
+            console.log(xmlhttp.responseText);
+            respuesta=JSON.parse(xmlhttp.responseText);
+            if (respuesta.ok){
+                document.getElementById("contador").textContent = respuesta.total;
+                if(confirm("Juego añadido al carrito.\n\n¿Desea ir al carrito?")){
+                    window.location.href="./carrito.php";
+                    cargarCarrito();
+                }
+            }else{
+                alert(respuesta.msg);
+            }
+        }
+    };
+
+    xmlhttp.open("POST", "./async/ajax_carrito.php", true);
+    xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xmlhttp.send("id="+ encodeURIComponent(id)+"&horas="+horas);
+}
+function calcularTotal() {
+    let total = 0;
+
+    document.querySelectorAll('[id^="total-"]').forEach(el => {
+        total += parseFloat(el.textContent);
+    });
+
+    document.getElementById("total-carrito").textContent = total.toFixed(2);
+}
+
+function eliminarCarrito(id){
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState==4 && this.status==200) {
+             var respuesta = JSON.parse(xmlhttp.responseText);
+            if (respuesta.ok) {
+                document.getElementById("contador").textContent = respuesta.total;
+                 cargarCarrito();
+                 calcularTotal();
+                
+
+            } else {
+                console.error(respuesta.msg);
+            }
+        }
+    };
+    xmlhttp.open("POST", "./async/eliminar_carrito.php", true);
+    xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xmlhttp.send("id="+ encodeURIComponent(id));
 }

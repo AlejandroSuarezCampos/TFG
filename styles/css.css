@@ -15,7 +15,6 @@ body {
   background-color: #171a21;
   min-height: 100vh;
 }
-
 .game-card {
   background-color: #2a475e;
   transition: transform .2s;
@@ -203,4 +202,40 @@ input[type="password"].modern-input {
 
 .text {
   color: #c7d5e0;
+}
+.btn-steam img {
+  width: 16px;
+  height: 16px;
+}
+.caja_carrito{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+}
+.carrito{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.carrito-item {
+    position: relative;
+    background-color: rgba(0,0,0,.25);
+    border-radius: 8px;
+    width: 100%;
+    max-width: 600px; 
+    padding: 15px;
+    display: flex;
+    gap: 15px; 
+
+}
+.carrito-item .flex-grow-1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* centra verticalmente dentro de la columna */
+    gap: 5px;
+}
+input.horas-input {
+    width: 70px;
 }

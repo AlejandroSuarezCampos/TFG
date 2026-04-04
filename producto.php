@@ -24,9 +24,13 @@
       <p class="text-secondary">Género: Acción / Aventura</p>
       <p class="lead">Disfruta de este increíble juego durante un tiempo limitado con nuestro sistema de alquiler digital. ¡Accede a todo el contenido y explora nuevas aventuras sin gastar de más!</p>
 
-      <h3 class="price"><?=$juego["precio_alquiler"]?> € - Alquiler 48h</h3>
-      <button class="btn btn-steam btn-lg mt-3">Alquilar ahora</button>
-
+      <h3 class="price"><?=$juego["precio_alquiler"]?> €/hora</h3>
+     <!-- HTML -->
+      <div class="card p-4 fondo ">
+        <label for="horas" class="form-label fw-bold text-secondary">Selecciona las horas</label>
+        <input type="number" id="horas" name="horas" min="1" max="50" step="1" value="1" class="form-control mb-3">
+        <a href="#" class="btn btn-steam btn-lg w-100" onclick="AnadirCarrito(<?= $juego['id_juego'] ?>)">Alquilar</a>
+      </div>
       <hr class="my-4">
       <h5>Requisitos mínimos</h5>
       <ul>
@@ -42,7 +46,6 @@
     </div>
   </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 

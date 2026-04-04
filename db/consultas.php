@@ -165,5 +165,26 @@ public function eliminarCat($id){
 		);
 	}
 
+
+
+//Funciones para el manejo del carrito
+public function listarjuegoscarrito($carrito){
+	$juegos=[];
+	foreach ($carrito as $id => $horas) {
+		$sentencia = "SELECT * FROM juegos WHERE id_juego=:id";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute(
+			array(
+				":id" => $id
+			)
+		);
+		$resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
+		if($resultado){
+			$resultado["horas"]=$horas;
+			$juegos[]=$resultado;	
+		}
+	}
+	return $juegos;
+}
 }
 ?>
