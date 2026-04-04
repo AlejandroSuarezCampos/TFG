@@ -269,7 +269,9 @@ function cargarCarrito(){
             xmlhttp.onreadystatechange=function(){
                  if(this.readyState==4 && this.status==200){
                     let campo=document.getElementById("carrito");
+                    if(campo){
                     campo.innerHTML=this.responseText;
+                    }
                     calcularTotal();
 
                  }

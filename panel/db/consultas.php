@@ -84,13 +84,14 @@ class Tienda{
 	}
 
 	public function registrarUsuario($nombre, $email, $pass){
-		$sentencia="INSERT INTO usuarios(nombre,email,password) VALUES (:nombre,:email,:password)";
+		$sentencia="INSERT INTO usuarios(nombre,email,password,foto) VALUES (:nombre,:email,:password,:foto)";
 		$ejecucion = $this->pdo->prepare($sentencia);
 		$ejecucion->execute(
 			array(
 				":nombre" => $nombre,
 				":email" => $email,
-				":password" => password_hash($pass,PASSWORD_DEFAULT)
+				":password" => password_hash($pass,PASSWORD_DEFAULT),
+				":foto"=>"/img/foto_usu.png"
 			)
 		);
 	}
