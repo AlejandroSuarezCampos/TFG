@@ -43,6 +43,7 @@ include_once("../cuerpos/PanelIndex.php");
 
             <!-- Botón De crear Usuario -->
             <button type="button" class="btn btn-steam w-100 py-2 mb-3" onclick="crearUsu()">Crear Usuario</button>
+            <a href="../cuerpos/usuarios.php"><button type="button" class="btn btn-steam w-100 py-2 mb-3">Volver</button></a>
 
           </form>
 
