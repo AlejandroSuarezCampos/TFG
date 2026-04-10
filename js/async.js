@@ -78,6 +78,7 @@ function registrar(){
 
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
+            //console.log(xmlhttp.responseText);
             let respuesta = JSON.parse(this.responseText);
             if (respuesta.exito) {
                 document.getElementById("errorCampos").innerText = respuesta.mensaje;
@@ -315,7 +316,10 @@ function calcularTotal() {
         total += parseFloat(el.textContent);
     });
 
-    document.getElementById("total-carrito").textContent = total.toFixed(2);
+    let tot=document.getElementById("total-carrito");
+    if (tot){
+        tot.textContent= total.toFixed(2);
+    }
 }
 
 function eliminarCarrito(id){

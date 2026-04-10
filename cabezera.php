@@ -34,7 +34,6 @@ $total_carrito = isset($_SESSION['carrito_total']) ? $_SESSION['carrito_total'] 
         <span class="navbar-toggler-icon"></span>
       </button>
 
-
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto align-items-lg-center">
 

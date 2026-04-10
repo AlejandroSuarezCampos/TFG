@@ -39,6 +39,7 @@
             $_SESSION['usuario_nombre']=$usuario['nombre'];
             $_SESSION['usuario_email']=$usuario['email'];
             $_SESSION['Rol']=$usuario['id_rol'];
+            $_SESSION['foto']=$usuario['foto'];
             $respuesta=[
                 "exito"=>true,
                 "mensaje"=>"Login correcto",

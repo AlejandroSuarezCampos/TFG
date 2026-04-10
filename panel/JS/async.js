@@ -403,7 +403,27 @@ function ocultarTodosLosErroresUsu(){
     document.getElementById("errorContrasena").classList.add("oculto");
 }
 
-//Funciones para carrito
-function AnadirCarrito(id){
-    alert(`El id del juego essasas: ${id}`);
+
+//Funciones para el panel de juegos
+function EliminarJuego(id){
+    if(!confirm("¿Seguro que deseas eliminar este juego?")) return;
+
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if(this.readyState == 4 && this.status == 200){
+            console.log(this.responseText);
+            let respuesta = JSON.parse(this.responseText);
+            if(respuesta.exito){
+                // Eliminar la fila de la tabla
+                let fila = document.getElementById("fila-" + id);
+                fila.parentNode.removeChild(fila);
+                alert(respuesta.mensaje);
+            } else {
+                alert(respuesta.mensaje);
+            }
+        }
+    };
+    xmlhttp.open("POST", "../async/eliminar_juego.php", true);
+    xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xmlhttp.send("id="+ encodeURIComponent(id));
 }

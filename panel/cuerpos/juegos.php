@@ -1,25 +1,31 @@
 <?php
   include_once("PanelIndex.php");
 
-  $listarJuegos=$db->listarUsuarios();
+  $listarJuegos=$db->listarJuegosPanel();
 ?>
 
-<a href="../crear/crear_Usuarios.php"><button class="btn btn-primary mb-3">Nuevo Juego</button></a>
-<table class="table">
+<h2>Gestión de Juegoss</h2>
+<a href="../crear/crear_juegos.php"><button class="btn btn-primary mb-3">Nuevo Juego</button></a>
+<table class="table table-hover">
+<thead>
+<tr><th>ID</th><th>Nombre</th><th>Imagen</th><th>Categorías</th><th>Precio</th><th>Stock</th><th>Ventas</th><th>Acciones</th></tr>
+</thead>
+<tbody>
 
-<h2>Gestión de Juegos</h2>
-<table class="table">
-<tr><th>ID</th><th>Nombre</th><th>Email</th><th>Rol</th><th>Acciones</th></tr>
 <?php
-    foreach($listarUsuario as $usuario){
+    foreach($listarJuegos as $juego){
+      $categorias=$db->listarProductosFiltradosCategoria($juego["id_juego"]);
   ?>
-<tr>
-<td><?=$usuario["id_usuario"]?></td><td><?=$usuario["nombre"]?></td><td><?=$usuario["email"]?></td><td><?=$usuario["id_rol"]?></td>
-<td><a href="../editar/editar_usuario.php?modificar=<?= $usuario["id_usuario"]?>"><button class="btn btn-sm btn-warning">Editar</button></a></td>
-</tr>
+    <tr id="fila-<?= $juego["id_juego"] ?>">
+    <td><?=$juego["id_juego"]?></td><td><?=$juego["titulo"]?></td><td><img  width="120" src=../../<?=$juego["imagen"]?>></td><td><?php foreach($categorias as $cate){echo $cate["NOMBRE"]."<br>";}?></td><td><?=$juego["precio_alquiler"]?></td><td><?=$juego["stock"]?></td><td><?=$juego["ventas"]?></td>
+    <td>
+    <a href="editar_producto.php"><button class="btn btn-sm btn-warning">Editar</button></a>
+     <button class="btn btn-sm btn-danger" onclick="EliminarJuego(<?=$juego['id_juego']?>)">Eliminar</button></td>
+    </tr>
 <?php
     }
 ?>
+</tbody>
 </table>
 
 </main>

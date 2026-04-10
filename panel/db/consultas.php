@@ -41,7 +41,7 @@ class Tienda{
 	}
 
 	//Función para listar todos los productos
-	public function listarProductos(){
+	public function listarJuegosPanel(){
 		$sentencia="SELECT * FROM juegos";
 		$ejecucion= $this->pdo->prepare($sentencia);
 		$ejecucion->execute();
@@ -51,7 +51,8 @@ class Tienda{
 
 	//Función que muestra todos los productos de una categoría
 	public function listarProductosFiltradosCategoria($id){
-		$sentencia="SELECT juegos.* FROM juegos LEFT JOIN juego_categoria ON juegos.id_juego = juego_categoria.id_juego WHERE juego_categoria.id_categoria=:id";
+		$sentencia="SELECT NOMBRE FROM CATEGORIAS C JOIN juego_categoria JC ON C.id_categoria=JC.id_categoria JOIN juegos J ON JC.id_juego=J.id_juego where J.id_juego=:id;
+";
 		$ejecucion= $this->pdo->prepare($sentencia);
 		$ejecucion->execute([
 			":id"=> $id
@@ -59,8 +60,24 @@ class Tienda{
 		$registros=$ejecucion->fetchAll(PDO::FETCH_ASSOC);
 		return $registros;
 
-	}
+	}	
 
+	public function existeJuegoId($id){
+		$sentencia= "SELECT titulo FROM JUEGOS WHERE id_juego=:id";
+		$ejecucion= $this->pdo->prepare($sentencia);
+		$ejecucion->execute([
+			":id"=> $id
+		]);
+		$registros=$ejecucion->fetch(PDO::FETCH_ASSOC);
+		return $registros;
+	}
+	public function eliminarJuego($id){
+		$sentencia="DELETE FROM JUEGOS WHERE id_juego=:id";
+		$ejecucion= $this->pdo->prepare($sentencia);
+		$ejecucion->execute([
+			":id"=> $id
+		]);
+	}
 	//Función para buscar un juego por su título, conteniendo el texto solo una parte del título (zu->Inazuma)
 	public function buscarJuego($texto){
 		$texto="%".$texto."%";
@@ -85,6 +102,7 @@ class Tienda{
 
 	public function registrarUsuario($nombre, $email, $pass){
 		$sentencia="INSERT INTO usuarios(nombre,email,password,foto) VALUES (:nombre,:email,:password,:foto)";
+		$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$ejecucion = $this->pdo->prepare($sentencia);
 		$ejecucion->execute(
 			array(
