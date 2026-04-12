@@ -187,5 +187,30 @@ public function listarjuegoscarrito($carrito){
 	}
 	return $juegos;
 }
+
+public function comprobarJuegoExiste($titulo){
+		$sentencia = "SELECT COUNT(*) as total FROM juegos WHERE LOWER(titulo) = LOWER(:titulo)";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute([
+			":titulo"=>$titulo
+		]);
+		$resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
+		
+		return $resultado['total']>0;
+}
+public function registrarJuego($titulo, $descripcion, $precio,$imagen, $ventas, $stock){
+		$sentencia="INSERT INTO jeugos(titulo,descripcion,precio_alquiler,imagen,ventas,stock) VALUES (:titulo,:descripcion,:precio,:imagen,:ventas,:stock)";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute(
+			array(
+				":titulo" => $titulo,
+				":descripcion" => $descripcion,
+				":precio" => $precio,
+				":imagen"=>$imagen,
+				":ventas"=> $ventas,
+				":stock"=> $stock
+			)
+		);
+	}
 }
 ?>

@@ -427,3 +427,81 @@ function EliminarJuego(id){
     xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xmlhttp.send("id="+ encodeURIComponent(id));
 }
+function limpiarErroresJuegos() {
+    document.getElementById("errorCampos").innerText = "";
+    document.getElementById("errorCampos").classList.add("oculto");
+    document.getElementById("errorTitulo").innerText = "";
+    document.getElementById("errorTitulo").classList.add("oculto");
+    document.getElementById("errorCampos").style.color = "#ff4444";
+    document.getElementById("errorImagen").innerText = "";
+    document.getElementById("errorImagen").classList.add("oculto");
+
+}
+
+function crearJuego(){
+    limpiarErroresJuegos();
+
+    let xmlhttp = new XMLHttpRequest();
+
+    let titulo = document.getElementById("titulo").value.trim();
+    let descripcion = document.getElementById("descripcion").value.trim();
+    let precio = document.getElementById("precio").value;
+    let imagenInput = document.getElementById("imagen");
+    let ventas=document.getElementById("ventas").value;
+    let stock=document.getElementById("stock").value
+    if (titulo == "" || descripcion == "" || precio <=0 || imagenInput.files.length == "") {
+        mostrarError("Todos los campos son obligatorios");
+        return;
+    }
+    //Para poder enviar los datos recogidos de los inputs como si fueran un formulario y recoger la ruta de la img con FILES
+     let formData = new FormData();
+    formData.append("titulo", titulo);
+    formData.append("descripcion", descripcion);
+    formData.append("precio", precio);
+    formData.append("imagen", imagenInput.files[0]); // 👈 AQUÍ VA LA IMAGEN REAL
+    formData.append("ventas", ventas);
+    formData.append("stock", stock);
+
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText);
+            let respuesta = JSON.parse(this.responseText);
+            if (respuesta.exito) {
+                document.getElementById("errorCampos").innerText = respuesta.mensaje;
+                document.getElementById("errorCampos").classList.remove("oculto");
+                document.getElementById("errorCampos").innerText = "¡Creacion completada con exito!";
+                document.getElementById("errorCampos").style.color = "#66c0f4";
+
+                document.getElementById("titulo").value = "";
+                document.getElementById("descripcion").value = "";
+                document.getElementById("precio").value = 0;
+                document.getElementById("imagen").src = "";
+                document.getElementById("ventas").value = 0;
+                document.getElementById("stock").value = 0;
+                
+            } else {
+                switch (respuesta.error) {
+                    case "Juego_existe":
+                        document.getElementById("errorTitulo").classList.remove("oculto");
+                        document.getElementById("errorTitulo").innerText = respuesta.mensaje;
+                        break;
+                    case "campos_vacios":
+                        document.getElementById("errorCampos").classList.remove("oculto");
+                        document.getElementById("errorCampos").innerText = respuesta.mensaje;
+                        break;
+                    case "no_imagen":
+                        document.getElementById("errorImagen").classList.remove("oculto");
+                        document.getElementById("errorImagen").innerText=respuesta.mensaje;
+                    case "imagen_grande":
+                         document.getElementById("errorImagen").classList.remove("oculto");
+                        document.getElementById("errorImagen").innerText=respuesta.mensaje;
+                    default:
+                        document.getElementById("errorCampos").innerText = respuesta.mensaje || "Error en la creacion del juego";
+                }
+            }
+        }
+    };
+    //Enviamos el formdata sin la cabecera ya que el formdata se encarga de ello
+    xmlhttp.open("POST", "../async/crearJuego.php", true);
+    xmlhttp.send(formData); 
+}

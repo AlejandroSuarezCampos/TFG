@@ -29,22 +29,23 @@ include_once("../cuerpos/PanelIndex.php");
                             <input type="text" class="form-control modern-input" id="descripcion" placeholder="Ej: Juego muy bueno y divertido">
                         </div>
 
-                        <div class="alert error-message mt-4 oculto" id="errorDescripcion"></div>
-
                         <!-- Precio -->
                         <div class="mb-3">
                             <label for="precio" class="form-label text">Precio</label>
                             <input type="number" class="form-control modern-input" id="precio" placeholder="Ej: 1.25€" max="99.99" min="0" step="0.01">
                         </div>
 
-                        <div class="alert error-message mt-4 oculto" id="errorPrecio"></div>
-
                         <!-- Imagen -->
 
                         <div class="mb-3">
                             <label for="imagen" class="form-label text">Subir Imagen</label>
-                            <input type="file" class="form-control modern-input" id="imagen" name="imagen" required>
+                            <input type="file" class="form-control modern-input" id="imagen" accept="image/*" name="imagen" required>
+                             <small class="text-secondary">
+                                Solo se permiten imágenes en formato JPG, JPEG ,PNG,GIF o WEBP.
+                            </small>
                         </div>
+
+                        <div class="alert error-message mt-4 oculto" id="errorImagen"></div>
 
                         <!-- Ventas -->
 
@@ -61,7 +62,7 @@ include_once("../cuerpos/PanelIndex.php");
                         </div>
 
                         <!-- Botón De crear Juego-->
-                        <button type="button" class="btn btn-steam w-100 py-2 mb-3" onclick="crearUsu()">Crear Juego</button>
+                        <button type="button" class="btn btn-steam w-100 py-2 mb-3" onclick="crearJuego()">Crear Juego</button>
                         <a href="../cuerpos/juegos.php"><button type="button" class="btn btn-steam w-100 py-2 mb-3">Volver</button></a>
 
                     </form>
