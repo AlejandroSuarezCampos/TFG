@@ -1,7 +1,7 @@
 <?php
 session_start();
-include_once("../../db/conexion.php");
-include_once("../../db/consultas.php");
+include_once("../db/conexion.php");
+include_once("../db/consultas.php");
 
 if(isset($_POST["valor"])){
 if (!isset($_SESSION["carrito"])) {
@@ -16,7 +16,6 @@ echo '<h2 class="mb-4 text-white">Tu carrito</h2>';
 if(empty($juegos_carrito)){
     echo '<p class="text-white">El carrito está vacío</p>';
 }
-
 foreach($juegos_carrito as $juego){
     echo '<div class="carrito-item d-flex align-items-center mb-3 p-3 text-white">
 
@@ -57,7 +56,7 @@ foreach($juegos_carrito as $juego){
 }
 
 echo '<h3 class="text-white mt-4">
-        Total carrito: <span id="total-carrito">0</span> €
+        Total carrito: <span id="total-carrito-precio">0</span> €
       </h3>';
 }else{
         echo "Error al cargar los productos";

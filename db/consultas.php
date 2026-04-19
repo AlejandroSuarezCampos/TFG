@@ -212,5 +212,16 @@ public function registrarJuego($titulo, $descripcion, $precio,$imagen, $ventas, 
 			)
 		);
 	}
+	public function obtenerPrecio($id){
+	$sentencia = "SELECT precio_alquiler FROM juegos WHERE id_juego=:id";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute([
+			":id"=>$id
+		]);
+		$resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
+		
+		return $resultado["precio_alquiler"];
 }
+}
+
 ?>

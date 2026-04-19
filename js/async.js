@@ -279,7 +279,7 @@ function cargarCarrito(){
             };
             var valor=1;
             var variable="valor="+valor;
-            xmlhttp.open("POST","./panel/async/cargarCarrito.php",true);
+            xmlhttp.open("POST","./async/cargarCarrito.php",true);
             xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
             xmlhttp.send(variable);
 }
@@ -316,7 +316,7 @@ function calcularTotal() {
         total += parseFloat(el.textContent);
     });
 
-    let tot=document.getElementById("total-carrito");
+    let tot=document.getElementById("total-carrito-precio");
     if (tot){
         tot.textContent= total.toFixed(2);
     }
@@ -342,3 +342,24 @@ function eliminarCarrito(id){
     xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xmlhttp.send("id="+ encodeURIComponent(id));
 }
+document.addEventListener("change", function (e) {
+    if (e.target.classList.contains("horas-input")) {
+        let id = e.target.dataset.id;
+        let horas = e.target.value;
+
+        let xmlhttp = new XMLHttpRequest();
+
+        xmlhttp.onload = function () {
+            if (xmlhttp.status === 200) {
+                console.log(xmlhttp.responseText);
+                let respuesta = JSON.parse(xmlhttp.responseText);
+                document.getElementById("total-" + id).innerText = respuesta.total_juego.toFixed(2);
+                document.getElementById("total-carrito-precio").innerText = respuesta.total_precio.toFixed(2);
+                
+            }
+        };
+        xmlhttp.open("POST", "./async/actualizar_carrito.php", true);
+        xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xmlhttp.send("id=" + id + "&horas=" + horas);
+    }
+});

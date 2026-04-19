@@ -22,6 +22,18 @@
         exit();
 
     }
+    list($ancho, $alto) = getimagesize($_FILES["imagen"]["tmp_name"]);
+
+    if ($ancho != 600 || $alto != 900) {
+
+        echo json_encode([
+            "exito" => false,
+            "error" => "dimensiones_invalidas",
+            "mensaje" => "La imagen debe ser exactamente 600x900 px"
+        ]);
+
+        exit();
+    }
     if ($_FILES["imagen"]["size"] > 2 * 1024 * 1024) {
     $respuesta=[
             "exito" => false,
@@ -49,7 +61,6 @@
         }else{
             $DIR="c:\\xampp\\htdocs\\TFG\\";
             $nombreImagen=$_FILES["imagen"]["name"];
-            $nombreImagen = uniqid() . "_" . $nombreImagen;
             $rutaDestino = $DIR."/img/" . $nombreImagen;
             move_uploaded_file($_FILES['imagen']['tmp_name'],$rutaDestino);
             $rutaBD = "img/" . $nombreImagen;

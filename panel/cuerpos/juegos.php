@@ -4,7 +4,7 @@
   $listarJuegos=$db->listarJuegosPanel();
 ?>
 
-<h2>Gestión de Juegoss</h2>
+<h2>Gestión de Juegos</h2>
 <a href="../crear/crear_juegos.php"><button class="btn btn-primary mb-3">Nuevo Juego</button></a>
 <table class="table table-hover">
 <thead>
@@ -19,7 +19,7 @@
     <tr id="fila-<?= $juego["id_juego"] ?>">
     <td><?=$juego["id_juego"]?></td><td><?=$juego["titulo"]?></td><td><img  width="120" src=../../<?=$juego["imagen"]?>></td><td><?php foreach($categorias as $cate){echo $cate["NOMBRE"]."<br>";}?></td><td><?=$juego["precio_alquiler"]?></td><td><?=$juego["stock"]?></td><td><?=$juego["ventas"]?></td>
     <td>
-    <a href="editar_producto.php"><button class="btn btn-sm btn-warning">Editar</button></a>
+    <a href="../editar/editar_juego.php?id=<?= $juego["id_juego"] ?>"><button class="btn btn-sm btn-warning">Editar</button></a>
      <button class="btn btn-sm btn-danger" onclick="EliminarJuego(<?=$juego['id_juego']?>)">Eliminar</button></td>
     </tr>
 <?php
