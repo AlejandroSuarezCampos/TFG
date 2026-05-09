@@ -13,8 +13,17 @@ if (isset($_POST['id']) && isset($_POST['horas'])) {
     $horas = $_POST['horas'];
     $precio = $db->obtenerPrecio($id);
     $total_juego = $precio * $horas;
-    // Actualizar directamente
-    $_SESSION['carrito'][$id] = $horas;
+    if(isset($_SESSION["usuario_id"])) {
+
+        $usuarioId = $_SESSION["usuario_id"];
+        $db->actualizarHorasCarrito($usuarioId, $id, $horas);
+
+        // mantener también sincronizada la sesión
+        $_SESSION['carrito'][$id] = $horas;
+
+    } else {
+        $_SESSION['carrito'][$id] = $horas;
+    }
 
     // Recalcular total de artículos (no es fiable usar count para total real)
     $_SESSION['carrito_total'] = count($_SESSION['carrito']);

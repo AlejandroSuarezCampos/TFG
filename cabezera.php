@@ -8,7 +8,7 @@ if (!isset($_SESSION['carrito'])) {
 }
 
 // Obtener el total actual
-$total_carrito = isset($_SESSION['carrito_total']) ? $_SESSION['carrito_total'] : 0;
+$total_carrito = count($_SESSION['carrito']);
 ?>
 
 <!DOCTYPE html>
@@ -20,6 +20,7 @@ $total_carrito = isset($_SESSION['carrito_total']) ? $_SESSION['carrito_total'] 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="./styles/css.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="./js/async.js"></script>
 </head>
 

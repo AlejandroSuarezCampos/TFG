@@ -3,62 +3,81 @@ session_start();
 include_once("../db/conexion.php");
 include_once("../db/consultas.php");
 
-if(isset($_POST["valor"])){
-if (!isset($_SESSION["carrito"])) {
-  $carrito = [];
-} else {
-  $carrito = $_SESSION["carrito"];
-}
+if (isset($_POST["valor"])) {
+    if (!isset($_SESSION["usuario_id"])) {
+        if(!isset($_SESSION["carrito"])) {
+            $carrito = [];
+        } else {
+            $carrito = $_SESSION["carrito"];
+        }
+    }else{
+        $carrito = $db->obtenerCarritoUsuario($_SESSION["usuario_id"]);
+        $_SESSION["carrito"] = $carrito;
+    }
+    /*
+    if(!isset($_SESSION["carrito"])) {
+      $carrito = [];
+    } else {
+      $carrito = $_SESSION["carrito"];
+    }*/
 
-$juegos_carrito = $db->listarjuegoscarrito($carrito);
-echo '<h2 class="mb-4 text-white">Tu carrito</h2>';
+    $juegos_carrito = $db->listarjuegoscarrito($carrito);
+    $response = '<h2 class="mb-4 text-white">Tu carrito</h2>';
 
-if(empty($juegos_carrito)){
-    echo '<p class="text-white">El carrito está vacío</p>';
-}
-foreach($juegos_carrito as $juego){
-    echo '<div class="carrito-item d-flex align-items-center mb-3 p-3 text-white">
+    if (empty($juegos_carrito)) {
+        echo json_encode([
+            "html" => $response . '<p class="text-white">El carrito está vacío</p>'
+        ]);
 
-            <!-- Imagen -->
-            <img src="' . $juego["imagen"] . '" width="120" class="me-3">
+        exit;
+    }
+    foreach ($juegos_carrito as $juego) {
+        $id = (int) $juego["id_juego"];
+        $horas = (int) $juego["horas"];
+        $precio = (float) $juego["precio_alquiler"];
+        $total = $precio * $horas;
 
-            <!-- Info -->
-            <div class="flex-grow-1">
+        $response .= "
+        <div class='carrito-item d-flex align-items-center mb-3 p-3 text-white'>
+            <img src='{$juego["imagen"]}' width='120' class='me-3'>
+            <div class='flex-grow-1'>
+                <h5>{$juego["titulo"]}</h5>
+                <div class='d-flex align-items-center gap-2'>
+                <button class='btn btn-outline-light btn-menos' type='button' data-id='$id'> − </button>
+                <input type='number' id='horascarro' class='horas-input'
+                       value='$horas'
+                       min='1'
+                       data-id='$id'>
+                <button class='btn btn-outline-light btn-mas' type='button' data-id='$id'> + </button>
+                </div>
+                <p>Precio/hora: $precio €</p>
 
-                <h5>' . $juego["titulo"] . '</h5>
-
-                <!-- HORAS -->
-                <label>Horas:</label>
-                <input type="number" 
-                       value="' . $juego["horas"] . '" 
-                       min="1"
-                       class="horas-input"
-                       data-id="' . $juego["id_juego"] . '">
-
-                <p>Precio/hora: ' . $juego["precio_alquiler"] . '€</p>
-
-                <p>Total: 
-                    <span id="total-' . $juego["id_juego"] . '">
-                        ' . ($juego["precio_alquiler"] * $juego["horas"]) . '
-                    </span> €
-                </p>
+                <p>Total: <span id='total-$id'>$total</span> €</p>
             </div>
 
-            <!-- Acciones -->
-            <div>
-                <button onclick="eliminarCarrito(' . $juego['id_juego'] . ')" 
-                        class="btn btn-danger btn-sm">
-                    Eliminar
-                </button>
-            </div>
+            <button onclick='eliminarCarrito($id)' class='btn btn-danger btn-sm'>
+                Eliminar
+            </button>
+        </div>";
+    }
+    $response .= '<h3 class="text-white mt-4"> 
+                  Total carrito: <span id="total-carrito-precio">0</span> €
+                </h3>';
+    $response .= '
+<div class="d-flex justify-content-center align-items-center mt-4 gap-3">
 
-        </div>';
+    <a class="btn btn-steam btn-outline-light" href="buscador.php">
+        Seguir Comprando
+    </a>
+
+    <a class="btn btn-steam btn-primary px-4" href="login.php">
+        Pagar
+    </a>
+
+</div>';
 }
 
-echo '<h3 class="text-white mt-4">
-        Total carrito: <span id="total-carrito-precio">0</span> €
-      </h3>';
-}else{
-        echo "Error al cargar los productos";
-}
+echo json_encode([
+    "html" => $response
+]);
 ?>

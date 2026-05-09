@@ -278,5 +278,14 @@ public function registrarJuego($titulo, $descripcion, $precio,$imagen, $ventas, 
 			)
 		);
 	}
+	public function obtenerCarritoUsuario($id){
+		$sentencia="SELECT * FROM carrito_item where id_usuario=:id";
+		$ejecucion = $this->pdo->prepare($sentencia);
+        $ejecucion->execute(array(
+			":id"=> $id
+		));
+		$resultado= $ejecucion->fetchAll(PDO::FETCH_ASSOC);
+		return $resultado;
+	}
 }
 ?>

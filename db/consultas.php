@@ -222,6 +222,65 @@ public function registrarJuego($titulo, $descripcion, $precio,$imagen, $ventas, 
 		
 		return $resultado["precio_alquiler"];
 }
+public function obtenerCarritoUsuario($id){
+		$sentencia="SELECT * FROM carrito_item where id_usuario=:id";
+		$ejecucion = $this->pdo->prepare($sentencia);
+        $ejecucion->execute(array(
+			":id"=> $id
+		));
+	 $data = $ejecucion->fetchAll(PDO::FETCH_ASSOC);
+    $carrito = [];
+    foreach ($data as $item) {
+        $carrito[$item["id_juego"]] = (int)$item["duracion"];
+    }
+    return $carrito;
+}
+public function guardarCarritoUsuario($id_usuario, $carrito) {
+	
+    $sentencia1 = "INSERT INTO carrito_item (id_usuario, id_juego, duracion, precio) VALUES (:id_usuario, :id_juego, :duracion, :precio)
+        ON DUPLICATE KEY UPDATE
+            duracion = VALUES(duracion),
+            precio = VALUES(precio)";
+
+    $ejecucion1 = $this->pdo->prepare($sentencia1);
+
+    foreach ($carrito as $id_juego => $horas) {
+        $sentencia ="SELECT precio_alquiler FROM juegos WHERE id_juego = :id";
+        $ejecucion = $this->pdo->prepare($sentencia);
+        $ejecucion->execute(array(
+			":id"=> $id_juego
+		));
+		$precio=$ejecucion->fetchColumn();
+		$precioTotal = $precio * $horas;
+        $ejecucion1->execute([
+            ":id_usuario" => $id_usuario,
+            ":id_juego" => $id_juego,
+            ":duracion" => $horas,
+			"precio"=> $precioTotal
+        ]);
+    }
+
+    return true;
+}
+public function actualizarHorasCarrito($usuarioId, $juegoId, $horas){
+
+    $sentencia= "UPDATE carrito_item SET duracion = :horas WHERE id_usuario = :usuario AND id_juego = :id";
+	$ejecucion = $this->pdo->prepare($sentencia);
+	$ejecucion->execute([
+			":id"=>$juegoId,
+			":usuario"=>$usuarioId,
+			":horas"=>$horas
+		]);
 }
 
+public function eliminarJuegoCarrito($usuarioId, $juegoId){
+
+    $sentencia= "DELETE from carrito_item WHERE id_usuario = :usuario AND id_juego = :id";
+	$ejecucion = $this->pdo->prepare($sentencia);
+	$ejecucion->execute([
+			":id"=>$juegoId,
+			":usuario"=>$usuarioId
+		]);
+	}
+}
 ?>
