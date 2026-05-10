@@ -1,42 +1,285 @@
+/* =========================
+   GENERAL
+========================= */
+
 body {
   background-color: #1b2838;
   color: #c7d5e0;
 }
 
-.navbar, footer {
+.navbar,
+footer {
   background-color: #171a21;
 }
 
-.sidebar {
-  background-color: #171a21;
-  min-height: 100vh;
+.container.py-4 {
+  max-width: 1400px;
 }
+
+/* =========================
+   TARJETAS
+========================= */
 
 .game-card {
   background-color: #2a475e;
-  transition: transform .2s;
+  border: 1px solid #3b5875;
+  border-radius: 14px;
+  overflow: hidden;
+  transition: all .2s ease;
 }
 
 .game-card:hover {
-  transform: scale(1.03);
+  border-color: #66c0f4;
+  box-shadow: 0 0 18px rgba(102, 192, 244, 0.12);
+  transform: translateY(-2px);
 }
+
+.card-body {
+  color: white;
+}
+
+/* =========================
+   BOTONES
+========================= */
+
+.btn-steam {
+  background-color: #66c0f4;
+  color: #000;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all .2s ease;
+}
+
+.btn-steam:hover {
+  background-color: #417a9b;
+  color: white;
+}
+
+.btn-outline-light {
+  border-radius: 8px;
+}
+
+/* =========================
+   CABECERAS FORO
+========================= */
+
+.forum-header {
+  border-bottom: 1px solid #3b5875;
+  padding-bottom: 20px;
+  margin-bottom: 35px;
+}
+
+.forum-header h1 {
+  color: white;
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+}
+
+/* =========================
+   INPUTS Y TEXTAREAS
+========================= */
+
+.form-control,
+.forum-input,
+.forum-textarea,
+.form-select {
+  background-color: #1b2838;
+  border: 1px solid #3b5875;
+  color: white;
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.form-control:focus,
+.forum-input:focus,
+.forum-textarea:focus,
+.form-select:focus {
+  background-color: #1b2838;
+  color: white;
+  border-color: #66c0f4;
+  box-shadow: 0 0 12px rgba(102, 192, 244, 0.15);
+}
+
+.forum-textarea {
+  resize: none;
+}
+
+.form-select option {
+  background-color: #1b2838;
+  color: white;
+}
+
+/* =========================
+   LABELS
+========================= */
+
+.forum-label {
+  color: white;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+/* =========================
+   CHECKBOX
+========================= */
+
+.form-check-input {
+  background-color: #1b2838;
+  border: 1px solid #3b5875;
+}
+
+.form-check-input:checked {
+  background-color: #66c0f4;
+  border-color: #66c0f4;
+}
+
+/* =========================
+   LISTA DE TEMAS
+========================= */
+
+.forum-container,
+.forum-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.forum-post,
+.forum-message {
+  margin-bottom: 0;
+}
+
+/* =========================
+   POSTS FORO
+========================= */
+
+.forum-post h5 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.forum-post small {
+  font-size: .85rem;
+}
+
+.badge {
+  padding: 8px 12px;
+  font-size: .8rem;
+  border-radius: 20px;
+}
+
+/* =========================
+   CAJA RESPONDER
+========================= */
+
+.forum-response-box {
+  margin-top: 30px;
+  margin-bottom: 60px;
+}
+
+.forum-response-box .card-body {
+  padding: 25px;
+}
+
+/* =========================
+   MENSAJES DEL FORO
+========================= */
+
+.forum-content {
+  padding: 25px 30px;
+}
+
+.forum-message-header {
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.forum-text {
+  color: #dbe7f1;
+  line-height: 1.8;
+  font-size: 1rem;
+  margin-bottom: 0;
+}
+
+/* =========================
+   PANEL USUARIO
+========================= */
+
+.user-panel {
+  padding: 25px 15px;
+  background-color: rgba(0,0,0,0.08);
+  min-height: 100%;
+}
+
+.border-end {
+  border-color: #3b5875 !important;
+}
+
+.user-panel h6 {
+  color: white;
+  font-size: 1rem;
+}
+
+/* =========================
+   AVATAR
+========================= */
+
+.forum-avatar {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  border: 3px solid #66c0f4;
+  object-fit: cover;
+}
+
+/* =========================
+   CREAR TEMA
+========================= */
+
+.create-topic-card .card-body {
+  padding: 35px;
+}
+
+/* =========================
+   PRECIOS
+========================= */
 
 .price {
   color: #66c0f4;
   font-weight: bold;
 }
 
-.btn-steam {
-  background-color: #66c0f4;
-  color: #000;
-  border: none;
-}
+/* =========================
+   RESPONSIVE
+========================= */
 
-.btn-steam:hover {
-  background-color: #417a9b;
-  color: #fff;
-}
+@media (max-width: 768px) {
 
-.card-body {
-  color: white;
+  .forum-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .forum-content {
+    padding: 20px;
+  }
+
+  .user-panel {
+    border-right: none !important;
+    border-bottom: 1px solid #3b5875;
+    padding: 20px;
+  }
+
+  .forum-message-header {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 10px;
+  }
+
+  .create-topic-card .card-body {
+    padding: 25px;
+  }
+
 }
