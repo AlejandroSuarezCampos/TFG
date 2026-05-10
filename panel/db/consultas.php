@@ -287,5 +287,12 @@ public function registrarJuego($titulo, $descripcion, $precio,$imagen, $ventas, 
 		$resultado= $ejecucion->fetchAll(PDO::FETCH_ASSOC);
 		return $resultado;
 	}
+	public function listarPedidos(){
+		$sentencia="SELECT * FROM pedido_item pi inner join pedido p on p.id_pedido=pi.id_pedido GROUP BY id_usuario";
+		$ejecucion = $this->pdo->prepare($sentencia);
+        $ejecucion->execute();
+		$resultado= $ejecucion->fetchAll(PDO::FETCH_ASSOC);
+		return $resultado;
+	}
 }
 ?>
