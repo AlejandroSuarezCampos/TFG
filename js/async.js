@@ -179,7 +179,6 @@ function iniciarSesion() {
             let respuesta = JSON.parse(this.responseText);
 
             console.log("Respuesta del servidor:", respuesta);
-            console.log("hola")
             if (respuesta.exito) {
                 document.getElementById("errorCampos").classList.remove("oculto");
                 document.getElementById("errorCampos").innerText = "¡Login correcto! Redirigiendo...";
