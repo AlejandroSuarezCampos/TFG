@@ -41,7 +41,7 @@ class Tienda{
 	}
 
 	//Función para listar todos los productos
-	public function listarProductos(){
+	public function listarJuegosPanel(){
 		$sentencia="SELECT * FROM juegos";
 		$ejecucion= $this->pdo->prepare($sentencia);
 		$ejecucion->execute();
@@ -51,7 +51,8 @@ class Tienda{
 
 	//Función que muestra todos los productos de una categoría
 	public function listarProductosFiltradosCategoria($id){
-		$sentencia="SELECT juegos.* FROM juegos LEFT JOIN juego_categoria ON juegos.id_juego = juego_categoria.id_juego WHERE juego_categoria.id_categoria=:id";
+		$sentencia="SELECT NOMBRE FROM CATEGORIAS C JOIN juego_categoria JC ON C.id_categoria=JC.id_categoria JOIN juegos J ON JC.id_juego=J.id_juego where J.id_juego=:id;
+";
 		$ejecucion= $this->pdo->prepare($sentencia);
 		$ejecucion->execute([
 			":id"=> $id
@@ -59,8 +60,24 @@ class Tienda{
 		$registros=$ejecucion->fetchAll(PDO::FETCH_ASSOC);
 		return $registros;
 
-	}
+	}	
 
+	public function existeJuegoId($id){
+		$sentencia= "SELECT titulo FROM JUEGOS WHERE id_juego=:id";
+		$ejecucion= $this->pdo->prepare($sentencia);
+		$ejecucion->execute([
+			":id"=> $id
+		]);
+		$registros=$ejecucion->fetch(PDO::FETCH_ASSOC);
+		return $registros;
+	}
+	public function eliminarJuego($id){
+		$sentencia="DELETE FROM JUEGOS WHERE id_juego=:id";
+		$ejecucion= $this->pdo->prepare($sentencia);
+		$ejecucion->execute([
+			":id"=> $id
+		]);
+	}
 	//Función para buscar un juego por su título, conteniendo el texto solo una parte del título (zu->Inazuma)
 	public function buscarJuego($texto){
 		$texto="%".$texto."%";
@@ -71,7 +88,16 @@ class Tienda{
 		));
 		return $sentencia;
 	}
-
+    public function getJuego($id){
+		$sentencia = "SELECT * FROM juegos WHERE id_juego = :id";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute(array(
+			":id"=>$id
+		));
+		$resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
+		
+		return $resultado;
+	}
 	public function comprobarEmailExiste($email){
 		$sentencia = "SELECT COUNT(*) as total FROM usuarios WHERE email = :email";
 		$ejecucion = $this->pdo->prepare($sentencia);
@@ -84,13 +110,15 @@ class Tienda{
 	}
 
 	public function registrarUsuario($nombre, $email, $pass){
-		$sentencia="INSERT INTO usuarios(nombre,email,password) VALUES (:nombre,:email,:password)";
+		$sentencia="INSERT INTO usuarios(nombre,email,password,foto) VALUES (:nombre,:email,:password,:foto)";
+		$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$ejecucion = $this->pdo->prepare($sentencia);
 		$ejecucion->execute(
 			array(
 				":nombre" => $nombre,
 				":email" => $email,
-				":password" => password_hash($pass,PASSWORD_DEFAULT)
+				":password" => password_hash($pass,PASSWORD_DEFAULT),
+				":foto"=>"/img/foto_usu.png"
 			)
 		);
 	}
@@ -198,6 +226,73 @@ public function eliminarUsu($id){
                 ":id_usu"=> $modificar
 			)
 		);
+	}
+	public function comprobarJuegoExiste($titulo){
+		$sentencia = "SELECT COUNT(*) as total FROM juegos WHERE LOWER(titulo) = LOWER(:titulo)";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute([
+			":titulo"=>$titulo
+		]);
+		$resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
+		
+		return $resultado['total']>0;
+}
+	public function comprobarJuegoExisteEditar($titulo,$id){
+		$sentencia = "SELECT COUNT(*) as total FROM juegos WHERE LOWER(titulo) = LOWER(:titulo) and id_juego!=:id";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute([
+			":titulo"=>$titulo,
+			":id"=>$id
+		]);
+		$resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
+		
+		return $resultado['total']>0;
+}
+public function registrarJuego($titulo, $descripcion, $precio,$imagen, $ventas, $stock){
+		$sentencia="INSERT INTO juegos(titulo,descripcion,precio_alquiler,imagen,ventas,stock) VALUES (:titulo,:descripcion,:precio,:imagen,:ventas,:stock)";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute(
+			array(
+				":titulo" => $titulo,
+				":descripcion" => $descripcion,
+				":precio" => $precio,
+				":imagen"=>$imagen,
+				":ventas"=> $ventas,
+				":stock"=> $stock
+			)
+		);
+	}
+
+	public function editarJuego($id,$titulo, $descripcion, $precio,$rutaBD, $ventas, $stock) {
+		$sentencia="UPDATE juegos SET titulo=:titulo, descripcion=:descripcion, precio_alquiler=:precio, imagen=:imagen,ventas=:ventas, stock=:stock WHERE id_juego=:id ";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute(
+			array(
+				":titulo" => $titulo,
+				":descripcion" => $descripcion,
+				":precio" => $precio,
+				":imagen"=>$rutaBD,
+				":ventas"=> $ventas,
+				":stock"=> $stock,
+				":id"=> $id
+			)
+		);
+	}
+	public function obtenerCarritoUsuario($id){
+		$sentencia="SELECT * FROM carrito_item where id_usuario=:id";
+		$ejecucion = $this->pdo->prepare($sentencia);
+        $ejecucion->execute(array(
+			":id"=> $id
+		));
+		$resultado= $ejecucion->fetchAll(PDO::FETCH_ASSOC);
+		return $resultado;
+	}
+	public function listarPedidos(){
+		$sentencia="SELECT * FROM pedido_item pi inner join pedido p on p.id_pedido=pi.id_pedido GROUP BY id_usuario";
+		$ejecucion = $this->pdo->prepare($sentencia);
+        $ejecucion->execute();
+		$resultado= $ejecucion->fetchAll(PDO::FETCH_ASSOC);
+		return $resultado;
 	}
 }
 ?>
