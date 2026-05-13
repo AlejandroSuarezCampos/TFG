@@ -5,7 +5,17 @@ $id_tema = $_GET["id"];
 
 $tema = $db->obtenerTema($id_tema);
 ?>
-
+<script>
+  cargarMensajes(<?=$id_tema?>);
+      document.addEventListener("DOMContentLoaded", function () {
+      document.getElementById("mensaje").addEventListener("keydown", function (e) {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          enviarMensaje(<?=$id_tema?>);
+        }
+      });
+  });
+</script>
 <div class="container py-4">
 
   <div class="forum-header">
@@ -47,24 +57,4 @@ $tema = $db->obtenerTema($id_tema);
   <div class="forum-messages"></div>
 
 </div>
-
-<script>
-  const ID_TEMA = <?= $id_tema ?>;
-  cargarMensajes(ID_TEMA);
-  document.addEventListener("DOMContentLoaded", function () {
-
-    const textarea = document.getElementById("mensaje");
-
-    textarea.addEventListener("keydown", function (e) {
-
-        if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            enviarMensaje(ID_TEMA);
-        }
-
-    });
-
-});
-</script>
-
 <?php include_once("pie.php"); ?>
