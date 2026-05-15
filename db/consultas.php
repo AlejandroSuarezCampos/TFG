@@ -282,5 +282,19 @@ public function eliminarJuegoCarrito($usuarioId, $juegoId){
 			":usuario"=>$usuarioId
 		]);
 	}
+		public function obtenerdato($id,$invoker){
+			if($invoker==0){
+				$sentencia = "SELECT email as resultado FROM usuarios WHERE id_usuario=:id";
+			}else{
+				$sentencia = "SELECT nombre as resultado FROM usuarios WHERE id_usuario=:id";
+			}
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute([
+			":id"=>$id
+		]);
+		$resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
+		
+		return $resultado["resultado"];
+}
 }
 ?>

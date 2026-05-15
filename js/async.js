@@ -357,8 +357,8 @@ function validarHoras(valor) {
 
     return valor;
 }
-function actualizar_contador(num){
-        document.getElementById("contador").innerText=num;
+function actualizar_contador(num) {
+    document.getElementById("contador").innerText = num;
 }
 function eliminarCarrito(id) {
     let xmlhttp = new XMLHttpRequest();
@@ -446,31 +446,31 @@ document.addEventListener("click", function (e) {
     }
 });
 function actualizarCarrito(id, horas) {
-        let xmlhttp = new XMLHttpRequest();
+    let xmlhttp = new XMLHttpRequest();
 
-        xmlhttp.onload = function () {
-            if (xmlhttp.status === 200) {
-                console.log(xmlhttp.responseText);
-                let respuesta = JSON.parse(xmlhttp.responseText);
-                 console.log(respuesta); // 👈 DEBUG IMPORTANTE
+    xmlhttp.onload = function () {
+        if (xmlhttp.status === 200) {
+            console.log(xmlhttp.responseText);
+            let respuesta = JSON.parse(xmlhttp.responseText);
+            console.log(respuesta); // 👈 DEBUG IMPORTANTE
 
-                document.getElementById("total-" + id).innerText = respuesta.total_juego.toFixed(2);
-                document.getElementById("total-carrito-precio").innerText = respuesta.total_precio.toFixed(2);
-                document.getElementById("contador").innerText=respuesta.total_items;
+            document.getElementById("total-" + id).innerText = respuesta.total_juego.toFixed(2);
+            document.getElementById("total-carrito-precio").innerText = respuesta.total_precio.toFixed(2);
+            document.getElementById("contador").innerText = respuesta.total_items;
 
-            }
-        };
-        xmlhttp.open("POST", "./async/actualizar_carrito.php", true);
-        xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xmlhttp.send("id=" + id + "&horas=" + horas);
+        }
+    };
+    xmlhttp.open("POST", "./async/actualizar_carrito.php", true);
+    xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xmlhttp.send("id=" + id + "&horas=" + horas);
 }
 function cambiarHoras(valor) {
-  let input = document.getElementById('horas');
-  let nueva = parseInt(input.value) + valor;
+    let input = document.getElementById('horas');
+    let nueva = parseInt(input.value) + valor;
 
-  if (nueva >= 1 && nueva <= 50) {
-    input.value = nueva;
-  }
+    if (nueva >= 1 && nueva <= 50) {
+        input.value = nueva;
+    }
 }
 /*function cambiarHorasCarrito(valor,id) {
   let input = document.querySelector(`.horas-input[data-id="${id}"]`);
@@ -480,3 +480,60 @@ function cambiarHoras(valor) {
     input.value = nueva;
   }
 }*/
+document.addEventListener('click', function (e) {
+    if (e.target && e.target.id === 'pagar') {
+        // Mostrar loading
+        Swal.fire({
+            title: 'Redirigiendo al pago...',
+            html: 'Conectando con la pasarela segura',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            showConfirmButton: false,
+            customClass: {
+                popup: 'steam-popup',
+            },
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+        let xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState === 4) {
+                if (xmlhttp.status === 200) {
+                    console.log(xmlhttp.responseText);
+                    let data = JSON.parse(xmlhttp.responseText);
+                    if (data.url) {
+                        // Pequeña espera para que se vea el efecto
+                        setTimeout(() => {
+                            window.location.href = data.url;
+                        }, 3000);
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: data.error || 'No se pudo iniciar el pago',
+                              customClass: {
+                                popup: 'steam-popup',
+                            },
+                        });
+                    }
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error del servidor',
+                        text: 'Inténtalo de nuevo más tarde',
+                        customClass: {
+                            popup: 'steam-popup',
+                        },
+                    });
+                }
+            }
+        };
+        xmlhttp.open("POST", "./async/checkout.php", true);
+        xmlhttp.setRequestHeader(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+        );
+        xmlhttp.send();
+    }
+});

@@ -21,7 +21,6 @@ $total_carrito = count($_SESSION['carrito']);
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="./styles/css.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="./js/async.js"></script>
 </head>
 
 <body>

@@ -70,7 +70,7 @@ if (isset($_POST["valor"])) {
         Seguir Comprando
     </a>
 
-    <a class="btn btn-steam btn-primary px-4" href="login.php">
+    <a id="pagar" class="btn btn-steam btn-primary px-4">
         Pagar
     </a>
 
