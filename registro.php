@@ -1,5 +1,5 @@
 <?php
-include_once("cabezera.php");
+include_once("cabecera.php");
 ?>
 
 <div class="container mt-5">
@@ -37,16 +37,25 @@ include_once("cabezera.php");
             <!-- Contraseña -->
             <div class="mb-3">
               <label for="password" class="form-label text">Contraseña</label>
-              <input type="password" class="form-control modern-input" id="password" placeholder="Mínimo 8 caracteres">
-              <small class="text password-hint">Mínimo 8 caracteres</small>
+              <div class="input-group">
+                <input type="password" class="form-control modern-input" id="password" placeholder="Crea una contraseña">
+                <button class="btn btn-outline-secondary text-white" type="button" onclick="togglePass('password', 'eyePass')">
+                  <i class="bi bi-eye" id="eyePass"></i>
+                </button>
+              </div>
             </div>
 
             <div class="alert error-message mt-4 oculto" id="errorContrasena"></div>
 
             <!-- Confirmar Contraseña -->
-            <div class="mb-4">
-              <label for="confirm_password" class="form-label text">Confirmar contraseña</label>
-              <input type="password" class="form-control modern-input" id="confirm_password" placeholder="Repite tu contraseña">
+            <div class="mb-3">
+              <label for="confirm_password" class="form-label text">Confirmar Contraseña</label>
+              <div class="input-group">
+                <input type="password" class="form-control modern-input" id="confirm_password" placeholder="Repite tu contraseña">
+                <button class="btn btn-outline-secondary text-white" type="button" onclick="togglePass('confirm_password', 'eyeConfirm')">
+                  <i class="bi bi-eye" id="eyeConfirm"></i>
+                </button>
+              </div>
             </div>
 
             <div class="alert error-message mt-4 oculto" id="errorContrasena2"></div>
@@ -70,7 +79,20 @@ include_once("cabezera.php");
     </div>
   </div>
 </div>
-
+<script>
+function togglePass(inputId, iconoId) {
+  let input=document.getElementById(inputId);
+  let icono=document.getElementById(iconoId);
+  
+  if(input.type=="password"){
+    input.type="text";
+    icono.classList.replace('bi-eye', 'bi-eye-slash');
+  }else{
+    input.type="password";
+    icono.classList.replace('bi-eye-slash', 'bi-eye');
+  }
+}
+</script>
 <?php
 include_once("pie.php");
 ?>
