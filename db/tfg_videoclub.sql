@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 11-03-2026 a las 13:56:13
+-- Tiempo de generación: 05-04-2026 a las 12:28:11
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -40,26 +40,15 @@ CREATE TABLE `alquileres` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `carritos`
+-- Estructura de tabla para la tabla `carrito_item`
 --
 
-CREATE TABLE `carritos` (
+CREATE TABLE `carrito_item` (
   `id_carrito` int(11) NOT NULL,
-  `id_usuario` int(11) DEFAULT NULL,
-  `fecha_creacion` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `carrito_items`
---
-
-CREATE TABLE `carrito_items` (
-  `id_item` int(11) NOT NULL,
-  `id_carrito` int(11) DEFAULT NULL,
-  `id_juego` int(11) DEFAULT NULL,
-  `duracion` int(11) NOT NULL
+  `id_usuario` int(11) NOT NULL,
+  `id_juego` int(11) NOT NULL,
+  `duracion` int(11) NOT NULL,
+  `precio` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -245,15 +234,39 @@ CREATE TABLE `logros` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `pagos`
+-- Estructura de tabla para la tabla `metodo_pago`
 --
 
-CREATE TABLE `pagos` (
-  `id_pago` int(11) NOT NULL,
-  `id_carrito` int(11) DEFAULT NULL,
-  `total` decimal(8,2) DEFAULT NULL,
-  `metodo_pago` varchar(50) DEFAULT NULL,
-  `fecha_pago` datetime DEFAULT current_timestamp()
+CREATE TABLE `metodo_pago` (
+  `id_metodo` int(11) NOT NULL,
+  `descripcion` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pedido`
+--
+
+CREATE TABLE `pedido` (
+  `id_pedido` int(11) NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `Fecha` datetime NOT NULL,
+  `metodo_pago` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pedido_item`
+--
+
+CREATE TABLE `pedido_item` (
+  `id_item` int(11) NOT NULL,
+  `id_pedido` int(11) NOT NULL,
+  `id_juego` int(11) NOT NULL,
+  `duracion` int(11) NOT NULL,
+  `precio` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -286,6 +299,7 @@ CREATE TABLE `roles` (
 --
 
 INSERT INTO `roles` (`id_rol`, `nombre`) VALUES
+(0, 'Base'),
 (1, 'SuperAdmin');
 
 -- --------------------------------------------------------
@@ -340,8 +354,9 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id_usuario`, `nombre`, `email`, `password`, `foto`, `nivel`, `estado`, `id_rol`, `fecha_registro`) VALUES
-(1, 'canaGay', 'canagay@gmail.com', '$2y$10$GGDD98gmL1CGoNrXhHcIJuR7PBs5W2Io4eoRDElMJR0eJd3jOzKtq', NULL, 1, 'activo', NULL, '2026-03-11 10:50:10'),
-(2, 'admin', 'admin@gmail.com', '$2y$10$b.irHkaAC5m.qNZf013HjegsF9tswv7OuUYPX7dfYHD6/P2/Y3woi', NULL, 1, 'activo', 1, '2026-03-11 11:59:53');
+(1, 'canaGay', 'canagay@gmail.com', '$2y$10$GGDD98gmL1CGoNrXhHcIJuR7PBs5W2Io4eoRDElMJR0eJd3jOzKtq', NULL, 1, 'activo', 0, '2026-03-11 10:50:10'),
+(2, 'admin', 'admin@gmail.com', '$2y$10$b.irHkaAC5m.qNZf013HjegsF9tswv7OuUYPX7dfYHD6/P2/Y3woi', NULL, 1, 'activo', 1, '2026-03-11 11:59:53'),
+(3, 'ADMINISTRADOR', 'ADMINISTRADOR@gmail.com', '$2y$10$kWgaWC02Blg5JYbWTy4R0OwvfgjE/dttxKE.qqNJKHNsShlm/9qeS', NULL, 1, 'activo', 1, '2026-03-30 14:45:24');
 
 -- --------------------------------------------------------
 
@@ -369,19 +384,12 @@ ALTER TABLE `alquileres`
   ADD KEY `fk_codigo_alquiler` (`id_codigo`);
 
 --
--- Indices de la tabla `carritos`
+-- Indices de la tabla `carrito_item`
 --
-ALTER TABLE `carritos`
+ALTER TABLE `carrito_item`
   ADD PRIMARY KEY (`id_carrito`),
-  ADD KEY `fk_usuario_carrito` (`id_usuario`);
-
---
--- Indices de la tabla `carrito_items`
---
-ALTER TABLE `carrito_items`
-  ADD PRIMARY KEY (`id_item`),
-  ADD KEY `fk_carrito_item` (`id_carrito`),
-  ADD KEY `fk_juego_item` (`id_juego`);
+  ADD KEY `fk_carrito_usuario` (`id_usuario`),
+  ADD KEY `fk_carrito_juego` (`id_juego`);
 
 --
 -- Indices de la tabla `categorias`
@@ -422,11 +430,26 @@ ALTER TABLE `logros`
   ADD PRIMARY KEY (`id_logro`);
 
 --
--- Indices de la tabla `pagos`
+-- Indices de la tabla `metodo_pago`
 --
-ALTER TABLE `pagos`
-  ADD PRIMARY KEY (`id_pago`),
-  ADD KEY `fk_carrito_pagos` (`id_carrito`);
+ALTER TABLE `metodo_pago`
+  ADD PRIMARY KEY (`id_metodo`);
+
+--
+-- Indices de la tabla `pedido`
+--
+ALTER TABLE `pedido`
+  ADD PRIMARY KEY (`id_pedido`),
+  ADD KEY `fk_pedido_metodo` (`metodo_pago`),
+  ADD KEY `fk_pedido_usuario` (`id_usuario`);
+
+--
+-- Indices de la tabla `pedido_item`
+--
+ALTER TABLE `pedido_item`
+  ADD PRIMARY KEY (`id_item`),
+  ADD KEY `fk_pitems_pedido` (`id_pedido`),
+  ADD KEY `fk_pitems_juego` (`id_juego`);
 
 --
 -- Indices de la tabla `respuestas`
@@ -483,16 +506,10 @@ ALTER TABLE `alquileres`
   MODIFY `id_alquiler` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `carritos`
+-- AUTO_INCREMENT de la tabla `carrito_item`
 --
-ALTER TABLE `carritos`
+ALTER TABLE `carrito_item`
   MODIFY `id_carrito` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `carrito_items`
---
-ALTER TABLE `carrito_items`
-  MODIFY `id_item` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `categorias`
@@ -510,7 +527,7 @@ ALTER TABLE `foros`
 -- AUTO_INCREMENT de la tabla `juegos`
 --
 ALTER TABLE `juegos`
-  MODIFY `id_juego` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id_juego` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT de la tabla `logros`
@@ -519,10 +536,22 @@ ALTER TABLE `logros`
   MODIFY `id_logro` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `pagos`
+-- AUTO_INCREMENT de la tabla `metodo_pago`
 --
-ALTER TABLE `pagos`
-  MODIFY `id_pago` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `metodo_pago`
+  MODIFY `id_metodo` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `pedido`
+--
+ALTER TABLE `pedido`
+  MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `pedido_item`
+--
+ALTER TABLE `pedido_item`
+  MODIFY `id_item` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `respuestas`
@@ -534,7 +563,7 @@ ALTER TABLE `respuestas`
 -- AUTO_INCREMENT de la tabla `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id_rol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_rol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `temas`
@@ -552,7 +581,7 @@ ALTER TABLE `tickets`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Restricciones para tablas volcadas
@@ -567,17 +596,11 @@ ALTER TABLE `alquileres`
   ADD CONSTRAINT `fk_usuario_alquiler` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Filtros para la tabla `carritos`
+-- Filtros para la tabla `carrito_item`
 --
-ALTER TABLE `carritos`
-  ADD CONSTRAINT `fk_usuario_carrito` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `carrito_items`
---
-ALTER TABLE `carrito_items`
-  ADD CONSTRAINT `fk_carrito_item` FOREIGN KEY (`id_carrito`) REFERENCES `carritos` (`id_carrito`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_juego_item` FOREIGN KEY (`id_juego`) REFERENCES `juegos` (`id_juego`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `carrito_item`
+  ADD CONSTRAINT `fk_carrito_juego` FOREIGN KEY (`id_juego`) REFERENCES `juegos` (`id_juego`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_carrito_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `codigos`
@@ -593,10 +616,18 @@ ALTER TABLE `juego_categoria`
   ADD CONSTRAINT `fk_id_juego_juego_categoria` FOREIGN KEY (`id_juego`) REFERENCES `juegos` (`id_juego`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `pagos`
+-- Filtros para la tabla `pedido`
 --
-ALTER TABLE `pagos`
-  ADD CONSTRAINT `fk_carrito_pagos` FOREIGN KEY (`id_carrito`) REFERENCES `carritos` (`id_carrito`) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE `pedido`
+  ADD CONSTRAINT `fk_pedido_metodo` FOREIGN KEY (`metodo_pago`) REFERENCES `metodo_pago` (`id_metodo`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_pedido_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `pedido_item`
+--
+ALTER TABLE `pedido_item`
+  ADD CONSTRAINT `fk_pitems_juego` FOREIGN KEY (`id_juego`) REFERENCES `juegos` (`id_juego`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_pitems_pedido` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id_pedido`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `respuestas`
