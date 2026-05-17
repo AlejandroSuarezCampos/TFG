@@ -282,7 +282,6 @@ public function eliminarJuegoCarrito($usuarioId, $juegoId){
 			":usuario"=>$usuarioId
 		]);
 	}
-<<<<<<< HEAD
 		public function obtenerdato($id,$invoker){
 			if($invoker==0){
 				$sentencia = "SELECT email as resultado FROM usuarios WHERE id_usuario=:id";
@@ -297,7 +296,6 @@ public function eliminarJuegoCarrito($usuarioId, $juegoId){
 		
 		return $resultado["resultado"];
 }
-=======
 	public function crearForo($nombre, $descripcion){
 		$sentencia = "INSERT INTO foros (nombre, descripcion) 
 					VALUES (:nombre, :descripcion)";
@@ -377,6 +375,5 @@ public function eliminarJuegoCarrito($usuarioId, $juegoId){
 
 		return $ejecucion->fetch(PDO::FETCH_ASSOC);
 	}
->>>>>>> Alejandro
 }
 ?>
