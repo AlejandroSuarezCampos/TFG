@@ -1,5 +1,5 @@
 <?php
-include_once("cabezera.php");
+include_once("cabecera.php");
 
 $listaProductosVendidos=$db->listarProductosVendidos();
 

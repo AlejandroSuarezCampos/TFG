@@ -13,7 +13,7 @@ if($id==""){
     foreach($juegos as $juego){
 
         echo"<div class='col-md-3 col-lg-2'>";
-        echo    "<a href='producto.php?id='.".$juego['id_juego'].".' class='text-decoration-none'>";
+        echo    "<a href='producto.php?id=" . $juego['id_juego'] . "' class='text-decoration-none'>";
         echo    "<div class='card game-card h-100'>";
         echo        "<img src='".$juego['imagen']."' class='card-img-top'>";
         echo          "<div class='card-body'>";

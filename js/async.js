@@ -471,6 +471,110 @@ function cambiarHoras(valor) {
     if (nueva >= 1 && nueva <= 50) {
         input.value = nueva;
     }
+        let xmlhttp = new XMLHttpRequest();
+
+        xmlhttp.onload = function () {
+            if (xmlhttp.status === 200) {
+                console.log(xmlhttp.responseText);
+                let respuesta = JSON.parse(xmlhttp.responseText);
+                 console.log(respuesta); // 👈 DEBUG IMPORTANTE
+
+                document.getElementById("total-" + id).innerText = respuesta.total_juego.toFixed(2);
+                document.getElementById("total-carrito-precio").innerText = respuesta.total_precio.toFixed(2);
+                document.getElementById("contador").innerText=respuesta.total_items;
+
+            }
+        };
+        xmlhttp.open("POST", "./async/actualizar_carrito.php", true);
+        xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xmlhttp.send("id=" + id + "&horas=" + horas);
+}
+function cambiarHoras(valor) {
+  let input = document.getElementById('horas');
+  let nueva = parseInt(input.value) + valor;
+
+  if (nueva >= 1 && nueva <= 50) {
+    input.value = nueva;
+  }
+}
+
+function cargarMensajes(id_tema){
+
+    let xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.onreadystatechange = function () {
+
+        if (this.readyState == 4 && this.status == 200) {
+            let data = JSON.parse(this.responseText);
+
+            let html = "";
+
+            data.forEach(m => {
+
+                let foto = m.foto ? m.foto : "./img/default-user.png";
+
+                html += `
+                <div class="card game-card mb-2">
+                    <div class="card-body d-flex gap-3 align-items-start">
+
+                        <img src="${foto}" 
+                            class="rounded-circle"
+                            width="45" height="45"
+                            style="object-fit: cover;">
+
+                        <div>
+                            <strong>${m.nombre}</strong><br>
+                            <small class="forum-date">${m.fecha_respuesta}</small>
+                            <p class="mb-0">${m.contenido}</p>
+                        </div>
+
+                    </div>
+                </div>`;
+            });
+
+            document.querySelector(".forum-messages").innerHTML = html;
+        }
+    };
+
+    xmlhttp.open("GET", "./async/cargarMensajes.php?id=" + id_tema, true);
+    xmlhttp.send();
+}
+
+function enviarMensaje(id_tema){
+
+    let contenido = document.getElementById("mensaje").value.trim();
+    let error = document.getElementById("errorMensaje");
+
+    // reset error
+    error.style.display = "none";
+
+    if(contenido === ""){
+        error.style.display = "block";
+        return;
+    }
+
+    let xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.onreadystatechange = function () {
+
+        if (this.readyState == 4 && this.status == 200) {
+
+            let data = JSON.parse(this.responseText);
+
+            if(data.ok){
+                document.getElementById("mensaje").value = "";
+                cargarMensajes(id_tema);
+            }
+        }
+    };
+
+    xmlhttp.open("POST", "./async/enviarMensaje.php", true);
+    xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    xmlhttp.send(
+        "id_tema=" + id_tema +
+        "&contenido=" + encodeURIComponent(contenido)
+    );
 }
 /*function cambiarHorasCarrito(valor,id) {
   let input = document.querySelector(`.horas-input[data-id="${id}"]`);

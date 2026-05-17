@@ -282,6 +282,7 @@ public function eliminarJuegoCarrito($usuarioId, $juegoId){
 			":usuario"=>$usuarioId
 		]);
 	}
+<<<<<<< HEAD
 		public function obtenerdato($id,$invoker){
 			if($invoker==0){
 				$sentencia = "SELECT email as resultado FROM usuarios WHERE id_usuario=:id";
@@ -296,5 +297,86 @@ public function eliminarJuegoCarrito($usuarioId, $juegoId){
 		
 		return $resultado["resultado"];
 }
+=======
+	public function crearForo($nombre, $descripcion){
+		$sentencia = "INSERT INTO foros (nombre, descripcion) 
+					VALUES (:nombre, :descripcion)";
+		
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute([
+			":nombre" => $nombre,
+			":descripcion" => $descripcion
+		]);
+	}
+	public function listarForos(){
+		$sentencia = "SELECT id_foro, nombre FROM foros";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute();
+		return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
+	}
+
+	public function listarTemas(){
+		$sentencia = "SELECT id_tema, titulo, id_foro, fecha_creacion
+					FROM temas
+					ORDER BY fecha_creacion ASC";
+
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute();
+
+		return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
+	}
+	public function crearTema($idUser, $titulo, $foro){
+		$sentencia = "INSERT INTO temas 
+					(titulo, id_usuario, id_foro, fecha_creacion)
+					VALUES
+					(:titulo, :idUser, :foro, NOW())";
+
+		$ejecucion = $this->pdo->prepare($sentencia);
+
+		$ejecucion->execute([
+			":titulo" => $titulo,
+			":idUser" => $idUser,
+			":foro" => $foro
+		]);
+	}
+	public function obtenerMensajes($id_tema){
+		$sentencia = "SELECT m.id_respuesta, m.contenido, m.fecha_respuesta, u.nombre, u.foto
+					FROM respuestas m
+					INNER JOIN usuarios u ON u.id_usuario = m.id_usuario
+					WHERE m.id_tema = :id
+					ORDER BY m.fecha_respuesta DESC";
+
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute([
+			":id" => $id_tema
+		]);
+
+		return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
+	}
+	public function crearMensaje($id_tema, $id_usuario, $contenido){
+		$sentencia = "INSERT INTO respuestas (contenido, id_tema, id_usuario, fecha_respuesta)
+					VALUES (:contenido, :id_tema, :id_usuario, NOW())";
+
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute([
+			":contenido" => $contenido,
+			":id_tema" => $id_tema,
+			":id_usuario" => $id_usuario
+		]);
+	}
+	public function obtenerTema($id_tema){
+		$sentencia = "SELECT t.id_tema, t.titulo, t.id_foro, t.fecha_creacion, u.nombre
+					FROM temas t
+					INNER JOIN usuarios u ON u.id_usuario = t.id_usuario
+					WHERE t.id_tema = :id";
+
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute([
+			":id" => $id_tema
+		]);
+
+		return $ejecucion->fetch(PDO::FETCH_ASSOC);
+	}
+>>>>>>> Alejandro
 }
 ?>
