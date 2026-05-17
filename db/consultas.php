@@ -84,19 +84,20 @@ class Tienda{
 	}
 
 	public function registrarUsuario($nombre, $email, $pass){
-		$sentencia="INSERT INTO usuarios(nombre,email,password) VALUES (:nombre,:email,:password)";
+		$sentencia="INSERT INTO usuarios(nombre,email,password,foto) VALUES (:nombre,:email,:password,:foto)";
 		$ejecucion = $this->pdo->prepare($sentencia);
 		$ejecucion->execute(
 			array(
 				":nombre" => $nombre,
 				":email" => $email,
-				":password" => password_hash($pass,PASSWORD_DEFAULT)
+				":password" => password_hash($pass,PASSWORD_DEFAULT),
+				":foto"=>"/img/foto_usu.png"
 			)
 		);
 	}
 
 	public function obtenerUsuarioPorEmail($correo) {
-    $sentencia="SELECT id_usuario, nombre, email,id_rol, password FROM usuarios WHERE email = :email";
+    $sentencia="SELECT id_usuario, nombre, email,id_rol, password,foto FROM usuarios WHERE email = :email";
     $ejecucion=$this->pdo->prepare($sentencia);
     $ejecucion->execute(
         array(
@@ -165,5 +166,135 @@ public function eliminarCat($id){
 		);
 	}
 
+
+
+//Funciones para el manejo del carrito
+public function listarjuegoscarrito($carrito){
+	$juegos=[];
+	foreach ($carrito as $id => $horas) {
+		$sentencia = "SELECT * FROM juegos WHERE id_juego=:id";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute(
+			array(
+				":id" => $id
+			)
+		);
+		$resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
+		if($resultado){
+			$resultado["horas"]=$horas;
+			$juegos[]=$resultado;	
+		}
+	}
+	return $juegos;
+}
+
+public function comprobarJuegoExiste($titulo){
+		$sentencia = "SELECT COUNT(*) as total FROM juegos WHERE LOWER(titulo) = LOWER(:titulo)";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute([
+			":titulo"=>$titulo
+		]);
+		$resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
+		
+		return $resultado['total']>0;
+}
+public function registrarJuego($titulo, $descripcion, $precio,$imagen, $ventas, $stock){
+		$sentencia="INSERT INTO jeugos(titulo,descripcion,precio_alquiler,imagen,ventas,stock) VALUES (:titulo,:descripcion,:precio,:imagen,:ventas,:stock)";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute(
+			array(
+				":titulo" => $titulo,
+				":descripcion" => $descripcion,
+				":precio" => $precio,
+				":imagen"=>$imagen,
+				":ventas"=> $ventas,
+				":stock"=> $stock
+			)
+		);
+	}
+	public function obtenerPrecio($id){
+	$sentencia = "SELECT precio_alquiler FROM juegos WHERE id_juego=:id";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute([
+			":id"=>$id
+		]);
+		$resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
+		
+		return $resultado["precio_alquiler"];
+}
+public function obtenerCarritoUsuario($id){
+		$sentencia="SELECT * FROM carrito_item where id_usuario=:id";
+		$ejecucion = $this->pdo->prepare($sentencia);
+        $ejecucion->execute(array(
+			":id"=> $id
+		));
+	 $data = $ejecucion->fetchAll(PDO::FETCH_ASSOC);
+    $carrito = [];
+    foreach ($data as $item) {
+        $carrito[$item["id_juego"]] = (int)$item["duracion"];
+    }
+    return $carrito;
+}
+public function guardarCarritoUsuario($id_usuario, $carrito) {
+	
+    $sentencia1 = "INSERT INTO carrito_item (id_usuario, id_juego, duracion, precio) VALUES (:id_usuario, :id_juego, :duracion, :precio)
+        ON DUPLICATE KEY UPDATE
+            duracion = VALUES(duracion),
+            precio = VALUES(precio)";
+
+    $ejecucion1 = $this->pdo->prepare($sentencia1);
+
+    foreach ($carrito as $id_juego => $horas) {
+        $sentencia ="SELECT precio_alquiler FROM juegos WHERE id_juego = :id";
+        $ejecucion = $this->pdo->prepare($sentencia);
+        $ejecucion->execute(array(
+			":id"=> $id_juego
+		));
+		$precio=$ejecucion->fetchColumn();
+		$precioTotal = $precio * $horas;
+        $ejecucion1->execute([
+            ":id_usuario" => $id_usuario,
+            ":id_juego" => $id_juego,
+            ":duracion" => $horas,
+			"precio"=> $precioTotal
+        ]);
+    }
+
+    return true;
+}
+public function actualizarHorasCarrito($usuarioId, $juegoId, $horas){
+
+    $sentencia= "UPDATE carrito_item SET duracion = :horas WHERE id_usuario = :usuario AND id_juego = :id";
+	$ejecucion = $this->pdo->prepare($sentencia);
+	$ejecucion->execute([
+			":id"=>$juegoId,
+			":usuario"=>$usuarioId,
+			":horas"=>$horas
+		]);
+}
+
+public function eliminarJuegoCarrito($usuarioId, $juegoId){
+
+    $sentencia= "DELETE from carrito_item WHERE id_usuario = :usuario AND id_juego = :id";
+	$ejecucion = $this->pdo->prepare($sentencia);
+	$ejecucion->execute([
+			":id"=>$juegoId,
+			":usuario"=>$usuarioId
+		]);
+	}
+		public function obtenerdato($id,$invoker){
+			if($invoker==0){
+				$sentencia = "SELECT email as resultado FROM usuarios WHERE id_usuario=:id";
+			}else{
+				$sentencia = "SELECT nombre as resultado FROM usuarios WHERE id_usuario=:id";
+			}
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute([
+			":id"=>$id
+		]);
+		$resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
+		
+		return $resultado["resultado"];
+}
 }
 ?>

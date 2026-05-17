@@ -15,7 +15,6 @@ body {
   background-color: #171a21;
   min-height: 100vh;
 }
-
 .game-card {
   background-color: #2a475e;
   transition: transform .2s;
@@ -204,3 +203,111 @@ input[type="password"].modern-input {
 .text {
   color: #c7d5e0;
 }
+.btn-steam img {
+  width: 16px;
+  height: 16px;
+}
+.caja_carrito{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+}
+.carrito{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.carrito-item {
+    position: relative;
+    background-color: rgba(0,0,0,.25);
+    border-radius: 8px;
+    width: 100%;
+    max-width: 600px; 
+    padding: 15px;
+    display: flex;
+    gap: 15px; 
+
+}
+.carrito-item .flex-grow-1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* centra verticalmente dentro de la columna */
+    gap: 5px;
+}
+input.horas-input {
+    width: 70px;
+}
+
+.steam-popup {
+  background: #22394d;
+  color: #c7d5e0;
+  border-radius: 12px;
+  padding: 15px;
+}
+
+.steam-btn-primary {
+  background: rgb(8, 207, 221);
+  color: #000;
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: none;
+}
+
+.steam-btn-primary:hover {
+  background: green;
+}
+
+.steam-btn-secondary {
+  background: #2e06df;
+  color: #c7d5e0;
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: none;
+}
+
+.steam-btn-secondary:hover {
+  background: #3b6a8a;
+}
+.fondo{
+ background-color: #1b2838;
+}
+.horas-input {
+    width: 70px;
+    padding: 5px 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 14px;
+    background-color: rgb(29, 29, 29);
+    color: white;
+}
+
+.horas-input:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 5px rgba(74,144,226,0.5);
+}
+.horas-input::-webkit-outer-spin-button,
+.horas-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.horas-input {
+    -moz-appearance: textfield; /* Firefox */
+    appearance: textfield;
+}
+#horas::-webkit-outer-spin-button,
+#horas::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#horas{
+    -moz-appearance: textfield; /* Firefox */
+    appearance: textfield;
+}
+
+

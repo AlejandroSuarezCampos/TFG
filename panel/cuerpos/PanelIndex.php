@@ -18,7 +18,7 @@ require_once("puerta.php");
 <nav id="sidebar">
   <div class="sidebar-brand"><i class="bi bi-shop"></i> Admin</div>
   <ul class="nav flex-column">
-    <li class="nav-item"><a class="nav-link" href="../cuerpos/productos.php">Productos</a></li>
+    <li class="nav-item"><a class="nav-link" href="../cuerpos/juegos.php">Juegos</a></li>
     <li class="nav-item"><a class="nav-link" href="../cuerpos/categorias.php">Categorías</a></li>
     <li class="nav-item"><a class="nav-link" href="../cuerpos/usuarios.php">Usuarios</a></li>
     <li class="nav-item"><a class="nav-link" href="../cuerpos/carritos.php">Carritos</a></li>
