@@ -337,7 +337,8 @@ try {
     //$mail->SMTPDebug = 2;
     //$mail->Debugoutput = 'html';
     $mail->send();
-  /*$db->insertarFactura($numero,$usuario_id);
+    //$db->insertarpdf($usuario_id,$numero,"$numero.pdf","pagado",$_SESSION["pedido_id"]);
+  /*
   Antes de eliminar el carrito hay que generar tantos códigos como carritos existan, posible PA
   $db->eliminarcarrito($usuario_id);*/
 } catch (Exception $e) {
