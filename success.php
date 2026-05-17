@@ -337,10 +337,25 @@ try {
     //$mail->SMTPDebug = 2;
     //$mail->Debugoutput = 'html';
     $mail->send();
-    //$db->insertarpdf($usuario_id,$numero,"$numero.pdf","pagado",$_SESSION["pedido_id"]);
-  /*
-  Antes de eliminar el carrito hay que generar tantos códigos como carritos existan, posible PA
-  $db->eliminarcarrito($usuario_id);*/
+    $id_pedido=$db->insertarpedido($usuario_id);
+    if(!$id_pedido){
+    die("Error creando pedido");
+}
+    foreach($juegos_carrito as $juego){
+
+    $db->insertarpedidoitem(
+        $id_pedido,
+        $juego['id_juego'],
+        $juego['horas'], // duración alquiler
+        $juego['precio_alquiler']
+    );
+}
+    if(!$db->reciboExiste($session_id)){
+    $nombre_pdf = $numero . ".pdf";
+    $db->insertarpdf($usuario_id,$numero,$nombre_pdf,"pagado",$session_id,$id_pedido);
+}  /*
+  Antes de eliminar el carrito hay que generar tantos códigos como carritos existan, posible PA*/
+  $db->eliminarcarrito($usuario_id);
 } catch (Exception $e) {
     echo "Error email: " . $mail->ErrorInfo;
 }

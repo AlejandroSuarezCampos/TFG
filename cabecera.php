@@ -3,8 +3,8 @@ include_once("./db/conexion.php");
 
 session_start();
 if (!isset($_SESSION['carrito'])) {
-    $_SESSION['carrito'] = [];
-    $_SESSION['carrito_total'] = 0;
+  $_SESSION['carrito'] = [];
+  $_SESSION['carrito_total'] = 0;
 }
 
 // Obtener el total actual
@@ -44,26 +44,36 @@ $total_carrito = count($_SESSION['carrito']);
             <a class="nav-link" href="buscador.php">Catalogo</a>
           </li>
 
-          <!-- FOROS -->
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-              
+
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+              Herramientas
             </a>
+
             <ul class="dropdown-menu dropdown-menu-dark">
+
               <li><a class="dropdown-item" href="index.php">General</a></li>
               <li><a class="dropdown-item" href="juegos.php">Juegos</a></li>
               <li><a class="dropdown-item" href="soporte.php">Soporte</a></li>
               <li><a class="dropdown-item" href="foro.php">Foros</a></li>
+
+              <?php if (isset($_SESSION["usuario_id"])): ?>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="mispedidos.php">Mis pedidos</a></li>
+              <?php endif; ?>
+
             </ul>
-            <?php
-            if (isset($_SESSION["Rol"]) && $_SESSION["Rol"] == 1) {
-              ?>
+
+          </li>
+          <?php
+          if (isset($_SESSION["Rol"]) && $_SESSION["Rol"] == 1) {
+            ?>
             <li><a class="nav-link" href="panel/cuerpos/Panelindex.php">Panel De administrador</a></li>
             <?php
-            }
-            ?>
-          </li>
-
+          }
+          ?>
           <li class="nav-item">
             <a class="nav-link" href="perfil.php">Perfil</a>
           </li>

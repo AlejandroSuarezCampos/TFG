@@ -45,16 +45,24 @@ $total_carrito = count($_SESSION['carrito']);
           <li class="nav-item">
             <a class="nav-link" href="buscador.php">Catalogo</a>
           </li>
-
-          <!-- FOROS -->
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="foros.php" data-bs-toggle="dropdown">
+          <li class="nav-item">
+           <a class="nav-link" href="foros.php" data-bs-toggle="dropdown">
               Foros
             </a>
+            </li>
+          <!-- FOROS -->
+          <li class="nav-item dropdown">
             <ul class="dropdown-menu dropdown-menu-dark">
               <li><a class="dropdown-item" href="index.php">General</a></li>
               <li><a class="dropdown-item" href="juegos.php">Juegos</a></li>
               <li><a class="dropdown-item" href="soporte.php">Soporte</a></li>
+              <?php
+              if (isset($_SESSION["usuario_id"])) {
+            ?>
+              <li><a class="dropdown-item" href="mis_pedidos.php"> Mis pedidos</a></li>
+            <?php
+            }
+            ?>
             </ul>
             <?php
             if (isset($_SESSION["Rol"]) && $_SESSION["Rol"] == 1) {

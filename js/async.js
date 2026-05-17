@@ -487,7 +487,7 @@ function cambiarHoras(valor) {
         };
         xmlhttp.open("POST", "./async/actualizar_carrito.php", true);
         xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xmlhttp.send("id=" + id + "&horas=" + horas);
+        xmlhttp.send("id=" + id + "&horas=" + input.value);
 }
 function cambiarHoras(valor) {
   let input = document.getElementById('horas');
