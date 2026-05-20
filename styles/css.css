@@ -1,13 +1,24 @@
 body {
   background-color: #1b2838;
   color: #c7d5e0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
+html, body {
+    height: 100%;
+}
+.main-content {
+    flex: 1;
+        width: 100%;
 
+}
 .oculto {
   display: none !important;
 }
 
-.navbar, footer {
+.navbar,
+footer {
   background-color: #171a21;
 }
 
@@ -15,6 +26,7 @@ body {
   background-color: #171a21;
   min-height: 100vh;
 }
+
 .game-card {
   background-color: #2a475e;
   transition: transform .2s;
@@ -203,41 +215,48 @@ input[type="password"].modern-input {
 .text {
   color: #c7d5e0;
 }
+
 .btn-steam img {
   width: 16px;
   height: 16px;
 }
-.caja_carrito{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    width: 100%;
+
+.caja_carrito {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
 }
-.carrito{
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+
+.carrito {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
+
 .carrito-item {
-    position: relative;
-    background-color: rgba(0,0,0,.25);
-    border-radius: 8px;
-    width: 100%;
-    max-width: 600px; 
-    padding: 15px;
-    display: flex;
-    gap: 15px; 
+  position: relative;
+  background-color: rgba(0, 0, 0, .25);
+  border-radius: 8px;
+  width: 100%;
+  max-width: 600px;
+  padding: 15px;
+  display: flex;
+  gap: 15px;
 
 }
+
 .carrito-item .flex-grow-1 {
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* centra verticalmente dentro de la columna */
-    gap: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* centra verticalmente dentro de la columna */
+  gap: 5px;
 }
+
 input.horas-input {
-    width: 70px;
+  width: 70px;
 }
 
 .steam-popup {
@@ -270,70 +289,188 @@ input.horas-input {
 .steam-btn-secondary:hover {
   background: #3b6a8a;
 }
-.fondo{
- background-color: #1b2838;
+
+.fondo {
+  background-color: #1b2838;
 }
+
 .horas-input {
-    width: 70px;
-    padding: 5px 8px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    text-align: center;
-    font-size: 14px;
-    background-color: rgb(29, 29, 29);
-    color: white;
+  width: 70px;
+  padding: 5px 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 14px;
+  background-color: rgb(29, 29, 29);
+  color: white;
 }
 
 .horas-input:focus {
-    outline: none;
-    border-color: #4a90e2;
-    box-shadow: 0 0 5px rgba(74,144,226,0.5);
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
 }
+
 .horas-input::-webkit-outer-spin-button,
 .horas-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .horas-input {
-    -moz-appearance: textfield; /* Firefox */
-    appearance: textfield;
+  -moz-appearance: textfield;
+  /* Firefox */
+  appearance: textfield;
 }
+
 #horas::-webkit-outer-spin-button,
 #horas::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 
-#horas{
-    -moz-appearance: textfield; /* Firefox */
-    appearance: textfield;
+#horas {
+  -moz-appearance: textfield;
+  /* Firefox */
+  appearance: textfield;
 }
 
-.forum-date{
-    color: #cfcfcf;
-    font-size: 12px;
+
+.forum-date {
+  color: #cfcfcf;
+  font-size: 12px;
 }
 
 
 .error-mensaje {
-    display: none;
-    background: linear-gradient(90deg, rgba(255,0,0,0.2), rgba(255,80,80,0.2));
-    border: 1px solid #ff3b3b;
-    color: #fff;
-    padding: 14px;
-    border-radius: 10px;
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 12px;
-    text-align: center;
-    animation: shake 0.3s ease;
+  display: none;
+  background: linear-gradient(90deg, rgba(255, 0, 0, 0.2), rgba(255, 80, 80, 0.2));
+  border: 1px solid #ff3b3b;
+  color: #fff;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  text-align: center;
+  animation: shake 0.3s ease;
 }
 
 @keyframes shake {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-4px); }
-    50% { transform: translateX(4px); }
-    75% { transform: translateX(-4px); }
-    100% { transform: translateX(0); }
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-4px);
+  }
+
+  50% {
+    transform: translateX(4px);
+  }
+
+  75% {
+    transform: translateX(-4px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+.h1Pedidos{
+            margin-bottom: 20px;
+        }
+.containerPedidos {
+  max-width: 1000px;
+  margin: 40px auto;
+}
+
+.cardPedidos {
+  background: #1a1d23;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.2s;
+}
+
+.cardPedidos:hover {
+  transform: scale(1.01);
+  background: #222733;
+}
+
+.infoPedidos {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.facturaPedidos {
+  font-size: 12px;
+  color: #aaa;
+}
+
+.estadoPedidos {
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.pagado {
+  background: #22c55e;
+  color: black;
+}
+
+.cancelado {
+  background: red;
+  color: black;
+}
+
+.btnPedidos {
+  background: #5865f2;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 13px;
+}
+.containerDetalle{
+    max-width:900px;
+    margin:40px auto;
+}
+
+.cardDetalle{
+    background:#1a1d23;
+    padding:15px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:10px;
+     width: 100%;
+}
+* {
+    box-sizing: border-box;
+}
+.cardDetalle img{
+    width:80px;
+    border-radius:8px;
+}
+
+.infoDetalle{
+    flex:1;
+}
+
+.priceDetalle{
+    color:#22c55e;
+    font-weight:bold;
+}
+
+.backDetalle{
+    display:inline-block;
+    margin-bottom:20px;
+    color:white;
+    text-decoration:none;
 }

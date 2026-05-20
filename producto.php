@@ -1,6 +1,6 @@
-<?php 
-  include_once("cabezera.php");
-  include_once("./db/consultas.php");
+<?php
+include_once("cabezera.php");
+include_once("./db/consultas.php");
 
 if (isset($_GET["id"])) {
   $id = $_GET["id"];
