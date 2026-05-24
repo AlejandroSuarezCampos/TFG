@@ -1,6 +1,10 @@
 <?php 
 include_once("cabezera.php");
 
+  if(!isset($_SESSION['usuario_id'])){
+        header("location: foro.php");
+    }
+    
 if($_POST){
 
     $nombre = $_POST["nombre"];

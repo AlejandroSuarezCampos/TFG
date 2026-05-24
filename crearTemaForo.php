@@ -4,6 +4,10 @@ include_once("cabezera.php");
 $categorias = $db->listarCategorias();
 $foros = $db->listarForos();
 
+  if(!isset($_SESSION['usuario_id'])){
+        header("location: foro.php");
+    }
+
 if($_POST){
 
     $titulo = $_POST["titulo"];
