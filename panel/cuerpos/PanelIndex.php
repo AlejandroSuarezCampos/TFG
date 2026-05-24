@@ -22,6 +22,7 @@ require_once("puerta.php");
     <li class="nav-item"><a class="nav-link" href="../cuerpos/categorias.php">Categorías</a></li>
     <li class="nav-item"><a class="nav-link" href="../cuerpos/usuarios.php">Usuarios</a></li>
     <li class="nav-item"><a class="nav-link" href="../cuerpos/carritos.php">Carritos</a></li>
+    <li class="nav-item"><a class="nav-link" href="../../index.php">Volver</a></li>
   </ul>
 </nav>
 <main class="content">
