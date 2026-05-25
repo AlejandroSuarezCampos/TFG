@@ -1,46 +1,121 @@
+/* ============================================================
+   STYLES.CSS — Steam-style Game Rental Web
+   ============================================================ */
+
+/* ========== RESET ========== */
+* {
+  box-sizing: border-box;
+}
+
+/* ========== BASE ========== */
+html, body {
+  height: 100%;
+}
+
 body {
   background-color: #1b2838;
   color: #c7d5e0;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+  font-family: 'Noto Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
-html, body {
-    height: 100%;
-}
-.main-content {
-    flex: 1;
-        width: 100%;
 
+.main-content {
+  flex: 1;
+  width: 100%;
 }
+
 .oculto {
   display: none !important;
 }
 
+/* ========== NAVBAR & FOOTER ========== */
 .navbar,
 footer {
   background-color: #171a21;
 }
 
+/* ========== SIDEBAR ========== */
 .sidebar {
   background-color: #171a21;
   min-height: 100vh;
 }
 
+/* ========== GAME CARDS ========== */
 .game-card {
-  background-color: #2a475e;
-  transition: transform .2s;
+  background: #2a475e;
+  border-radius: 10px;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: transform .25s ease, box-shadow .25s ease;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.04);
 }
 
 .game-card:hover {
-  transform: scale(1.03);
+  transform: translateY(-6px);
+  box-shadow: 0 14px 35px rgba(0,0,0,0.45);
 }
 
+.game-card .card-img-top {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  display: block;
+  background: #1b2838;
+  transition: transform .3s ease;
+}
+
+.game-card:hover .card-img-top {
+  transform: scale(1.05);
+}
+
+.game-card .card-body {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0;
+}
+
+.card-body {
+  color: white;
+}
+
+.game-card p {
+  font-size: 12px;
+  color: #9fb3c8;
+  margin: 0;
+}
+
+.game-card .price {
+  font-size: 14px;
+  font-weight: bold;
+  color: #66c0f4;
+}
+
+.game-card .btn-steam {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+/* ========== PRICE ========== */
 .price {
   color: #66c0f4;
   font-weight: bold;
 }
 
+/* ========== BUTTONS ========== */
 .btn-steam {
   background-color: #66c0f4;
   color: #000;
@@ -52,12 +127,25 @@ footer {
   color: #fff;
 }
 
-.card-body {
-  color: white;
+.btn-steam img {
+  width: 16px;
+  height: 16px;
 }
 
-/* ========== ESTILOS PARA FORMULARIOS ========== */
+.btn-outline-steam {
+  background-color: transparent;
+  border: 1px solid #66c0f4;
+  color: #66c0f4;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
 
+.btn-outline-steam:hover {
+  background-color: #66c0f4;
+  color: #000;
+}
+
+/* ========== FORMS ========== */
 .modern-select {
   background-color: #2a475e;
   color: #fff;
@@ -121,12 +209,11 @@ footer {
   opacity: 0.7;
 }
 
-/* Para inputs de tipo password específicamente */
 input[type="password"].modern-input {
   letter-spacing: 2px;
 }
 
-/* ========== ESTILOS PARA CHECKBOX ========== */
+/* ========== CHECKBOX ========== */
 .form-check-input {
   background-color: #2a475e;
   border-color: #66c0f4;
@@ -143,7 +230,7 @@ input[type="password"].modern-input {
   border-color: #66c0f4;
 }
 
-/* ========== ESTILOS PARA ENLACES ========== */
+/* ========== LINKS ========== */
 .forgot-link,
 .terms-link,
 .login-link {
@@ -158,21 +245,7 @@ input[type="password"].modern-input {
   transition: opacity 0.2s ease;
 }
 
-/* ========== ESTILOS PARA BOTONES ========== */
-.btn-outline-steam {
-  background-color: transparent;
-  border: 1px solid #66c0f4;
-  color: #66c0f4;
-  border-radius: 6px;
-  transition: all 0.2s ease;
-}
-
-.btn-outline-steam:hover {
-  background-color: #66c0f4;
-  color: #000;
-}
-
-/* ========== ESTILOS PARA LÍNEA DIVISORIA ========== */
+/* ========== DIVIDERS ========== */
 .divider-line {
   background-color: #66c0f4;
   opacity: 0.3;
@@ -186,7 +259,7 @@ input[type="password"].modern-input {
   font-size: 0.9rem;
 }
 
-/* ========== ESTILOS PARA MENSAJES ========== */
+/* ========== ALERTS & MESSAGES ========== */
 .error-message {
   background-color: #2a475e;
   border: 1px solid #ff4444;
@@ -195,7 +268,29 @@ input[type="password"].modern-input {
   padding: 0.75rem 1rem;
 }
 
-/* ========== ESTILOS PARA TEXTOS ========== */
+.error-mensaje {
+  display: none;
+  background: linear-gradient(90deg, rgba(255, 0, 0, 0.2), rgba(255, 80, 80, 0.2));
+  border: 1px solid #ff3b3b;
+  color: #fff;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  text-align: center;
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0%   { transform: translateX(0); }
+  25%  { transform: translateX(-4px); }
+  50%  { transform: translateX(4px); }
+  75%  { transform: translateX(-4px); }
+  100% { transform: translateX(0); }
+}
+
+/* ========== TYPOGRAPHY HELPERS ========== */
 .password-hint {
   font-size: 0.8rem;
   opacity: 0.8;
@@ -216,11 +311,12 @@ input[type="password"].modern-input {
   color: #c7d5e0;
 }
 
-.btn-steam img {
-  width: 16px;
-  height: 16px;
+.forum-date {
+  color: #cfcfcf;
+  font-size: 12px;
 }
 
+/* ========== CARRITO ========== */
 .caja_carrito {
   display: flex;
   flex-direction: column;
@@ -244,14 +340,12 @@ input[type="password"].modern-input {
   padding: 15px;
   display: flex;
   gap: 15px;
-
 }
 
 .carrito-item .flex-grow-1 {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* centra verticalmente dentro de la columna */
   gap: 5px;
 }
 
@@ -259,6 +353,7 @@ input.horas-input {
   width: 70px;
 }
 
+/* ========== STEAM POPUP ========== */
 .steam-popup {
   background: #22394d;
   color: #c7d5e0;
@@ -290,6 +385,7 @@ input.horas-input {
   background: #3b6a8a;
 }
 
+/* ========== HORAS INPUT ========== */
 .fondo {
   background-color: #1b2838;
 }
@@ -312,74 +408,24 @@ input.horas-input {
 }
 
 .horas-input::-webkit-outer-spin-button,
-.horas-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.horas-input {
-  -moz-appearance: textfield;
-  /* Firefox */
-  appearance: textfield;
-}
-
+.horas-input::-webkit-inner-spin-button,
 #horas::-webkit-outer-spin-button,
 #horas::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
+.horas-input,
 #horas {
   -moz-appearance: textfield;
-  /* Firefox */
   appearance: textfield;
 }
 
-
-.forum-date {
-  color: #cfcfcf;
-  font-size: 12px;
+/* ========== PEDIDOS ========== */
+.h1Pedidos {
+  margin-bottom: 20px;
 }
 
-
-.error-mensaje {
-  display: none;
-  background: linear-gradient(90deg, rgba(255, 0, 0, 0.2), rgba(255, 80, 80, 0.2));
-  border: 1px solid #ff3b3b;
-  color: #fff;
-  padding: 14px;
-  border-radius: 10px;
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 12px;
-  text-align: center;
-  animation: shake 0.3s ease;
-}
-
-@keyframes shake {
-  0% {
-    transform: translateX(0);
-  }
-
-  25% {
-    transform: translateX(-4px);
-  }
-
-  50% {
-    transform: translateX(4px);
-  }
-
-  75% {
-    transform: translateX(-4px);
-  }
-
-  100% {
-    transform: translateX(0);
-  }
-}
-.h1Pedidos{
-            margin-bottom: 20px;
-        }
 .containerPedidos {
   max-width: 1000px;
   margin: 40px auto;
@@ -436,41 +482,573 @@ input.horas-input {
   text-decoration: none;
   font-size: 13px;
 }
-.containerDetalle{
-    max-width:900px;
-    margin:40px auto;
+
+/* ========== DETALLE PEDIDO ========== */
+.containerDetalle {
+  max-width: 900px;
+  margin: 40px auto;
 }
 
-.cardDetalle{
-    background:#1a1d23;
-    padding:15px;
-    border-radius:12px;
-    display:flex;
-    align-items:center;
-    gap:15px;
-    margin-bottom:10px;
-     width: 100%;
-}
-* {
-    box-sizing: border-box;
-}
-.cardDetalle img{
-    width:80px;
-    border-radius:8px;
+.cardDetalle {
+  background: #1a1d23;
+  padding: 15px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 10px;
+  width: 100%;
 }
 
-.infoDetalle{
-    flex:1;
+.cardDetalle img {
+  width: 80px;
+  border-radius: 8px;
 }
 
-.priceDetalle{
-    color:#22c55e;
-    font-weight:bold;
+.infoDetalle {
+  flex: 1;
 }
 
-.backDetalle{
-    display:inline-block;
-    margin-bottom:20px;
-    color:white;
-    text-decoration:none;
+.priceDetalle {
+  color: #22c55e;
+  font-weight: bold;
+}
+
+.backDetalle {
+  display: inline-block;
+  margin-bottom: 20px;
+  color: white;
+  text-decoration: none;
+}
+
+/* ========== HERO ========== */
+.hero-section {
+  position: relative;
+  background: linear-gradient(135deg, #0a1628 0%, #16243a 60%, #0e1e30 100%);
+  border-radius: 8px;
+  padding: 3rem 2.5rem;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2rem;
+  border: 1px solid rgba(102, 192, 244, 0.1);
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(66, 132, 176, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(66, 132, 176, 0.07) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-tag {
+  display: inline-block;
+  background: rgba(102, 192, 244, 0.12);
+  border: 1px solid rgba(102, 192, 244, 0.35);
+  color: #66c0f4;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 3px;
+  margin-bottom: 1rem;
+}
+
+.hero-title {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+
+.hero-title span {
+  color: #66c0f4;
+}
+
+.hero-sub {
+  color: #8fb0c8;
+  font-size: 15px;
+  margin-bottom: 1.5rem;
+  max-width: 420px;
+}
+
+.hero-stats {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 2rem;
+  flex-shrink: 0;
+}
+
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.hero-stat-num {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #66c0f4;
+  line-height: 1;
+}
+
+.hero-stat-label {
+  font-size: 11px;
+  color: #7193a8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+
+/* ========== SECTION HEADING ========== */
+.section-heading {
+  color: #c6d4df;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding-left: 10px;
+  border-left: 3px solid #66c0f4;
+}
+
+/* ========== FEATURED CARD ========== */
+.featured-card {
+  background-size: cover !important;
+  background-position: center !important;
+  min-height: 280px;
+  border: 1px solid rgba(0, 0, 0, 0.4) !important;
+}
+
+.featured-overlay {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.2) 60%, transparent 100%);
+  padding: 1.5rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  border-radius: inherit;
+}
+
+.featured-badge {
+  display: inline-block;
+  background: #4c6b22;
+  color: #a4d55d;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 3px;
+  margin-bottom: 10px;
+  align-self: flex-start;
+}
+
+.featured-title {
+  color: #fff;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+/* ========== SIDE ITEMS ========== */
+.side-item {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 0;
+  transition: transform .15s;
+}
+
+.side-item:hover {
+  transform: translateX(4px);
+}
+
+.side-item-img {
+  width: 100px;
+  height: 56px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border-radius: 4px 0 0 4px;
+}
+
+.side-item-price {
+  margin-left: auto;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ========== GENRE CARDS ========== */
+.genre-card {
+  background-color: #2a475e;
+  border-radius: 6px;
+  padding: 1.2rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+  border: 1px solid transparent;
+  transition: transform .2s, border-color .2s, background-color .2s;
+  color: #c7d5e0;
+}
+
+.genre-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(102, 192, 244, 0.4);
+  background-color: #2f526e;
+  text-decoration: none;
+  color: #fff;
+}
+
+.genre-icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+.genre-name {
+  font-size: 13px;
+  font-weight: 500;
+  display: block;
+}
+
+/* ========== HOW IT WORKS STEPS ========== */
+.steps-icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+/* ========== BANNER CTA ========== */
+.banner-cta {
+  min-height: unset;
+  align-items: center;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .hero-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hero-stats {
+    gap: 1.5rem;
+  }
+
+  .hero-title {
+    font-size: 1.8rem;
+  }
+}
+
+.avatar-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--steam-blue);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+}
+
+:root {
+  --steam-blue: #66c0f4;
+  --bg-dark: #1b2838;
+  --panel: #2a475e;
+  --panel-dark: #171a21;
+}
+
+.game-img {
+  position: relative;
+  overflow: hidden;
+}
+
+.game-img img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  transition: transform .3s ease;
+}
+
+.game-card:hover .game-img img {
+  transform: scale(1.05);
+}
+
+.game-img .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+
+.game-card:hover .overlay {
+  opacity: 1;
+}
+
+.profile-banner {
+  background: linear-gradient(135deg, #0f1c2e, #1b2838);
+  border-bottom: 1px solid rgba(102,192,244,0.15);
+  padding: 2rem;
+  border-radius: 0 0 12px 12px;
+}
+
+.stat-card {
+  background: linear-gradient(145deg, #2a475e, #1f3446);
+  border-radius: 10px;
+  padding: 1.2rem;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+  transition: transform .2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+}
+
+.stat-card h3 {
+  color: var(--steam-blue);
+  font-size: 1.8rem;
+  margin-bottom: 0.3rem;
+}
+
+/* ============================================================
+   LIBRARY CARD (PERFIL USUARIO)
+============================================================ */
+
+.library-card {
+  background: linear-gradient(145deg, #22384a, #1a2c3a);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid rgba(102,192,244,0.08);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.library-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+
+/* imagen */
+.library-card .game-img {
+  position: relative;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+}
+
+.library-card .game-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .3s ease;
+}
+
+.library-card:hover .game-img img {
+  transform: scale(1.04);
+}
+
+/* badge biblioteca */
+.library-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(102,192,244,0.15);
+  border: 1px solid rgba(102,192,244,0.4);
+  color: #66c0f4;
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* contenido */
+.library-card .card-body {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.library-card .title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0;
+}
+
+.library-card .meta {
+  font-size: 11px;
+  color: #8aa6bf;
+}
+
+/* botón pequeño */
+.library-card .btn-library {
+  margin-top: auto;
+  background: transparent;
+  border: 1px solid #66c0f4;
+  color: #66c0f4;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all .2s ease;
+}
+
+.library-card .btn-library:hover {
+  background: #66c0f4;
+  color: #000;
+}
+
+/* ============================================================
+   PROFILE STATS TEXT
+============================================================ */
+
+.profile-stat-num {
+  color: #66c0f4;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.profile-stat-label {
+  font-size: 11px;
+  color: #8aa6bf;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   ACHIEVEMENTS
+============================================================ */
+
+.achievement-card {
+  background: #2a475e;
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: center;
+  transition: transform .2s ease, box-shadow .2s ease;
+  border: 1px solid rgba(102,192,244,0.08);
+}
+
+.achievement-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+
+/* imagen logro */
+.achievement-img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #1b2838;
+}
+
+.achievement-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: .3s ease;
+}
+
+.achievement-card:hover .achievement-img img {
+  transform: scale(1.05);
+}
+
+/* contenido */
+.achievement-body {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.achievement-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.achievement-status {
+  font-size: 10px;
+  color: #8aa6bf;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   LOCKED STATE (BLANCO Y NEGRO)
+============================================================ */
+
+.achievement-card.locked {
+  filter: grayscale(100%);
+  opacity: 0.45;
+}
+
+.achievement-card.locked img {
+  filter: grayscale(100%);
+}
+
+/* ============================================================
+   SETTINGS PAGE (STEAM STYLE)
+============================================================ */
+
+.settings-card {
+  background: linear-gradient(145deg, #2a475e, #1f3446);
+  border-radius: 10px;
+  padding: 20px;
+  border: 1px solid rgba(102,192,244,0.08);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+}
+
+.settings-title {
+  color: #fff;
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+.settings-text {
+  color: #8aa6bf;
+  font-size: 13px;
+}
+
+/* danger box */
+.settings-card.danger {
+  border: 1px solid rgba(255,0,0,0.3);
+  background: linear-gradient(145deg, #2a1f22, #1a1214);
+}
+
+/* botones */
+.btn-danger {
+  background: #e74c3c;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  transition: .2s;
+}
+
+.btn-danger:hover {
+  background: #c0392b;
+}
+.btn-outline-steam {
+  background: transparent;
+  border: 1px solid #66c0f4;
+  color: #66c0f4;
+  border-radius: 6px;
+  transition: all .2s ease;
+}
+
+.btn-outline-steam:hover {
+  background: #66c0f4;
+  color: #000;
 }
