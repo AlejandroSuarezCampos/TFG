@@ -3,17 +3,16 @@ session_start();
 require_once("./vendor/autoload.php");
 include_once("./db/conexion.php");
 include_once("./db/consultas.php");
-$juegos_carrito = $db->listarjuegoscarrito($_SESSION["carrito"]);
-include 'factura_generator.php';
+
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 \Stripe\Stripe::setApiKey('sk_test_51TVq223JiYqRuNkdWHbg1JOQfZrC4zILSIAXiSet4kUfyoyfKsOqQEJl6z5uz6ckxI7RnNt70i3WVzOax7vtSKef00qRUnr611');
-$usuario_id=$_SESSION["usuario_id"];
+$usuario_id = $_SESSION["usuario_id"];
 $session_id = $_GET['id'];
-
+$juegos_carrito = $db->listarjuegoscarrito($_SESSION["carrito"]);
 $session = \Stripe\Checkout\Session::retrieve($session_id);
 
 // datos
@@ -21,241 +20,49 @@ $email = $session->customer_details->email;
 $total = $session->amount_total / 100;
 $nombre = $session->metadata->customer_name ?? 'Cliente';
 $payment_id = $session->payment_intent;
-
 $numero = "FAC-" . date("YmdHis");
 
-$html = "
-<html>
-<head>
-<style>
-body{
-    font-family: Arial, Helvetica, sans-serif;
-    color:#1a1a1a;
-    margin:40px;
-    font-size:14px;
+//Insertamos el pedido
+$id_pedido = $db->insertarpedido($usuario_id);
+
+if (!$id_pedido) {
+    die("Error creando pedido");
 }
-.header{
-    position: relative;
-    margin-bottom: 40px;
-    min-height: 120px;
-}
-.logo{
-    position: absolute;
-    top: 0;
-    right: 0;
-}
-.logo img{
-    width: 280px;
-}
-.title{
-    font-size:34px;
-    font-weight:bold;
-    margin-bottom:20px;
-}
-.invoice-info{
-    color:#555;
-    line-height:1.8;
-}
-.logo img{
-    width:150px;
-}
-.section{
-    margin-top:35px;
-}
-.section-title{
-    font-size:13px;
-    text-transform:uppercase;
-    color:#777;
-    margin-bottom:10px;
-    font-weight:bold;
-}
-.client-box{
-    line-height:1.8;
-    color:#444;
-}
-.amount-due{
-    margin-top:30px;
-    padding:20px;
-    background:#f6f9fc;
-    border-radius:8px;
-    font-size:18px;
-    font-weight:bold;
-}
-table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:35px;
-}
-thead{
-    background:#f6f9fc;
-}
-th{
-    text-align:left;
-    padding:14px;
-    color:#666;
-    font-size:13px;
-    border-bottom:1px solid #ddd;
-}
-td{
-    padding:14px;
-    border-bottom:1px solid #eee;
-    color:#333;
-}
-.text-center{
-    text-align:center;
-}
-.text-right{
-    text-align:right;
-}
-.summary{
-    width:320px;
-    margin-left:auto;
-    margin-top:35px;
-}
-.summary-row{
-    display:flex;
-    justify-content:space-between;
-    margin-bottom:12px;
-    font-size:15px;
-    text-align:right;
-}
-.summary-row span:last-child{
-    min-width:120px;
-    text-align:right;
+/* =========================
+   PROCESAR JUEGOS
+========================= */
+$juegos_carrito_codificados = [];
+
+foreach ($juegos_carrito as $juego) {
+
+    $codigo = $db->generarCodigoFactura(16);
+
+    // INSERT EN BD
+    $db->insertarpedidoitem(
+        $id_pedido,
+        $juego['id_juego'],
+        $juego['horas'],
+        $juego['precio_alquiler'],
+        $codigo
+    );
+
+    // guardar código para factura
+    $juego['codigo'] = $codigo;
+    $juegos_carrito_codificados[] = $juego;
 }
 
-.total{
-    border-top:2px solid #ddd;
-    padding-top:15px;
-    margin-top:15px;
-    font-size:22px;
-    font-weight:bold;
-    color:#111;
-}
-.footer{
-    margin-top:60px;
-    font-size:12px;
-    color:#888;
-    text-align:center;
-}
-</style>
-</head>
-<body>
-<div class='header'>
-    <div>
-        <div class='title'>Factura</div>
-        <div class='invoice-info'>
-            <strong>Número de factura:</strong> $numero
-            <br>
-            <strong>Fecha de emisión:</strong> " . date('d/m/Y H:i:s') . "
-        </div>
-    </div>
-    <div class='logo'>
-        <img src='http://localhost/TFG/assets/logo.jpg'>
-    </div>
-</div>
-<div class='section'>
-    <div class='section-title'>
-        Facturar a
-    </div>
-    <div class='client-box'>
-        $nombre
-        <br>
-        España
-        <br>
-        $email
-    </div>
-</div>
+$juegos_carrito = $juegos_carrito_codificados;
+include_once "factura_generator.php";
+ob_start();
 
-<table>
-
-<thead>
-
-<tr>
-
-    <th>Descripción</th>
-
-    <th class='text-center'>
-        Horas
-    </th>
-
-    <th class='text-right'>
-        Base
-    </th>
-
-    <th class='text-right'>
-        IVA 21%
-    </th>
-
-    <th class='text-right'>
-        Importe
-    </th>
-
-</tr>
-
-</thead>
-
-<tbody>
-
-    $filas
-
-</tbody>
-
-</table>
-
-<div class='summary'>
-
-    <div class='summary-row'>
-
-        <span>Subtotal</span>
-
-        <span>
-            €" . number_format($subtotal, 2) . "
-        </span>
-
-    </div>
-
-    <div class='summary-row'>
-
-        <span>IVA total</span>
-
-        <span>
-            €" . number_format($iva_total, 2) . "
-        </span>
-
-    </div>
-
-    <div class='summary-row total'>
-
-        <span>TOTAL</span>
-
-        <span>
-            €" . number_format($total_final, 2) . "
-        </span>
-
-    </div>
-
-</div>
-
-<div class='footer'>
-
-    Gracias por tu compra.
-
-</div>
-
-</body>
-
-</html>
-
-";
+include __DIR__ . "/templates/factura.php";
+$html = ob_get_clean();
 // crear carpeta
 if (!is_dir(__DIR__ . "/facturas")) {
     mkdir(__DIR__ . "/facturas", 0777, true);
 }
 
-/* =========================
-   1. GENERAR PDF
-========================= */
+//Generación del PDF
 
 $options = new Options();
 $options->set('isRemoteEnabled', true);
@@ -272,9 +79,7 @@ $pdf_output = $dompdf->output();
 $pdf_path = __DIR__ . "/facturas/$numero.pdf";
 file_put_contents($pdf_path, $pdf_output);
 
-/* =========================
-   2. ENVIAR EMAIL
-========================= */
+//Enviamos el mail
 
 $mail = new PHPMailer(true);
 
@@ -294,74 +99,29 @@ try {
     $mail->isHTML(true);
     $mail->Subject = "Tu factura $numero";
 
-  $mail->Body = "
-
-<div style='font-family:Arial,sans-serif;color:#222;line-height:1.6;'>
-
-    <h2 style='color:#111;margin-bottom:20px;'>
-        Gracias por tu compra
-    </h2>
-
-    <p>
-        Hemos recibido correctamente tu pedido y el pago se ha realizado con éxito.
-    </p>
-
-    <p>
-        En el archivo adjunto encontrarás la factura en formato PDF con todos los detalles de la operación.
-    </p>
-
-    <p>
-        Agradecemos la confianza depositada en nuestra plataforma y esperamos verte de nuevo muy pronto.
-    </p>
-
-    <p>
-        Si necesitas ayuda o tienes cualquier consulta, nuestro equipo estará encantado de atenderte.
-    </p>
-
-    <br>
-
-    <hr style='border:none;border-top:1px solid #ddd;'>
-
-    <p style='font-size:12px;color:#777;'>
-
-        Este correo ha sido generado automáticamente.<br>
-        Por favor, no respondas directamente a este mensaje.
-
-    </p>
-
-</div>
-
-";
+    ob_start();
+    include __DIR__ . "/templates/email_facturas.php";
+    $mail->Body = ob_get_clean();
 
     $mail->addAttachment($pdf_path);
     //$mail->SMTPDebug = 2;
     //$mail->Debugoutput = 'html';
     $mail->send();
-    $id_pedido=$db->insertarpedido($usuario_id);
-    if(!$id_pedido){
-    die("Error creando pedido");
-}
-    foreach($juegos_carrito as $juego){
 
-    $db->insertarpedidoitem(
-        $id_pedido,
-        $juego['id_juego'],
-        $juego['horas'], // duración alquiler
-        $juego['precio_alquiler']
-    );
-}
-    if(!$db->reciboExiste($session_id)){
-    $nombre_pdf = $numero . ".pdf";
-    $db->insertarpdf($usuario_id,$numero,$nombre_pdf,"pagado",$session_id,$id_pedido);
-}  /*
-  Antes de eliminar el carrito hay que generar tantos códigos como carritos existan, posible PA*/
-  $db->eliminarcarrito($usuario_id);
+
+    if (!$db->reciboExiste($session_id)) {
+        $nombre_pdf = $numero . ".pdf";
+        $db->insertarpdf($usuario_id, $numero, $nombre_pdf, "pagado", $session_id, $id_pedido);
+        //Eliminamos el carrito si todo ha ido bien
+        $db->eliminarcarrito($usuario_id);
+    }
+
 } catch (Exception $e) {
     echo "Error email: " . $mail->ErrorInfo;
 }
 ?>
 
-<!-- TU UI BONITA -->
+
 <!DOCTYPE html>
 <html lang="es">
 

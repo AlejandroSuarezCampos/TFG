@@ -423,10 +423,10 @@ class Tienda
 		]);
 		return $this->pdo->lastInsertId();
 	}
-	public function insertarpedidoitem($id_pedido, $id_juego, $duracion, $precio)
+	public function insertarpedidoitem($id_pedido, $id_juego, $duracion, $precio, $codigo)
 	{
 
-		$sentencia = "INSERT INTO pedido_item (id_pedido, id_juego, duracion, precio) VALUES (:pedido, :juego, :duracion, :precio)";
+		$sentencia = "INSERT INTO pedido_item (id_pedido, id_juego, duracion, precio,codigo) VALUES (:pedido, :juego, :duracion, :precio,:codigo)";
 
 		$ejecucion = $this->pdo->prepare($sentencia);
 
@@ -434,7 +434,8 @@ class Tienda
 			":pedido" => $id_pedido,
 			":juego" => $id_juego,
 			":duracion" => $duracion,
-			"precio" => $precio
+			"precio" => $precio,
+			":codigo" => $codigo
 		]);
 	}
 	public function reciboExiste($stripe_session_id)
@@ -526,8 +527,23 @@ class Tienda
 			":id" => $id_pedido,
 			":user" => $id_usuario
 		]);
-		$resultado=$ejecucion->fetch(PDO::FETCH_ASSOC);
+		$resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
 		return $resultado['nombre_fichero'];
 	}
+
+	public function generarCodigoFactura($longitud = 16)
+{
+    $time = microtime(true);
+    $random = bin2hex(random_bytes(8));
+
+    $base = $time . $random;
+
+    $hash = hash('sha256', $base);
+    $hash = strtoupper($hash);
+
+    $hash = preg_replace('/[^A-Z0-9]/', '', $hash);
+
+    return substr($hash, 0, $longitud);
+}
 }
 ?>
