@@ -529,5 +529,22 @@ class Tienda
 		$resultado=$ejecucion->fetch(PDO::FETCH_ASSOC);
 		return $resultado['nombre_fichero'];
 	}
+
+	public function borrarCuenta($id){
+		$sentencia = "DELETE FROM usuarios WHERE id_usuario = :id";
+
+		$ejecucion = $this->pdo->prepare($sentencia);
+
+		$ejecucion->execute([
+			":id" => $id	
+		]);
+
+        // cerrar sesión
+        session_unset();
+        session_destroy();
+
+        header("location: index.php?cuenta=borrada");
+        exit;
+	}
 }
 ?>
