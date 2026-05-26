@@ -250,16 +250,7 @@ function ocultarTodosLosErroresLogin() {
 }
 
 function logOut() {
-    let xmlhttp = new XMLHttpRequest();
-
-    xmlhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            document.location.reload();
-        }
-    };
-
-    xmlhttp.open("GET", "./async/logOut.php", true);
-    xmlhttp.send();
+    window.location.href = "/TFG/async/logOut.php";
 }
 
 //Funciones para carrito

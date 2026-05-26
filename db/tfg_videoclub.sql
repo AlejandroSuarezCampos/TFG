@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 20-05-2026 a las 23:05:23
+-- Tiempo de generación: 27-05-2026 a las 00:25:00
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -51,14 +51,6 @@ CREATE TABLE `carrito_item` (
   `duracion` int(11) NOT NULL,
   `precio` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `carrito_item`
---
-
-INSERT INTO `carrito_item` (`id_carrito`, `id_usuario`, `id_juego`, `duracion`, `precio`) VALUES
-(177, 3, 5, 3, 6.00),
-(179, 3, 4, 1, 1.50);
 
 -- --------------------------------------------------------
 
@@ -155,7 +147,7 @@ INSERT INTO `juegos` (`id_juego`, `titulo`, `descripcion`, `precio_alquiler`, `i
 (22, 'Uncharted 4', 'Aventura de acción lanzada en 2016 para PS4.', 2.50, './img/uncharted_4.jpg', 0, 10),
 (23, 'The Last of Us', 'Juego de acción y supervivencia lanzado en 2013 para PS3.', 2.50, './img/the_last_of_us.jpg', 0, 10),
 (24, 'The Last of Us Part II', 'Juego de acción y supervivencia lanzado en 2020 para PlayStation 4.', 3.50, './img/the_last_of_us_part_2.jpg', 0, 10),
-(39, 'asfasf', 'asfasf', 0.99, 'img/DragonLegacy.png', 2, 1);
+(39, 'asfasf', 'asfasf', 0.99, 'img/DragonLegacy.png', 2, 0);
 
 -- --------------------------------------------------------
 
@@ -265,8 +257,21 @@ CREATE TABLE `pedido` (
   `id_pedido` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL,
   `Fecha` datetime NOT NULL,
-  `metodo_pago` int(11) NOT NULL
+  `metodo_pago` int(11) NOT NULL,
+  `estado` enum('pagado','reembolsado') NOT NULL DEFAULT 'pagado',
+  `fecha_reembolso` datetime DEFAULT NULL,
+  `motivo_reembolso` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `pedido`
+--
+
+INSERT INTO `pedido` (`id_pedido`, `id_usuario`, `Fecha`, `metodo_pago`, `estado`, `fecha_reembolso`, `motivo_reembolso`) VALUES
+(24, 3, '2026-05-25 23:37:02', 1, 'pagado', NULL, NULL),
+(32, 3, '2026-05-26 00:07:48', 1, 'pagado', NULL, NULL),
+(33, 3, '2026-05-26 18:19:49', 1, 'pagado', NULL, NULL),
+(34, 3, '2026-05-26 18:44:42', 1, 'pagado', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -281,8 +286,23 @@ CREATE TABLE `pedido_item` (
   `duracion` int(11) NOT NULL,
   `precio` decimal(10,2) NOT NULL,
   `canjeado` tinyint(1) NOT NULL,
-  `codigo` int(16) NOT NULL
+  `codigo` char(16) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `pedido_item`
+--
+
+INSERT INTO `pedido_item` (`id_item`, `id_pedido`, `id_juego`, `duracion`, `precio`, `canjeado`, `codigo`) VALUES
+(414956, 24, 4, 4, 1.50, 0, 'A5DEFFD21EBEFDB0'),
+(414957, 24, 18, 1, 2.50, 0, '2A66DEAF91DFFB27'),
+(414970, 32, 8, 6, 3.00, 0, '619168F580C55BB0'),
+(414971, 32, 13, 7, 2.50, 0, '3F48731AEAAEB0E6'),
+(414972, 33, 3, 10, 2.00, 0, '82CD0CD0353D185F'),
+(414973, 33, 4, 3, 1.50, 0, 'F6AF417044B3BE3C'),
+(414974, 33, 2, 4, 2.50, 0, '94F478C9928EC703'),
+(414975, 33, 8, 5, 3.00, 0, 'F2A225F02F74702D'),
+(414976, 34, 3, 3, 2.00, 0, '9406317988D959C9');
 
 -- --------------------------------------------------------
 
@@ -300,6 +320,16 @@ CREATE TABLE `recibos` (
   `fecha_emision` datetime DEFAULT current_timestamp(),
   `id_pedido` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `recibos`
+--
+
+INSERT INTO `recibos` (`id_recibo`, `id_usuario`, `numero_factura`, `nombre_fichero`, `estado`, `stripe_session_id`, `fecha_emision`, `id_pedido`) VALUES
+(2, 3, 'FAC-20260525233702', 'FAC-20260525233702.pdf', 'pagado', 'cs_test_b1Sg2qvij5oiXFRNB78VZThjPY4e296LLqXxrPyuge7QherKDZ8yht3EYh', '2026-05-25 23:37:04', 24),
+(10, 3, 'FAC-20260526000748', 'FAC-20260526000748.pdf', 'pagado', 'cs_test_b1ksFslOmNrF7xtx4aENa66mNX0hFVzgudDQXpmlro9Q5zTXazrEusGPqc', '2026-05-26 00:07:51', 32),
+(11, 3, 'FAC-20260526181949', 'FAC-20260526181949.pdf', 'pagado', 'cs_test_b14t0f43yLJtbjOFLqDC2J8Q8YPuJSUXGWq4ceA4etrbXeFm3DvGyYPtV9', '2026-05-26 18:19:53', 33),
+(12, 3, 'FAC-20260526184442', 'FAC-20260526184442.pdf', 'pagado', 'cs_test_a1AdSiwkfcSMVQ9TsoB56THffMshBd5GhusXnVPRsKmrWQ2NbmQKpIhnLu', '2026-05-26 18:44:44', 34);
 
 -- --------------------------------------------------------
 
@@ -559,7 +589,7 @@ ALTER TABLE `alquileres`
 -- AUTO_INCREMENT de la tabla `carrito_item`
 --
 ALTER TABLE `carrito_item`
-  MODIFY `id_carrito` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=180;
+  MODIFY `id_carrito` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=245;
 
 --
 -- AUTO_INCREMENT de la tabla `categorias`
@@ -595,19 +625,19 @@ ALTER TABLE `metodo_pago`
 -- AUTO_INCREMENT de la tabla `pedido`
 --
 ALTER TABLE `pedido`
-  MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT de la tabla `pedido_item`
 --
 ALTER TABLE `pedido_item`
-  MODIFY `id_item` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_item` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=414977;
 
 --
 -- AUTO_INCREMENT de la tabla `recibos`
 --
 ALTER TABLE `recibos`
-  MODIFY `id_recibo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_recibo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `respuestas`
@@ -724,3 +754,4 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+

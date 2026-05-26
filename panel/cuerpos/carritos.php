@@ -1,9 +1,5 @@
 <?php
 include_once("PanelIndex.php");
-
-
-
-
 $listaPedidos = $db->listarPedidos();
 ?>
 
@@ -33,7 +29,8 @@ $listaPedidos = $db->listarPedidos();
       <td><?= $pedido["totales"] ?></td>
       <td>
         <button class="btn btn-sm btn-danger"
-          onclick="eliminarCategoria(<?= $categoria['id_categoria'] ?>)">Eliminar</button>
+         onclick="reembolsarPedido(<?= $pedido['id_pedido'] ?>)">Eliminar
+        </button>
         <button class="btn btn-sm btn-warning" onclick="eliminarCategoria(<?= $categoria['id_categoria'] ?>)">Eliminar y
           reembolsar</button>
       </td>

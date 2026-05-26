@@ -5,11 +5,11 @@
         }
     });
 });*/
-document.addEventListener("DOMContentLoaded", function(){
+document.addEventListener("DOMContentLoaded", function () {
     const buscador = document.getElementById("buscador");
 
     if (buscador !== null) {
-        buscador.addEventListener("keydown", function(e){
+        buscador.addEventListener("keydown", function (e) {
             if (e.key === "Enter") {
                 buscarJuego();
             }
@@ -17,36 +17,36 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 });
 
-function filtrarCat(id){
+function filtrarCat(id) {
     let xmlhttp = new XMLHttpRequest();
 
-    xmlhttp.onreadystatechange = function() {
-        if(this.readyState==4 && this.status==200){
-            document.getElementById("visorJuegos").innerHTML=this.responseText;
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("visorJuegos").innerHTML = this.responseText;
         }
     };
 
-    xmlhttp.open("GET", "./async/filtrarCat.php?id="+id, true);
+    xmlhttp.open("GET", "./async/filtrarCat.php?id=" + id, true);
     xmlhttp.send();
 }
 
-function buscarJuego(){
+function buscarJuego() {
     let xmlhttp = new XMLHttpRequest();
 
-    xmlhttp.onreadystatechange = function() {
-        if(this.readyState==4 && this.status==200){
-            document.getElementById("visorJuegos").innerHTML=this.responseText;
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("visorJuegos").innerHTML = this.responseText;
         }
     };
 
     let texto = document.getElementById("buscador").value;
-		if(texto!=""){
-		  xmlhttp.open("GET","./async/buscarJuego.php?texto="+texto);
-		  xmlhttp.send();
-		}else{
-		  let capa = document.getElementById("results");
-		  capa.innerText="Error al Buscar";
-		}
+    if (texto != "") {
+        xmlhttp.open("GET", "./async/buscarJuego.php?texto=" + texto);
+        xmlhttp.send();
+    } else {
+        let capa = document.getElementById("results");
+        capa.innerText = "Error al Buscar";
+    }
 }
 
 
@@ -83,59 +83,59 @@ function limpiarErrores() {
 function crearCat() {
     limpiarErroresCat();
 
-    let xmlhttp=new XMLHttpRequest();
+    let xmlhttp = new XMLHttpRequest();
 
-    let nombre=document.getElementById("nombre").value.trim();
-    if(nombre==""){
+    let nombre = document.getElementById("nombre").value.trim();
+    if (nombre == "") {
         mostrarErrorCat("campos_vacios", "Todos los campos son obligatorios");
         return;
     }
-        
-        xmlhttp.onreadystatechange=function(){
-            if (this.readyState==4 && this.status==200) {
-                let respuesta=JSON.parse(this.responseText);
-                
-                
-                if(respuesta.exito){
-                    document.getElementById("errorCampos").classList.remove("oculto");
-                    document.getElementById("errorCampos").innerText="¡Creado correctamente!";
-                    document.getElementById("errorCampos").style.color="#66c0f4";
-                    document.getElementById("errorCampos").style.borderColor="#66c0f4";
+
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            let respuesta = JSON.parse(this.responseText);
 
 
-                    document.getElementById("nombre").value="";
-                
-                    
-                }else{
-                    ocultarTodosLosErroresCat();
+            if (respuesta.exito) {
+                document.getElementById("errorCampos").classList.remove("oculto");
+                document.getElementById("errorCampos").innerText = "¡Creado correctamente!";
+                document.getElementById("errorCampos").style.color = "#66c0f4";
+                document.getElementById("errorCampos").style.borderColor = "#66c0f4";
 
-                    switch(respuesta.error){
-                        case "campos_vacios":
-                            document.getElementById("errorCampos").classList.remove("oculto");
-                            document.getElementById("errorCampos").innerText = respuesta.mensaje;
-                            break;
-                        case "categoria_existe":
-                            document.getElementById("errorNombre").classList.remove("oculto");
-                            document.getElementById("errorNombre").innerText = respuesta.mensaje;
-                            break;
-                        default:
-                             document.getElementById("errorCampos").classList.remove("oculto");
-                             document.getElementById("errorCampos").innerText=respuesta.mensaje || "Error Al crear Cateogira";
+
+                document.getElementById("nombre").value = "";
+
+
+            } else {
+                ocultarTodosLosErroresCat();
+
+                switch (respuesta.error) {
+                    case "campos_vacios":
+                        document.getElementById("errorCampos").classList.remove("oculto");
+                        document.getElementById("errorCampos").innerText = respuesta.mensaje;
+                        break;
+                    case "categoria_existe":
+                        document.getElementById("errorNombre").classList.remove("oculto");
+                        document.getElementById("errorNombre").innerText = respuesta.mensaje;
+                        break;
+                    default:
+                        document.getElementById("errorCampos").classList.remove("oculto");
+                        document.getElementById("errorCampos").innerText = respuesta.mensaje || "Error Al crear Cateogira";
 
                 }
             }
         }
-        };
-        let url="../async/crearCategoria.php?nombre=" + encodeURIComponent(nombre);
-        
-        xmlhttp.open("GET", url, true);
-        xmlhttp.send();
-    }
+    };
+    let url = "../async/crearCategoria.php?nombre=" + encodeURIComponent(nombre);
+
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+}
 
 
-function mostrarErrorCat(tipo, mensaje){
+function mostrarErrorCat(tipo, mensaje) {
     ocultarTodosLosErroresCat();
-    switch(tipo){
+    switch (tipo) {
         case "campos_vacios":
             document.getElementById("errorCampos").classList.remove("oculto");
             document.getElementById("errorCampos").innerText = mensaje;
@@ -144,20 +144,20 @@ function mostrarErrorCat(tipo, mensaje){
 }
 
 
-function limpiarErroresCat(){
+function limpiarErroresCat() {
     ocultarTodosLosErroresCat();
     document.getElementById("errorCampos").style.color = "#ff4444";
     document.getElementById("errorCampos").style.borderColor = "#ff4444";
 }
 
 
-function ocultarTodosLosErroresCat(){
+function ocultarTodosLosErroresCat() {
     document.getElementById("errorCampos").classList.add("oculto");
     document.getElementById("errorNombre").classList.add("oculto");
 }
 
 
-function crearUsu(){
+function crearUsu() {
     limpiarErrores();
 
     let xmlhttp = new XMLHttpRequest();
@@ -170,7 +170,7 @@ function crearUsu(){
         return;
     }
 
-    xmlhttp.onreadystatechange = function() {
+    xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             let respuesta = JSON.parse(this.responseText);
             if (respuesta.exito) {
@@ -182,7 +182,7 @@ function crearUsu(){
                 document.getElementById("username").value = "";
                 document.getElementById("email").value = "";
                 document.getElementById("password").value = "";
-                
+
             } else {
                 switch (respuesta.error) {
                     case "Usaurio_existe":
@@ -204,7 +204,7 @@ function crearUsu(){
         }
     };
 
-    let url="../async/crearUsuarios.php?nombre="+encodeURIComponent(nombre)+"&correo=" + encodeURIComponent(correo)+"&contrasena=" + encodeURIComponent(contrasena);
+    let url = "../async/crearUsuarios.php?nombre=" + encodeURIComponent(nombre) + "&correo=" + encodeURIComponent(correo) + "&contrasena=" + encodeURIComponent(contrasena);
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
 }
@@ -223,88 +223,65 @@ function limpiarErrores() {
 function ModificarCat(modificar) {
     limpiarErroresCat();
 
-    let xmlhttp=new XMLHttpRequest();
+    let xmlhttp = new XMLHttpRequest();
 
-    let nombre=document.getElementById("nombre").value.trim();
-    if(nombre=="" || modificar==""){
+    let nombre = document.getElementById("nombre").value.trim();
+    if (nombre == "" || modificar == "") {
         mostrarErrorCat("campos_vacios", "Todos los campos son obligatorios");
         return;
     }
-        
-        xmlhttp.onreadystatechange=function(){
-            if (this.readyState==4 && this.status==200) {
-                console.log(this.responseText)
-                let respuesta=JSON.parse(this.responseText);
-                
-                
-                if(respuesta.exito){
-                    document.getElementById("errorCampos").classList.remove("oculto");
-                    document.getElementById("errorCampos").innerText="¡Editado correctamente!";
-                    document.getElementById("errorCampos").style.color="#66c0f4";
-                    document.getElementById("errorCampos").style.borderColor="#66c0f4";
-                    document.getElementById("nombre").value="";
-                
-                    setTimeout(function(){
-                    window.location.href="../cuerpos/categorias.php";
-                }, 2000);
-                    
-                }else{
-                    ocultarTodosLosErroresCat();
 
-                    switch(respuesta.error){
-                        case "campos_vacios":
-                            document.getElementById("errorCampos").classList.remove("oculto");
-                            document.getElementById("errorCampos").innerText = respuesta.mensaje;
-                            break;
-                        case "categoria_existe":
-                            document.getElementById("errorNombre").classList.remove("oculto");
-                            document.getElementById("errorNombre").innerText = respuesta.mensaje;
-                            break;
-                        default:
-                             document.getElementById("errorCampos").classList.remove("oculto");
-                             document.getElementById("errorCampos").innerText=respuesta.mensaje || "Error Al crear Cateogira";
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText)
+            let respuesta = JSON.parse(this.responseText);
+
+
+            if (respuesta.exito) {
+                document.getElementById("errorCampos").classList.remove("oculto");
+                document.getElementById("errorCampos").innerText = "¡Editado correctamente!";
+                document.getElementById("errorCampos").style.color = "#66c0f4";
+                document.getElementById("errorCampos").style.borderColor = "#66c0f4";
+                document.getElementById("nombre").value = "";
+
+                setTimeout(function () {
+                    window.location.href = "../cuerpos/categorias.php";
+                }, 2000);
+
+            } else {
+                ocultarTodosLosErroresCat();
+
+                switch (respuesta.error) {
+                    case "campos_vacios":
+                        document.getElementById("errorCampos").classList.remove("oculto");
+                        document.getElementById("errorCampos").innerText = respuesta.mensaje;
+                        break;
+                    case "categoria_existe":
+                        document.getElementById("errorNombre").classList.remove("oculto");
+                        document.getElementById("errorNombre").innerText = respuesta.mensaje;
+                        break;
+                    default:
+                        document.getElementById("errorCampos").classList.remove("oculto");
+                        document.getElementById("errorCampos").innerText = respuesta.mensaje || "Error Al crear Cateogira";
 
                 }
             }
         }
-        };
-        let url="../async/EditarCategoria.php?nombre=" + encodeURIComponent(nombre)+"&modificar="+encodeURIComponent(modificar);
-        
-        xmlhttp.open("GET", url, true);
-        xmlhttp.send();
-    }
-
-function eliminarCategoria(id){
-    if(!confirm("¿Seguro que deseas eliminar esta categoría?")) return;
-
-    let xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
-        if(this.readyState == 4 && this.status == 200){
-            let respuesta = JSON.parse(this.responseText);
-            if(respuesta.exito){
-                // Eliminar la fila de la tabla
-                let fila = document.getElementById("fila-" + id);
-                fila.parentNode.removeChild(fila);
-                alert(respuesta.mensaje);
-            } else {
-                alert(respuesta.mensaje);
-            }
-        }
     };
-    let url="../async/eliminar_categoria.php?id=" + encodeURIComponent(id);
+    let url = "../async/EditarCategoria.php?nombre=" + encodeURIComponent(nombre) + "&modificar=" + encodeURIComponent(modificar);
 
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
 }
 
-function EliminarUsuario(id){
-    if(!confirm("¿Seguro que deseas eliminar este usuario?")) return;
+function eliminarCategoria(id) {
+    if (!confirm("¿Seguro que deseas eliminar esta categoría?")) return;
 
     let xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
-        if(this.readyState == 4 && this.status == 200){
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
             let respuesta = JSON.parse(this.responseText);
-            if(respuesta.exito){
+            if (respuesta.exito) {
                 // Eliminar la fila de la tabla
                 let fila = document.getElementById("fila-" + id);
                 fila.parentNode.removeChild(fila);
@@ -314,7 +291,30 @@ function EliminarUsuario(id){
             }
         }
     };
-    let url="../async/eliminar_Usuario.php?id=" + encodeURIComponent(id);
+    let url = "../async/eliminar_categoria.php?id=" + encodeURIComponent(id);
+
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+}
+
+function EliminarUsuario(id) {
+    if (!confirm("¿Seguro que deseas eliminar este usuario?")) return;
+
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            let respuesta = JSON.parse(this.responseText);
+            if (respuesta.exito) {
+                // Eliminar la fila de la tabla
+                let fila = document.getElementById("fila-" + id);
+                fila.parentNode.removeChild(fila);
+                alert(respuesta.mensaje);
+            } else {
+                alert(respuesta.mensaje);
+            }
+        }
+    };
+    let url = "../async/eliminar_Usuario.php?id=" + encodeURIComponent(id);
 
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
@@ -323,64 +323,64 @@ function EliminarUsuario(id){
 function ModificarUsu(modificar) {
     limpiarErroresUsu();
 
-    let xmlhttp=new XMLHttpRequest();
+    let xmlhttp = new XMLHttpRequest();
 
-    let Usuario=document.getElementById("username").value.trim();
-    let email=document.getElementById("email").value.trim();
-    let pass=document.getElementById("password").value.trim();
-    if(Usuario=="" ||email==""||pass==""|| modificar==""){
+    let Usuario = document.getElementById("username").value.trim();
+    let email = document.getElementById("email").value.trim();
+    let pass = document.getElementById("password").value.trim();
+    if (Usuario == "" || email == "" || pass == "" || modificar == "") {
         mostrarErrorUsu("campos_vacios", "Todos los campos son obligatorios");
         return;
     }
-        
-        xmlhttp.onreadystatechange=function(){
-            if (this.readyState==4 && this.status==200) {
-                console.log(this.responseText)
-                let respuesta=JSON.parse(this.responseText);
-                
-                
-                if(respuesta.exito){
-                    document.getElementById("errorCampos").classList.remove("oculto");
-                    document.getElementById("errorCampos").innerText="¡Editado correctamente!";
-                    document.getElementById("errorCampos").style.color="#66c0f4";
-                    document.getElementById("errorCampos").style.borderColor="#66c0f4";
-                    document.getElementById("username").value="";
-                    document.getElementById("email").value="";
-                    document.getElementById("password").value="";
-                
-                    setTimeout(function(){
-                    window.location.href="../cuerpos/categorias.php";
-                }, 2000);
-                    
-                }else{
-                    ocultarTodosLosErroresUsu();
 
-                    switch(respuesta.error){
-                        case "campos_vacios":
-                            document.getElementById("errorCampos").classList.remove("oculto");
-                            document.getElementById("errorCampos").innerText = respuesta.mensaje;
-                            break;
-                        case "categoria_existe":
-                            document.getElementById("errorNombre").classList.remove("oculto");
-                            document.getElementById("errorNombre").innerText = respuesta.mensaje;
-                            break;
-                        default:
-                             document.getElementById("errorCampos").classList.remove("oculto");
-                             document.getElementById("errorCampos").innerText=respuesta.mensaje || "Error Al crear Cateogira";
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText)
+            let respuesta = JSON.parse(this.responseText);
+
+
+            if (respuesta.exito) {
+                document.getElementById("errorCampos").classList.remove("oculto");
+                document.getElementById("errorCampos").innerText = "¡Editado correctamente!";
+                document.getElementById("errorCampos").style.color = "#66c0f4";
+                document.getElementById("errorCampos").style.borderColor = "#66c0f4";
+                document.getElementById("username").value = "";
+                document.getElementById("email").value = "";
+                document.getElementById("password").value = "";
+
+                setTimeout(function () {
+                    window.location.href = "../cuerpos/categorias.php";
+                }, 2000);
+
+            } else {
+                ocultarTodosLosErroresUsu();
+
+                switch (respuesta.error) {
+                    case "campos_vacios":
+                        document.getElementById("errorCampos").classList.remove("oculto");
+                        document.getElementById("errorCampos").innerText = respuesta.mensaje;
+                        break;
+                    case "categoria_existe":
+                        document.getElementById("errorNombre").classList.remove("oculto");
+                        document.getElementById("errorNombre").innerText = respuesta.mensaje;
+                        break;
+                    default:
+                        document.getElementById("errorCampos").classList.remove("oculto");
+                        document.getElementById("errorCampos").innerText = respuesta.mensaje || "Error Al crear Cateogira";
 
                 }
             }
         }
-        };
-        let url="../async/Editar_Usuario.php?modificar="+encodeURIComponent(modificar)+"&nombre=" + encodeURIComponent(Usuario)+"&email="+encodeURIComponent(email)+"&contraseña="+encodeURIComponent(pass);
-        
-        xmlhttp.open("GET", url, true);
-        xmlhttp.send();
-    }
+    };
+    let url = "../async/Editar_Usuario.php?modificar=" + encodeURIComponent(modificar) + "&nombre=" + encodeURIComponent(Usuario) + "&email=" + encodeURIComponent(email) + "&contraseña=" + encodeURIComponent(pass);
 
-    function mostrarErrorUsu(tipo, mensaje){
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+}
+
+function mostrarErrorUsu(tipo, mensaje) {
     ocultarTodosLosErroresUsu();
-    switch(tipo){
+    switch (tipo) {
         case "campos_vacios":
             document.getElementById("errorCampos").classList.remove("oculto");
             document.getElementById("errorCampos").innerText = mensaje;
@@ -389,14 +389,14 @@ function ModificarUsu(modificar) {
 }
 
 
-function limpiarErroresUsu(){
+function limpiarErroresUsu() {
     ocultarTodosLosErroresUsu();
     document.getElementById("errorCampos").style.color = "#ff4444";
     document.getElementById("errorCampos").style.borderColor = "#ff4444";
 }
 
 
-function ocultarTodosLosErroresUsu(){
+function ocultarTodosLosErroresUsu() {
     document.getElementById("errorCampos").classList.add("oculto");
     document.getElementById("errorUsuario").classList.add("oculto");
     document.getElementById("errorEmail").classList.add("oculto");
@@ -405,15 +405,15 @@ function ocultarTodosLosErroresUsu(){
 
 
 //Funciones para el panel de juegos
-function EliminarJuego(id){
-    if(!confirm("¿Seguro que deseas eliminar este juego?")) return;
+function EliminarJuego(id) {
+    if (!confirm("¿Seguro que deseas eliminar este juego?")) return;
 
     let xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
-        if(this.readyState == 4 && this.status == 200){
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
             console.log(this.responseText);
             let respuesta = JSON.parse(this.responseText);
-            if(respuesta.exito){
+            if (respuesta.exito) {
                 // Eliminar la fila de la tabla
                 let fila = document.getElementById("fila-" + id);
                 fila.parentNode.removeChild(fila);
@@ -425,7 +425,7 @@ function EliminarJuego(id){
     };
     xmlhttp.open("POST", "../async/eliminar_juego.php", true);
     xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xmlhttp.send("id="+ encodeURIComponent(id));
+    xmlhttp.send("id=" + encodeURIComponent(id));
 }
 function limpiarErroresJuegos() {
     document.getElementById("errorCampos").innerText = "";
@@ -438,7 +438,7 @@ function limpiarErroresJuegos() {
 
 }
 
-function crearJuego(){
+function crearJuego() {
     limpiarErroresJuegos();
 
     let xmlhttp = new XMLHttpRequest();
@@ -447,14 +447,14 @@ function crearJuego(){
     let descripcion = document.getElementById("descripcion").value.trim();
     let precio = document.getElementById("precio").value;
     let imagenInput = document.getElementById("imagen");
-    let ventas=document.getElementById("ventas").value;
-    let stock=document.getElementById("stock").value
-    if (titulo == "" || descripcion == "" || precio <=0 || imagenInput.files.length == "") {
+    let ventas = document.getElementById("ventas").value;
+    let stock = document.getElementById("stock").value
+    if (titulo == "" || descripcion == "" || precio <= 0 || imagenInput.files.length == "") {
         mostrarError("Todos los campos son obligatorios");
         return;
     }
     //Para poder enviar los datos recogidos de los inputs como si fueran un formulario y recoger la ruta de la img con FILES
-     let formData = new FormData();
+    let formData = new FormData();
     formData.append("titulo", titulo);
     formData.append("descripcion", descripcion);
     formData.append("precio", precio);
@@ -462,7 +462,7 @@ function crearJuego(){
     formData.append("ventas", ventas);
     formData.append("stock", stock);
 
-    xmlhttp.onreadystatechange = function() {
+    xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             console.log(this.responseText);
             let respuesta = JSON.parse(this.responseText);
@@ -471,7 +471,7 @@ function crearJuego(){
                 document.getElementById("errorCampos").classList.remove("oculto");
                 document.getElementById("errorCampos").innerText = "¡Creacion completada con exito!";
                 document.getElementById("errorCampos").style.color = "#66c0f4";
-                document.getElementById("errorCampos").style.borderColor="#66c0f4";
+                document.getElementById("errorCampos").style.borderColor = "#66c0f4";
 
                 document.getElementById("titulo").value = "";
                 document.getElementById("descripcion").value = "";
@@ -479,7 +479,7 @@ function crearJuego(){
                 document.getElementById("imagen").src = "";
                 document.getElementById("ventas").value = 0;
                 document.getElementById("stock").value = 0;
-                
+
             } else {
                 switch (respuesta.error) {
                     case "Juego_existe":
@@ -492,13 +492,13 @@ function crearJuego(){
                         break;
                     case "no_imagen":
                         document.getElementById("errorImagen").classList.remove("oculto");
-                        document.getElementById("errorImagen").innerText=respuesta.mensaje;
+                        document.getElementById("errorImagen").innerText = respuesta.mensaje;
                     case "imagen_grande":
-                         document.getElementById("errorImagen").classList.remove("oculto");
-                        document.getElementById("errorImagen").innerText=respuesta.mensaje;
+                        document.getElementById("errorImagen").classList.remove("oculto");
+                        document.getElementById("errorImagen").innerText = respuesta.mensaje;
                     case "dimensiones_invalidas":
-                         document.getElementById("errorImagen").classList.remove("oculto");
-                        document.getElementById("errorImagen").innerText=respuesta.mensaje;
+                        document.getElementById("errorImagen").classList.remove("oculto");
+                        document.getElementById("errorImagen").innerText = respuesta.mensaje;
                     default:
                         document.getElementById("errorCampos").innerText = respuesta.mensaje || "Error en la creacion del juego";
                 }
@@ -507,21 +507,21 @@ function crearJuego(){
     };
     //Enviamos el formdata sin la cabecera ya que el formdata se encarga de ello
     xmlhttp.open("POST", "../async/crearJuego.php", true);
-    xmlhttp.send(formData); 
+    xmlhttp.send(formData);
 }
-function editarJuego(id){
-limpiarErroresJuegos();
+function editarJuego(id) {
+    limpiarErroresJuegos();
 
     let xmlhttp = new XMLHttpRequest();
 
     let titulo = document.getElementById("titulo").value.trim();
     let descripcion = document.getElementById("descripcion").value.trim();
     let precio = document.getElementById("precio").value;
-    let imagenActual=document.getElementById("imagen_actual").value;
+    let imagenActual = document.getElementById("imagen_actual").value;
     let imagenInput = document.getElementById("imagen");
-    let ventas=document.getElementById("ventas").value;
-    let stock=document.getElementById("stock").value
-    if (titulo == "" || descripcion == "" || precio <=0) {
+    let ventas = document.getElementById("ventas").value;
+    let stock = document.getElementById("stock").value
+    if (titulo == "" || descripcion == "" || precio <= 0) {
         mostrarError("Todos los campos son obligatorios");
         return;
     }
@@ -537,9 +537,9 @@ limpiarErroresJuegos();
     }
     formData.append("ventas", ventas);
     formData.append("stock", stock);
-    formData.append("id",id);
+    formData.append("id", id);
 
-    xmlhttp.onreadystatechange = function() {
+    xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             console.log(this.responseText);
             let respuesta = JSON.parse(this.responseText);
@@ -569,13 +569,13 @@ limpiarErroresJuegos();
                         break;
                     case "no_imagen":
                         document.getElementById("errorImagen").classList.remove("oculto");
-                        document.getElementById("errorImagen").innerText=respuesta.mensaje;
+                        document.getElementById("errorImagen").innerText = respuesta.mensaje;
                     case "imagen_grande":
-                         document.getElementById("errorImagen").classList.remove("oculto");
-                        document.getElementById("errorImagen").innerText=respuesta.mensaje;
+                        document.getElementById("errorImagen").classList.remove("oculto");
+                        document.getElementById("errorImagen").innerText = respuesta.mensaje;
                     case "dimensiones_invalidas":
                         document.getElementById("errorImagen").classList.remove("oculto");
-                        document.getElementById("errorImagen").innerText=respuesta.mensaje;
+                        document.getElementById("errorImagen").innerText = respuesta.mensaje;
                     default:
                         document.getElementById("errorCampos").innerText = respuesta.mensaje || "Error en la creacion del juego";
                 }
@@ -584,5 +584,58 @@ limpiarErroresJuegos();
     };
     //Enviamos el formdata sin la cabecera ya que el formdata se encarga de ello
     xmlhttp.open("POST", "../async/editarJuego.php", true);
-    xmlhttp.send(formData); 
+    xmlhttp.send(formData);
+}
+function reembolsarPedido(idPedido) {
+
+    Swal.fire({
+        title: 'Reembolsar pedido',
+        text: 'Introduce el motivo del reembolso',
+        input: 'text',
+        inputPlaceholder: 'Ej: Solicitud del cliente / error en compra',
+        showCancelButton: true,
+        confirmButtonText: 'Reembolsar',
+        cancelButtonText: 'Cancelar',
+        customClass: {
+            popup: 'steam-popup',
+            confirmButton: 'steam-btn-primary',
+            cancelButton: 'steam-btn-secondary'
+        },
+        buttonsStyling: false,
+        inputValidator: (value) => {
+            if (!value) {
+                return 'Debes introducir un motivo';
+            }
+        }
+    }).then((result) => {
+
+        if (!result.isConfirmed) return;
+
+        let motivo = result.value;
+
+        let xmlhttp = new XMLHttpRequest();
+
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Reembolsado',
+                    text: 'El pedido ha sido reembolsado correctamente'
+                });
+
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            }
+        };
+
+        xmlhttp.open("POST", "./async/reembolso.php", true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+        xmlhttp.send(
+            "id_pedido=" + encodeURIComponent(idPedido) +
+            "&motivo=" + encodeURIComponent(motivo)
+        );
+    });
 }

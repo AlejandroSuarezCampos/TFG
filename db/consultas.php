@@ -437,6 +437,11 @@ class Tienda
 			"precio" => $precio,
 			":codigo" => $codigo
 		]);
+		$sentencia ="UPDATE juegos set SET stock = stock - 1 WHERE id_juego=:id";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute([
+			":id" => $id_juego
+		]);
 	}
 	public function reciboExiste($stripe_session_id)
 	{
@@ -544,6 +549,16 @@ class Tienda
     $hash = preg_replace('/[^A-Z0-9]/', '', $hash);
 
     return substr($hash, 0, $longitud);
+}
+public function TieneStock($id_juego)
+{
+    $sentencia = "SELECT stock FROM juegos WHERE id_juego = :id";
+    $ejecucion = $this->pdo->prepare($sentencia);
+    $ejecucion->execute([
+			":id" => $id_juego
+		]);
+    $resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
+	return $resultado['stock'];
 }
 }
 ?>
