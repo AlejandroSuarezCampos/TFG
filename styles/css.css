@@ -29,6 +29,14 @@ body {
   display: none !important;
 }
 
+/* ========== CSS VARIABLES ========== */
+:root {
+  --steam-blue: #66c0f4;
+  --bg-dark: #1b2838;
+  --panel: #2a475e;
+  --panel-dark: #171a21;
+}
+
 /* ========== NAVBAR & FOOTER ========== */
 .navbar,
 footer {
@@ -109,6 +117,48 @@ footer {
   border-radius: 6px;
 }
 
+/* ========== GAME IMG (overlay) ========== */
+.game-img {
+  position: relative;
+  overflow: hidden;
+}
+
+.game-img img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  transition: transform .3s ease;
+}
+
+.game-card:hover .game-img img {
+  transform: scale(1.05);
+}
+
+.game-img .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+
+.game-card:hover .overlay {
+  opacity: 1;
+}
+
+/* ========== AVATAR ========== */
+.avatar-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--steam-blue);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+}
+
 /* ========== PRICE ========== */
 .price {
   color: #66c0f4;
@@ -143,6 +193,18 @@ footer {
 .btn-outline-steam:hover {
   background-color: #66c0f4;
   color: #000;
+}
+
+.btn-danger {
+  background: #e74c3c;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  transition: .2s;
+}
+
+.btn-danger:hover {
+  background: #c0392b;
 }
 
 /* ========== FORMS ========== */
@@ -261,11 +323,12 @@ input[type="password"].modern-input {
 
 /* ========== ALERTS & MESSAGES ========== */
 .error-message {
-  background-color: #2a475e;
+  background-color: rgba(255, 68, 68, 0.08);
   border: 1px solid #ff4444;
   color: #ff4444;
   border-radius: 6px;
   padding: 0.75rem 1rem;
+  font-size: 14px;
 }
 
 .error-mensaje {
@@ -280,6 +343,15 @@ input[type="password"].modern-input {
   margin-bottom: 12px;
   text-align: center;
   animation: shake 0.3s ease;
+}
+
+.exito-message {
+  background-color: rgba(34, 197, 94, 0.08);
+  border: 1px solid #22c55e;
+  color: #22c55e;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  font-size: 14px;
 }
 
 @keyframes shake {
@@ -369,9 +441,7 @@ input.horas-input {
   border: none;
 }
 
-.steam-btn-primary:hover {
-  background: green;
-}
+.steam-btn-primary:hover { background: green; }
 
 .steam-btn-secondary {
   background: #2e06df;
@@ -381,9 +451,7 @@ input.horas-input {
   border: none;
 }
 
-.steam-btn-secondary:hover {
-  background: #3b6a8a;
-}
+.steam-btn-secondary:hover { background: #3b6a8a; }
 
 /* ========== HORAS INPUT ========== */
 .fondo {
@@ -505,9 +573,7 @@ input.horas-input {
   border-radius: 8px;
 }
 
-.infoDetalle {
-  flex: 1;
-}
+.infoDetalle { flex: 1; }
 
 .priceDetalle {
   color: #22c55e;
@@ -572,9 +638,7 @@ input.horas-input {
   margin-bottom: 1rem;
 }
 
-.hero-title span {
-  color: #66c0f4;
-}
+.hero-title span { color: #66c0f4; }
 
 .hero-sub {
   color: #8fb0c8;
@@ -632,7 +696,7 @@ input.horas-input {
 }
 
 .featured-overlay {
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.2) 60%, transparent 100%);
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 60%, transparent 100%);
   padding: 1.5rem;
   height: 100%;
   display: flex;
@@ -669,9 +733,7 @@ input.horas-input {
   transition: transform .15s;
 }
 
-.side-item:hover {
-  transform: translateX(4px);
-}
+.side-item:hover { transform: translateX(4px); }
 
 .side-item-img {
   width: 100px;
@@ -722,7 +784,7 @@ input.horas-input {
   display: block;
 }
 
-/* ========== HOW IT WORKS STEPS ========== */
+/* ========== HOW IT WORKS ========== */
 .steps-icon {
   font-size: 2rem;
   line-height: 1;
@@ -734,69 +796,7 @@ input.horas-input {
   align-items: center;
 }
 
-/* ========== RESPONSIVE ========== */
-@media (max-width: 768px) {
-  .hero-section {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .hero-stats {
-    gap: 1.5rem;
-  }
-
-  .hero-title {
-    font-size: 1.8rem;
-  }
-}
-
-.avatar-circle {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid var(--steam-blue);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-}
-
-:root {
-  --steam-blue: #66c0f4;
-  --bg-dark: #1b2838;
-  --panel: #2a475e;
-  --panel-dark: #171a21;
-}
-
-.game-img {
-  position: relative;
-  overflow: hidden;
-}
-
-.game-img img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  transition: transform .3s ease;
-}
-
-.game-card:hover .game-img img {
-  transform: scale(1.05);
-}
-
-.game-img .overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity .25s ease;
-}
-
-.game-card:hover .overlay {
-  opacity: 1;
-}
-
+/* ========== PROFILE BANNER ========== */
 .profile-banner {
   background: linear-gradient(135deg, #0f1c2e, #1b2838);
   border-bottom: 1px solid rgba(102,192,244,0.15);
@@ -804,6 +804,7 @@ input.horas-input {
   border-radius: 0 0 12px 12px;
 }
 
+/* ========== STAT CARDS ========== */
 .stat-card {
   background: linear-gradient(145deg, #2a475e, #1f3446);
   border-radius: 10px;
@@ -813,9 +814,7 @@ input.horas-input {
   transition: transform .2s ease;
 }
 
-.stat-card:hover {
-  transform: translateY(-4px);
-}
+.stat-card:hover { transform: translateY(-4px); }
 
 .stat-card h3 {
   color: var(--steam-blue);
@@ -823,10 +822,19 @@ input.horas-input {
   margin-bottom: 0.3rem;
 }
 
-/* ============================================================
-   LIBRARY CARD (PERFIL USUARIO)
-============================================================ */
+.profile-stat-num {
+  color: #66c0f4;
+  font-size: 18px;
+  font-weight: bold;
+}
 
+.profile-stat-label {
+  font-size: 11px;
+  color: #8aa6bf;
+  text-transform: uppercase;
+}
+
+/* ========== LIBRARY CARD ========== */
 .library-card {
   background: linear-gradient(145deg, #22384a, #1a2c3a);
   border-radius: 10px;
@@ -843,7 +851,6 @@ input.horas-input {
   box-shadow: 0 10px 25px rgba(0,0,0,0.4);
 }
 
-/* imagen */
 .library-card .game-img {
   position: relative;
   aspect-ratio: 2 / 3;
@@ -857,11 +864,8 @@ input.horas-input {
   transition: transform .3s ease;
 }
 
-.library-card:hover .game-img img {
-  transform: scale(1.04);
-}
+.library-card:hover .game-img img { transform: scale(1.04); }
 
-/* badge biblioteca */
 .library-badge {
   position: absolute;
   top: 8px;
@@ -876,7 +880,6 @@ input.horas-input {
   letter-spacing: 1px;
 }
 
-/* contenido */
 .library-card .card-body {
   padding: 10px;
   display: flex;
@@ -896,7 +899,6 @@ input.horas-input {
   color: #8aa6bf;
 }
 
-/* botón pequeño */
 .library-card .btn-library {
   margin-top: auto;
   background: transparent;
@@ -913,26 +915,7 @@ input.horas-input {
   color: #000;
 }
 
-/* ============================================================
-   PROFILE STATS TEXT
-============================================================ */
-
-.profile-stat-num {
-  color: #66c0f4;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.profile-stat-label {
-  font-size: 11px;
-  color: #8aa6bf;
-  text-transform: uppercase;
-}
-
-/* ============================================================
-   ACHIEVEMENTS
-============================================================ */
-
+/* ========== ACHIEVEMENTS ========== */
 .achievement-card {
   background: #2a475e;
   border-radius: 10px;
@@ -947,7 +930,6 @@ input.horas-input {
   box-shadow: 0 10px 25px rgba(0,0,0,0.4);
 }
 
-/* imagen logro */
 .achievement-img {
   width: 100%;
   aspect-ratio: 1 / 1;
@@ -962,11 +944,8 @@ input.horas-input {
   transition: .3s ease;
 }
 
-.achievement-card:hover .achievement-img img {
-  transform: scale(1.05);
-}
+.achievement-card:hover .achievement-img img { transform: scale(1.05); }
 
-/* contenido */
 .achievement-body {
   padding: 8px;
   display: flex;
@@ -986,35 +965,308 @@ input.horas-input {
   text-transform: uppercase;
 }
 
-/* ============================================================
-   LOCKED STATE (BLANCO Y NEGRO)
-============================================================ */
-
 .achievement-card.locked {
   filter: grayscale(100%);
   opacity: 0.45;
 }
 
-.achievement-card.locked img {
-  filter: grayscale(100%);
+/* ========== CARRUSEL ========== */
+.carrusel-wrapper { overflow: hidden; }
+
+.carrusel-track {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 4px;
 }
 
-/* ============================================================
-   SETTINGS PAGE (STEAM STYLE)
-============================================================ */
+.carrusel-track::-webkit-scrollbar { display: none; }
 
+.carrusel-slide {
+  flex: 0 0 calc(20% - 10px);
+  scroll-snap-align: start;
+  min-width: 160px;
+}
+
+.carrusel-nav { display: flex; gap: 6px; }
+
+.carrusel-btn {
+  background: #2a475e;
+  border: 1px solid rgba(102, 192, 244, 0.3);
+  color: #66c0f4;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, border-color 0.15s;
+  padding: 0;
+}
+
+.carrusel-btn:hover {
+  background: #345b75;
+  border-color: #66c0f4;
+  color: #fff;
+}
+
+.carrusel-img-wrap {
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px 4px 0 0;
+}
+
+.carrusel-img-wrap img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s;
+}
+
+.carrusel-slide:hover .carrusel-img-wrap img { transform: scale(1.05); }
+
+.carrusel-play-btn {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.carrusel-slide:hover .carrusel-play-btn { opacity: 1; }
+
+.carrusel-slide--logro {
+  flex: 0 0 calc(25% - 10px);
+  min-width: 200px;
+}
+
+/* ========== LOGROS ========== */
+.logro-card {
+  background: #16202d;
+  border: 1px solid rgba(102, 192, 244, 0.1);
+  border-radius: 8px;
+  padding: 14px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  height: 100%;
+  transition: border-color 0.2s, transform 0.15s;
+}
+
+.logro-card:hover {
+  border-color: rgba(102, 192, 244, 0.35);
+  transform: translateY(-2px);
+}
+
+.logro-bloqueado {
+  opacity: 0.45;
+  filter: grayscale(0.6);
+}
+
+.logro-icon-wrap { position: relative; flex-shrink: 0; }
+
+.logro-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.logro-lock {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  font-size: 13px;
+}
+
+.logro-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.logro-nombre {
+  font-size: 13px;
+  font-weight: 600;
+  color: #c7d5e0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.logro-desc {
+  font-size: 11px;
+  color: #7193a8;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.logro-fecha {
+  font-size: 10px;
+  color: #66c0f4;
+  margin-top: 2px;
+}
+
+/* ========== PERFIL HEADER ========== */
+.perfil-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: linear-gradient(135deg, #0a1628 0%, #16243a 100%);
+  border: 1px solid rgba(102, 192, 244, 0.1);
+  border-radius: 8px;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.perfil-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(66, 132, 176, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(66, 132, 176, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+.perfil-avatar-wrap { position: relative; flex-shrink: 0; z-index: 1; }
+
+.perfil-avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 2px solid rgba(102, 192, 244, 0.4);
+}
+
+.perfil-estado {
+  position: absolute;
+  bottom: -3px;
+  right: -3px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #16243a;
+}
+
+.perfil-estado.online  { background: #57cbde; }
+.perfil-estado.offline { background: #666; }
+
+.perfil-info { position: relative; z-index: 1; }
+
+.perfil-nombre {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 4px;
+}
+
+.perfil-estado-texto { font-size: 13px; }
+.perfil-estado-texto.online  { color: #57cbde; }
+.perfil-estado-texto.offline { color: #888; }
+
+.perfil-bio {
+  font-size: 13px;
+  color: #8fb0c8;
+  max-width: 400px;
+}
+
+.perfil-nivel-wrap { position: relative; z-index: 1; }
+
+.perfil-nivel-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #c7d5e0;
+}
+
+.perfil-xp-bar {
+  width: 180px;
+  height: 6px;
+  background: rgba(102, 192, 244, 0.15);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.perfil-xp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #66c0f4, #57cbde);
+  border-radius: 3px;
+  transition: width 0.6s ease;
+}
+
+/* ========== ACTIVIDAD ========== */
+.actividad-list { display: flex; flex-direction: column; gap: 8px; }
+
+.actividad-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #16202d;
+  border: 1px solid rgba(102, 192, 244, 0.08);
+  border-radius: 8px;
+  padding: 12px 16px;
+  transition: border-color 0.2s;
+}
+
+.actividad-item:hover { border-color: rgba(102, 192, 244, 0.25); }
+
+.actividad-img {
+  width: 56px;
+  height: 32px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.actividad-body { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+
+.actividad-texto { font-size: 14px; color: #c7d5e0; }
+
+.actividad-link { color: #66c0f4; text-decoration: none; }
+.actividad-link:hover { text-decoration: underline; }
+
+.actividad-tiempo { font-size: 12px; color: #7193a8; }
+
+.actividad-horas {
+  font-size: 13px;
+  color: #66c0f4;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ========== SETTINGS ========== */
 .settings-card {
   background: linear-gradient(145deg, #2a475e, #1f3446);
   border-radius: 10px;
   padding: 20px;
-  border: 1px solid rgba(102,192,244,0.08);
+  border: 1px solid rgba(102, 192, 244, 0.08);
   box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+}
+
+.settings-card.danger {
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  background: linear-gradient(145deg, #2a1f22, #1a1214);
 }
 
 .settings-title {
   color: #fff;
   font-size: 16px;
   margin-bottom: 15px;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(102, 192, 244, 0.1);
 }
 
 .settings-text {
@@ -1022,33 +1274,22 @@ input.horas-input {
   font-size: 13px;
 }
 
-/* danger box */
-.settings-card.danger {
-  border: 1px solid rgba(255,0,0,0.3);
-  background: linear-gradient(145deg, #2a1f22, #1a1214);
+/* ========== RESPONSIVE ========== */
+@media (max-width: 992px) {
+  .carrusel-slide        { flex: 0 0 calc(33% - 8px); }
+  .carrusel-slide--logro { flex: 0 0 calc(50% - 6px); }
 }
 
-/* botones */
-.btn-danger {
-  background: #e74c3c;
-  border: none;
-  padding: 10px;
-  border-radius: 6px;
-  transition: .2s;
+@media (max-width: 768px) {
+  .hero-section     { flex-direction: column; align-items: flex-start; }
+  .hero-stats       { gap: 1.5rem; }
+  .hero-title       { font-size: 1.8rem; }
+  .perfil-header    { flex-wrap: wrap; }
+  .perfil-nivel-wrap { width: 100%; text-align: left !important; }
+  .perfil-xp-bar    { width: 100%; }
 }
 
-.btn-danger:hover {
-  background: #c0392b;
-}
-.btn-outline-steam {
-  background: transparent;
-  border: 1px solid #66c0f4;
-  color: #66c0f4;
-  border-radius: 6px;
-  transition: all .2s ease;
-}
-
-.btn-outline-steam:hover {
-  background: #66c0f4;
-  color: #000;
+@media (max-width: 576px) {
+  .carrusel-slide        { flex: 0 0 calc(50% - 6px); }
+  .carrusel-slide--logro { flex: 0 0 85%; }
 }
