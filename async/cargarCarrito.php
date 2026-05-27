@@ -5,12 +5,12 @@ include_once("../db/consultas.php");
 
 if (isset($_POST["valor"])) {
     if (!isset($_SESSION["usuario_id"])) {
-        if(!isset($_SESSION["carrito"])) {
+        if (!isset($_SESSION["carrito"])) {
             $carrito = [];
         } else {
             $carrito = $_SESSION["carrito"];
         }
-    }else{
+    } else {
         $carrito = $db->obtenerCarritoUsuario($_SESSION["usuario_id"]);
         $_SESSION["carrito"] = $carrito;
     }
@@ -63,19 +63,33 @@ if (isset($_POST["valor"])) {
     $response .= '<h3 class="text-white mt-4"> 
                   Total carrito: <span id="total-carrito-precio">0</span> €
                 </h3>';
-    $response .= '
+    if (isset($_SESSION["usuario_id"])) {
+        $response .= '
 <div class="d-flex justify-content-center align-items-center mt-4 gap-3">
 
     <a class="btn btn-steam btn-outline-light" href="buscador.php">
         Seguir Comprando
     </a>
 
-    <a class="btn btn-steam btn-primary px-4" href="login.php">
+    <a id="pagar" class="btn btn-steam btn-primary px-4">
         Pagar
     </a>
-
 </div>';
+    } else {
+        $response .= '
+<div class="d-flex justify-content-center align-items-center mt-4 gap-3">
+
+    <a class="btn btn-steam btn-outline-light" href="buscador.php">
+        Seguir Comprando
+    </a>
+
+   <a href="login.php" class="btn btn-warning px-4">
+        Inicia sesión para pagar
+    </a>
+</div>';
+    }
 }
+
 
 echo json_encode([
     "html" => $response

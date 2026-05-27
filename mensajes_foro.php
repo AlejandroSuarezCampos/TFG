@@ -1,5 +1,5 @@
 <?php 
-include_once("cabezera.php");
+include_once("cabecera.php");
 
 $id_tema = $_GET["id"];
 

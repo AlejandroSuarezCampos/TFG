@@ -1,6 +1,6 @@
-<?php 
-  include_once("cabezera.php");
-  include_once("./db/consultas.php");
+<?php
+include_once("cabecera.php");
+include_once("./db/consultas.php");
 
 if (isset($_GET["id"])) {
   $id = $_GET["id"];
@@ -41,11 +41,19 @@ $juego = $db->listarProductoID($id);
 
           <button class="btn btn-outline-light" type="button" onclick="cambiarHoras(1)">+</button>
         </div>
-
+      <?php
+       if($db->TieneStock($juego['id_juego'])){
+      ?>
         <button class="btn btn-steam btn-lg w-100" onclick="AnadirCarrito(<?= $juego['id_juego'] ?>)">
           🎮 Alquilar ahora
         </button>
-
+      <?php
+       }else{
+      ?>
+         <span style="color:red;">No hay stock</span>
+      <?php
+       }
+      ?>
       </div>
       <hr class="my-4">
       <h5>Requisitos mínimos</h5>

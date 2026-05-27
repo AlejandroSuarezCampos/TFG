@@ -1,0 +1,110 @@
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    color:#1a1a1a;
+    margin:40px;
+    font-size:14px;
+}
+.header{
+    position: relative;
+    margin-bottom: 40px;
+    min-height: 120px;
+}
+.logo{
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.logo img{
+    width: 280px;
+}
+.title{
+    font-size:34px;
+    font-weight:bold;
+    margin-bottom:20px;
+}
+.invoice-info{
+    color:#555;
+    line-height:1.8;
+}
+.logo img{
+    width:150px;
+}
+.section{
+    margin-top:35px;
+}
+.section-title{
+    font-size:13px;
+    text-transform:uppercase;
+    color:#777;
+    margin-bottom:10px;
+    font-weight:bold;
+}
+.client-box{
+    line-height:1.8;
+    color:#444;
+}
+.amount-due{
+    margin-top:30px;
+    padding:20px;
+    background:#f6f9fc;
+    border-radius:8px;
+    font-size:18px;
+    font-weight:bold;
+}
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:35px;
+}
+thead{
+    background:#f6f9fc;
+}
+th{
+    text-align:left;
+    padding:14px;
+    color:#666;
+    font-size:13px;
+    border-bottom:1px solid #ddd;
+}
+td{
+    padding:14px;
+    border-bottom:1px solid #eee;
+    color:#333;
+}
+.text-center{
+    text-align:center;
+}
+.text-right{
+    text-align:right;
+}
+.summary{
+    width:320px;
+    margin-left:auto;
+    margin-top:35px;
+}
+.summary-row{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:12px;
+    font-size:15px;
+    text-align:right;
+}
+.summary-row span:last-child{
+    min-width:120px;
+    text-align:right;
+}
+
+.total{
+    border-top:2px solid #ddd;
+    padding-top:15px;
+    margin-top:15px;
+    font-size:22px;
+    font-weight:bold;
+    color:#111;
+}
+.footer{
+    margin-top:60px;
+    font-size:12px;
+    color:#888;
+    text-align:center;
+}

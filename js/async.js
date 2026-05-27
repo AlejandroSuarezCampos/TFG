@@ -250,16 +250,7 @@ function ocultarTodosLosErroresLogin() {
 }
 
 function logOut() {
-    let xmlhttp = new XMLHttpRequest();
-
-    xmlhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            document.location.reload();
-        }
-    };
-
-    xmlhttp.open("GET", "./async/logOut.php", true);
-    xmlhttp.send();
+    window.location.href = "/TFG/async/logOut.php";
 }
 
 //Funciones para carrito
@@ -357,8 +348,8 @@ function validarHoras(valor) {
 
     return valor;
 }
-function actualizar_contador(num){
-        document.getElementById("contador").innerText=num;
+function actualizar_contador(num) {
+    document.getElementById("contador").innerText = num;
 }
 function eliminarCarrito(id) {
     let xmlhttp = new XMLHttpRequest();
@@ -446,6 +437,31 @@ document.addEventListener("click", function (e) {
     }
 });
 function actualizarCarrito(id, horas) {
+    let xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.onload = function () {
+        if (xmlhttp.status === 200) {
+            console.log(xmlhttp.responseText);
+            let respuesta = JSON.parse(xmlhttp.responseText);
+            console.log(respuesta); // 👈 DEBUG IMPORTANTE
+
+            document.getElementById("total-" + id).innerText = respuesta.total_juego.toFixed(2);
+            document.getElementById("total-carrito-precio").innerText = respuesta.total_precio.toFixed(2);
+            document.getElementById("contador").innerText = respuesta.total_items;
+
+        }
+    };
+    xmlhttp.open("POST", "./async/actualizar_carrito.php", true);
+    xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xmlhttp.send("id=" + id + "&horas=" + horas);
+}
+function cambiarHoras(valor) {
+    let input = document.getElementById('horas');
+    let nueva = parseInt(input.value) + valor;
+
+    if (nueva >= 1 && nueva <= 50) {
+        input.value = nueva;
+    }
         let xmlhttp = new XMLHttpRequest();
 
         xmlhttp.onload = function () {
@@ -462,7 +478,7 @@ function actualizarCarrito(id, horas) {
         };
         xmlhttp.open("POST", "./async/actualizar_carrito.php", true);
         xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xmlhttp.send("id=" + id + "&horas=" + horas);
+        xmlhttp.send("id=" + id + "&horas=" + input.value);
 }
 function cambiarHoras(valor) {
   let input = document.getElementById('horas');
@@ -559,3 +575,142 @@ function enviarMensaje(id_tema){
     input.value = nueva;
   }
 }*/
+document.addEventListener('click', function (e) {
+    if (e.target && e.target.id === 'pagar') {
+        // Mostrar loading
+        Swal.fire({
+            title: 'Redirigiendo al pago...',
+            html: 'Conectando con la pasarela segura',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            showConfirmButton: false,
+            customClass: {
+                popup: 'steam-popup',
+            },
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+        let xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState === 4) {
+                if (xmlhttp.status === 200) {
+                    console.log(xmlhttp.responseText);
+                    let data = JSON.parse(xmlhttp.responseText);
+                    if (data.url) {
+                        // Pequeña espera para que se vea el efecto
+                        setTimeout(() => {
+                            window.location.href = data.url;
+                        }, 3000);
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: data.error || 'No se pudo iniciar el pago',
+                              customClass: {
+                                popup: 'steam-popup',
+                            },
+                        });
+                    }
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error del servidor',
+                        text: 'Inténtalo de nuevo más tarde',
+                        customClass: {
+                            popup: 'steam-popup',
+                        },
+                    });
+                }
+            }
+        };
+        xmlhttp.open("POST", "./async/checkout.php", true);
+        xmlhttp.setRequestHeader(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+        );
+        xmlhttp.send();
+    }
+});
+
+function cambiarPassword() {
+  limpiarErrores();
+
+  let nueva   = document.getElementById("nueva").value;
+  let repetir = document.getElementById("repetir").value;
+
+  // Validaciones en cliente
+  if (nueva === "" || repetir === "") {
+    mostrarError("campos_vacios", "Todos los campos son obligatorios");
+    return;
+  }
+  if (nueva !== repetir) {
+    mostrarError("contrasenas_no_coinciden", "Las contraseñas no coinciden");
+    return;
+  }
+  if (nueva.length < 8) {
+    mostrarError("contrasena_corta", "La contraseña debe tener al menos 8 caracteres");
+    return;
+  }
+
+  // Petición asíncrona
+  let xmlhttp = new XMLHttpRequest();
+  let url = "./async/cambiarContrasena.php"+"?nueva="+encodeURIComponent(nueva)+"&repetir="+encodeURIComponent(repetir);
+
+  xmlhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      let respuesta = JSON.parse(this.responseText);
+
+      if (respuesta.exito) {
+        let exito = document.getElementById("exito");
+        exito.innerText = respuesta.mensaje;
+        exito.classList.remove("oculto");
+
+        document.getElementById("nueva").value   = "";
+        document.getElementById("repetir").value = "";
+      } else {
+        switch (respuesta.error) {
+          case "campos_vacios":
+            mostrarError("campos_vacios", respuesta.mensaje);
+            break;
+          case "contrasenas_no_coinciden":
+            mostrarError("contrasenas_no_coinciden", respuesta.mensaje);
+            break;
+          case "contrasena_corta":
+            mostrarError("contrasena_corta", respuesta.mensaje);
+            break;
+          default:
+            mostrarError("campos_vacios", respuesta.mensaje || "Error desconocido");
+        }
+      }
+    }
+  };
+
+  xmlhttp.open("GET", url, true);
+  xmlhttp.send();
+}
+
+function mostrarError(tipo, mensaje) {
+  switch (tipo) {
+    case "campos_vacios":
+      document.getElementById("errorCampos").innerText = mensaje;
+      document.getElementById("errorCampos").classList.remove("oculto");
+      break;
+    case "contrasena_corta":
+      document.getElementById("errorContrasena").innerText = mensaje;
+      document.getElementById("errorContrasena").classList.remove("oculto");
+      break;
+    case "contrasenas_no_coinciden":
+      document.getElementById("errorRepetir").innerText = mensaje;
+      document.getElementById("errorRepetir").classList.remove("oculto");
+      break;
+  }
+}
+
+function limpiarErrores() {
+  ["errorCampos", "errorContrasena", "errorRepetir", "exito"].forEach(id => {
+    let el = document.getElementById(id);
+    el.innerText = "";
+    el.classList.add("oculto");
+  });
+}
