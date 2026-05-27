@@ -437,7 +437,7 @@ class Tienda
 			"precio" => $precio,
 			":codigo" => $codigo
 		]);
-		$sentencia ="UPDATE juegos set SET stock = stock - 1 WHERE id_juego=:id";
+		$sentencia ="UPDATE juegos SET stock = stock - 1,ventas = ventas + 1 WHERE id_juego=:id";
 		$ejecucion = $this->pdo->prepare($sentencia);
 		$ejecucion->execute([
 			":id" => $id_juego

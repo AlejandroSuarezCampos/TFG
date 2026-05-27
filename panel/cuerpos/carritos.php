@@ -13,6 +13,7 @@ $listaPedidos = $db->listarPedidos();
     <th>Email</th>
     <th>Recibos</th>
     <th>Items</th>
+    <th>Estado</th>
     <th>Acciones</th>
   </tr>
   <?php
@@ -27,12 +28,17 @@ $listaPedidos = $db->listarPedidos();
         <a href="../../facturas/<?= $pedido['fichero'] ?>" target="_blank"> 📄 Ver factura</a>
       </td>
       <td><?= $pedido["totales"] ?></td>
+      <td><?=$pedido["estado"]?></td>
       <td>
-        <button class="btn btn-sm btn-danger"
-         onclick="reembolsarPedido(<?= $pedido['id_pedido'] ?>)">Eliminar
+        <?php
+         if($pedido["estado"]=='pagado'){
+        ?>
+        <button class="btn btn-sm btn-warning" onclick="reembolsarPedido(<?= $pedido['id_pedido'] ?>)">
+          Reembolsar
         </button>
-        <button class="btn btn-sm btn-warning" onclick="eliminarCategoria(<?= $categoria['id_categoria'] ?>)">Eliminar y
-          reembolsar</button>
+        <?php
+         }
+        ?>
       </td>
       <?php
   }

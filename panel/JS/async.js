@@ -601,23 +601,23 @@ function reembolsarPedido(idPedido) {
             confirmButton: 'steam-btn-primary',
             cancelButton: 'steam-btn-secondary'
         },
-        buttonsStyling: false,
         inputValidator: (value) => {
             if (!value) {
                 return 'Debes introducir un motivo';
             }
         }
     }).then((result) => {
-
+        console.log(result);
         if (!result.isConfirmed) return;
 
         let motivo = result.value;
 
         let xmlhttp = new XMLHttpRequest();
-
+        console.log("ENVIANDO REEMBOLSO", idPedido, result.value);
         xmlhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-
+                console.log("STATE:", this.readyState, "STATUS:", this.status);
+                console.log("RESPUESTA:", this.responseText);
                 Swal.fire({
                     icon: 'success',
                     title: 'Reembolsado',
@@ -626,11 +626,11 @@ function reembolsarPedido(idPedido) {
 
                 setTimeout(() => {
                     location.reload();
-                }, 1000);
+                }, 3000);
             }
         };
 
-        xmlhttp.open("POST", "./async/reembolso.php", true);
+        xmlhttp.open("POST", "/TFG/panel/async/reembolso.php", true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
         xmlhttp.send(

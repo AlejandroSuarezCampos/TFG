@@ -38,8 +38,8 @@ if (isset($_POST["valor"])) {
         $total = $precio * $horas;
 
         $response .= "
-        <div class='carrito-item d-flex align-items-center mb-3 p-3 text-white'>
-            <img src='{$juego["imagen"]}' width='120' class='me-3'>
+        <div class='carrito-item d-flex flex-column flex-md-row align-items-start align-items-md-center mb-3 p-3 text-white'>
+            <img src='{$juego["imagen"]}' width='120' class='me-md-3 mb-3 mb-md-0 carrito-img'>
             <div class='flex-grow-1'>
                 <h5>{$juego["titulo"]}</h5>
                 <div class='d-flex align-items-center gap-2'>
@@ -89,7 +89,6 @@ if (isset($_POST["valor"])) {
 </div>';
     }
 }
-
 
 echo json_encode([
     "html" => $response

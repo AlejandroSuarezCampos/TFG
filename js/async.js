@@ -7,7 +7,7 @@
 });
 */
 const MIN_HORAS = 1;
-const MAX_HORAS = 50;
+const MAX_HORAS = 100;
 document.addEventListener("DOMContentLoaded", function () {
     const buscador = document.getElementById("buscador");
 
@@ -351,6 +351,7 @@ function validarHoras(valor) {
 function actualizar_contador(num) {
     document.getElementById("contador").innerText = num;
 }
+
 function eliminarCarrito(id) {
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
@@ -401,7 +402,7 @@ document.addEventListener("input", function (e) {
 
         let horas = validarHoras(e.target.value);
 
-        // 🔥 corregimos el input si se pasa
+        //  corregimos el input si se pasa
         e.target.value = horas;
         actualizarCarrito(id, horas);
     }
@@ -443,8 +444,7 @@ function actualizarCarrito(id, horas) {
         if (xmlhttp.status === 200) {
             console.log(xmlhttp.responseText);
             let respuesta = JSON.parse(xmlhttp.responseText);
-            console.log(respuesta); // 👈 DEBUG IMPORTANTE
-
+            console.log(respuesta);
             document.getElementById("total-" + id).innerText = respuesta.total_juego.toFixed(2);
             document.getElementById("total-carrito-precio").innerText = respuesta.total_precio.toFixed(2);
             document.getElementById("contador").innerText = respuesta.total_items;
@@ -455,11 +455,12 @@ function actualizarCarrito(id, horas) {
     xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xmlhttp.send("id=" + id + "&horas=" + horas);
 }
-function cambiarHoras(valor) {
+
+/*function cambiarHoras(valor){
     let input = document.getElementById('horas');
     let nueva = parseInt(input.value) + valor;
 
-    if (nueva >= 1 && nueva <= 50) {
+    if (nueva >= 1) {
         input.value = nueva;
     }
         let xmlhttp = new XMLHttpRequest();
@@ -468,7 +469,7 @@ function cambiarHoras(valor) {
             if (xmlhttp.status === 200) {
                 console.log(xmlhttp.responseText);
                 let respuesta = JSON.parse(xmlhttp.responseText);
-                 console.log(respuesta); // 👈 DEBUG IMPORTANTE
+                 console.log(respuesta); 
 
                 document.getElementById("total-" + id).innerText = respuesta.total_juego.toFixed(2);
                 document.getElementById("total-carrito-precio").innerText = respuesta.total_precio.toFixed(2);
@@ -479,17 +480,19 @@ function cambiarHoras(valor) {
         xmlhttp.open("POST", "./async/actualizar_carrito.php", true);
         xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xmlhttp.send("id=" + id + "&horas=" + input.value);
-}
+}*/
+//Comprobaciones de que no introduzcan horas negativas, y se cambian las horas
+
 function cambiarHoras(valor) {
-  let input = document.getElementById('horas');
-  let nueva = parseInt(input.value) + valor;
-
-  if (nueva >= 1 && nueva <= 50) {
-    input.value = nueva;
-  }
+    let input = document.getElementById('horas');
+    let nueva = parseInt(input.value) + valor;
+    let horas = 0
+    if (horas = validarHoras(nueva)) {
+        input.value = horas;
+    }
 }
 
-function cargarMensajes(id_tema){
+function cargarMensajes(id_tema) {
 
     let xmlhttp = new XMLHttpRequest();
 
@@ -531,7 +534,7 @@ function cargarMensajes(id_tema){
     xmlhttp.send();
 }
 
-function enviarMensaje(id_tema){
+function enviarMensaje(id_tema) {
 
     let contenido = document.getElementById("mensaje").value.trim();
     let error = document.getElementById("errorMensaje");
@@ -539,7 +542,7 @@ function enviarMensaje(id_tema){
     // reset error
     error.style.display = "none";
 
-    if(contenido === ""){
+    if (contenido === "") {
         error.style.display = "block";
         return;
     }
@@ -552,7 +555,7 @@ function enviarMensaje(id_tema){
 
             let data = JSON.parse(this.responseText);
 
-            if(data.ok){
+            if (data.ok) {
                 document.getElementById("mensaje").value = "";
                 cargarMensajes(id_tema);
             }
@@ -603,13 +606,21 @@ document.addEventListener('click', function (e) {
                             window.location.href = data.url;
                         }, 3000);
                     } else {
+                        let mensaje = "Ha ocurrido un error inesperado";
+
+                        if (data.type === "stock") {
+                            mensaje = data.message;
+                        }
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: data.error || 'No se pudo iniciar el pago',
-                              customClass: {
+                            text: mensaje,
+                            confirmButtonText: 'Volver al carrito',
+                            customClass: {
                                 popup: 'steam-popup',
                             },
+                        }).then(() => {
+                            window.location.href = '/TFG/carrito.php';
                         });
                     }
                 } else {
