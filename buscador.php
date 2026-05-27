@@ -48,7 +48,7 @@
                 <img src="<?=$juego["imagen"]?>" class="card-img-top">
                 <div class="card-body">
                   <h5 class="card-title"><?=$juego["titulo"]?></h5>
-                  <p>Alquiler 48h</p>
+                  <p>Alquiler 1h</p>
                   <div class="d-flex justify-content-between">
                     <span class="price"><?=$juego["precio_alquiler"]?> €</span>
                     <button class="btn btn-steam btn-sm" disabled>Alquilar</button>

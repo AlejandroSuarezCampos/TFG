@@ -273,51 +273,81 @@ function ModificarCat(modificar) {
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
 }
-
 function eliminarCategoria(id) {
-    if (!confirm("¿Seguro que deseas eliminar esta categoría?")) return;
+    Swal.fire({
+        title: 'Eliminar categoría 🗂️',
+        text: '¿Estás seguro de que quieres eliminar esta categoría?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar',
+        customClass: {
+            popup: 'steam-popup',
+            confirmButton: 'steam-btn-primary',
+            cancelButton: 'steam-btn-secondary'
+        },
+        buttonsStyling: false
+    }).then((result) => {
+        if (result.isConfirmed) {
 
-    let xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            let respuesta = JSON.parse(this.responseText);
-            if (respuesta.exito) {
-                // Eliminar la fila de la tabla
-                let fila = document.getElementById("fila-" + id);
-                fila.parentNode.removeChild(fila);
-                alert(respuesta.mensaje);
-            } else {
-                alert(respuesta.mensaje);
-            }
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    let respuesta = JSON.parse(this.responseText);
+                    if (respuesta.exito) {
+                        // Elimina la fila de la tabla sin recargar la página
+                        let fila = document.getElementById("fila-" + id);
+                        fila.parentNode.removeChild(fila);
+                    } else {
+                        alert(respuesta.mensaje);
+                    }
+                }
+            };
+
+            let url = "../async/eliminar_categoria.php?id=" + encodeURIComponent(id);
+            xmlhttp.open("GET", url, true);
+            xmlhttp.send();
+
         }
-    };
-    let url = "../async/eliminar_categoria.php?id=" + encodeURIComponent(id);
-
-    xmlhttp.open("GET", url, true);
-    xmlhttp.send();
+    });
 }
 
 function EliminarUsuario(id) {
-    if (!confirm("¿Seguro que deseas eliminar este usuario?")) return;
+    Swal.fire({
+        title: 'Eliminar usuario 👤',
+        text: '¿Estás seguro de que quieres eliminar este usuario?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar',
+        customClass: {
+            popup: 'steam-popup',
+            confirmButton: 'steam-btn-primary',
+            cancelButton: 'steam-btn-secondary'
+        },
+        buttonsStyling: false
+    }).then((result) => {
+        if (result.isConfirmed) {
 
-    let xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            let respuesta = JSON.parse(this.responseText);
-            if (respuesta.exito) {
-                // Eliminar la fila de la tabla
-                let fila = document.getElementById("fila-" + id);
-                fila.parentNode.removeChild(fila);
-                alert(respuesta.mensaje);
-            } else {
-                alert(respuesta.mensaje);
-            }
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    let respuesta = JSON.parse(this.responseText);
+                    if (respuesta.exito) {
+                        let fila = document.getElementById("fila-" + id);
+                        fila.parentNode.removeChild(fila);
+                    } else {
+                        alert(respuesta.mensaje);
+                    }
+                }
+            };
+
+            let url = "../async/eliminar_Usuario.php?id=" + encodeURIComponent(id);
+            xmlhttp.open("GET", url, true);
+            xmlhttp.send();
+
         }
-    };
-    let url = "../async/eliminar_Usuario.php?id=" + encodeURIComponent(id);
-
-    xmlhttp.open("GET", url, true);
-    xmlhttp.send();
+    });
 }
 
 function ModificarUsu(modificar) {
@@ -406,26 +436,42 @@ function ocultarTodosLosErroresUsu() {
 
 //Funciones para el panel de juegos
 function EliminarJuego(id) {
-    if (!confirm("¿Seguro que deseas eliminar este juego?")) return;
+    Swal.fire({
+        title: 'Eliminar juego 🎮',
+        text: '¿Estás seguro de que quieres eliminar este juego?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar',
+        customClass: {
+            popup: 'steam-popup',
+            confirmButton: 'steam-btn-primary',
+            cancelButton: 'steam-btn-secondary'
+        },
+        buttonsStyling: false
+    }).then((result) => {
+        if (result.isConfirmed) {
 
-    let xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            console.log(this.responseText);
-            let respuesta = JSON.parse(this.responseText);
-            if (respuesta.exito) {
-                // Eliminar la fila de la tabla
-                let fila = document.getElementById("fila-" + id);
-                fila.parentNode.removeChild(fila);
-                alert(respuesta.mensaje);
-            } else {
-                alert(respuesta.mensaje);
-            }
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log(this.responseText);
+                    let respuesta = JSON.parse(this.responseText);
+                    if (respuesta.exito) {
+                        let fila = document.getElementById("fila-" + id);
+                        fila.parentNode.removeChild(fila);
+                    } else {
+                        alert(respuesta.mensaje);
+                    }
+                }
+            };
+
+            xmlhttp.open("POST", "../async/eliminar_juego.php", true);
+            xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xmlhttp.send("id=" + encodeURIComponent(id));
+
         }
-    };
-    xmlhttp.open("POST", "../async/eliminar_juego.php", true);
-    xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xmlhttp.send("id=" + encodeURIComponent(id));
+    });
 }
 function limpiarErroresJuegos() {
     document.getElementById("errorCampos").innerText = "";

@@ -5,16 +5,14 @@ class Tienda
 
 	private $pdo;
 
-	public function __construct($host, $port, $db, $user, $pass)
-	{
-
+	public function __construct($host, $port, $db, $user, $pass){
 		$this->pdo = new PDO("mysql:host=" . $host . ";port=" . $port . ";dbname=" . $db, $user, $pass);
 	}
 
 	//Función para listar los 4 productos más vendidos
 	public function listarProductosVendidos()
 	{
-		$sentencia = "SELECT * FROM juegos ORDER BY ventas DESC LIMIT 4";
+		$sentencia = "SELECT * FROM juegos ORDER BY ventas DESC LIMIT 5";
 		$ejecucion = $this->pdo->prepare($sentencia);
 		$ejecucion->execute();
 		$registros = $ejecucion->fetchAll(PDO::FETCH_ASSOC);
@@ -560,5 +558,58 @@ public function TieneStock($id_juego)
     $resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
 	return $resultado['stock'];
 }
+	public function borrarCuenta($id){
+		$sentencia = "DELETE FROM usuarios WHERE id_usuario = :id";
+
+		$ejecucion = $this->pdo->prepare($sentencia);
+
+		$ejecucion->execute([
+			":id" => $id	
+		]);
+
+        // cerrar sesión
+        session_unset();
+        session_destroy();
+
+        header("location: index.php?cuenta=borrada");
+        exit;
+	}
+
+	public function cambiarPassword($id_usuario, $nueva_pass){
+		$sentencia = "UPDATE usuarios SET password = :password WHERE id_usuario = :id_usuario";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute([
+			":password"    => password_hash($nueva_pass, PASSWORD_DEFAULT),
+			":id_usuario"  => $id_usuario
+		]);
+	}
+
+	public function listarAlquileresPorUsuario($id_usuario){
+		$sentencia = "SELECT
+			a.id_juego,
+			MIN(CASE WHEN a.estado = 'activo' THEN 'activo' ELSE 'expirado' END) AS estado,
+			j.titulo,
+			j.imagen
+		FROM alquileres a
+		JOIN juegos j ON a.id_juego = j.id_juego
+		WHERE a.id_usuario = :id_usuario
+		GROUP BY a.id_juego, j.titulo, j.imagen";
+		
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute([':id_usuario' => $id_usuario]);
+		$registros = $ejecucion->fetchAll(PDO::FETCH_ASSOC);
+		return $registros;
+	}
+
+	public function totalHorasJugadas($id_usuario){
+		$sentencia = "SELECT SUM(pi.duracion) AS total_horas
+					FROM alquileres a
+					JOIN pedido_item pi ON a.id_pedido_item = pi.id_item
+					WHERE a.id_usuario = :id_usuario";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute([':id_usuario' => $id_usuario]);
+		$registro = $ejecucion->fetch(PDO::FETCH_ASSOC);
+		return $registro['total_horas'] ?? 0;
+	}
 }
 ?>

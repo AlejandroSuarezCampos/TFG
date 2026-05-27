@@ -30,8 +30,13 @@ $id=$_GET["modificar"];
 
             <!-- Contraseña -->
             <div class="mb-3">
-              <label for="password" class="form-label text">Contraseña</label>
-              <input type="password" class="form-control modern-input" id="password" placeholder="******">
+              <label for="password" class="form-label text">Contraseña</label>  
+              <div class="input-group">
+                <input type="password" class="form-control modern-input" id="password" placeholder="••••••••">
+                <button class="btn btn-outline-secondary" type="button" onclick="togglePass('password', 'iconoOjoLogin')">
+                  <i class="bi bi-eye text-white" id="iconoOjoLogin"></i>
+                </button>
+              </div>
             </div>
 
             <div class="alert error-message mt-4 oculto" id="errorContrasena"></div>
