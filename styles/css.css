@@ -1293,3 +1293,8 @@ input.horas-input {
   .carrusel-slide        { flex: 0 0 calc(50% - 6px); }
   .carrusel-slide--logro { flex: 0 0 85%; }
 }
+
+.library-card.locked {
+  filter: grayscale(100%);
+  opacity: 0.45;
+}

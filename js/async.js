@@ -634,7 +634,7 @@ document.addEventListener('click', function (e) {
 });
 
 function cambiarPassword() {
-  limpiarErrores();
+  limpiarErroresPerfil();
 
   let nueva   = document.getElementById("nueva").value;
   let repetir = document.getElementById("repetir").value;
@@ -707,7 +707,7 @@ function mostrarError(tipo, mensaje) {
   }
 }
 
-function limpiarErrores() {
+function limpiarErroresPerfil() {
   ["errorCampos", "errorContrasena", "errorRepetir", "exito"].forEach(id => {
     let el = document.getElementById(id);
     el.innerText = "";

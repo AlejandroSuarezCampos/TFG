@@ -431,7 +431,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id_usuario`, `nombre`, `email`, `password`, `foto`, `nivel`, `estado`, `id_rol`, `fecha_registro`) VALUES
-(1, 'canaGay', 'canagay@gmail.com', '$2y$10$GGDD98gmL1CGoNrXhHcIJuR7PBs5W2Io4eoRDElMJR0eJd3jOzKtq', NULL, 1, 'activo', 0, '2026-03-11 10:50:10'),
+(1, 'admin', 'alejandro.suarez.campos.06@gmail.com', '$2y$10$GGDD98gmL1CGoNrXhHcIJuR7PBs5W2Io4eoRDElMJR0eJd3jOzKtq', NULL, 1, 'activo', 0, '2026-03-11 10:50:10'),
 (3, 'ADMINISTRADOR', 'felipe777gaymer@gmail.com', '$2y$10$kWgaWC02Blg5JYbWTy4R0OwvfgjE/dttxKE.qqNJKHNsShlm/9qeS', NULL, 1, 'activo', 1, '2026-03-30 14:45:24');
 
 -- --------------------------------------------------------
