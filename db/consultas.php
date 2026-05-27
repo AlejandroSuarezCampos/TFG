@@ -560,5 +560,30 @@ public function TieneStock($id_juego)
     $resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
 	return $resultado['stock'];
 }
+	public function borrarCuenta($id){
+		$sentencia = "DELETE FROM usuarios WHERE id_usuario = :id";
+
+		$ejecucion = $this->pdo->prepare($sentencia);
+
+		$ejecucion->execute([
+			":id" => $id	
+		]);
+
+        // cerrar sesión
+        session_unset();
+        session_destroy();
+
+        header("location: index.php?cuenta=borrada");
+        exit;
+	}
+
+	public function cambiarPassword($id_usuario, $nueva_pass){
+		$sentencia = "UPDATE usuarios SET password = :password WHERE id_usuario = :id_usuario";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute([
+			":password"    => password_hash($nueva_pass, PASSWORD_DEFAULT),
+			":id_usuario"  => $id_usuario
+		]);
+	}
 }
 ?>

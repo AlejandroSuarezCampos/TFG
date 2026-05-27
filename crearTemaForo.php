@@ -1,8 +1,12 @@
 <?php 
-include_once("cabezera.php");
+include_once("cabecera.php");
 
 $categorias = $db->listarCategorias();
 $foros = $db->listarForos();
+
+  if(!isset($_SESSION['usuario_id'])){
+        header("location: foro.php");
+    }
 
 if($_POST){
 
