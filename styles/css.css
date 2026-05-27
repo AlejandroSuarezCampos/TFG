@@ -19,18 +19,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-<<<<<<< HEAD
-
-html,
-body {
-  height: 100%;
-}
-
-.main-content {
-  flex: 1;
-  width: 100%;
-=======
->>>>>>> Desarrollo
 
 .main-content {
   flex: 1;
@@ -510,11 +498,6 @@ input.horas-input {
 }
 
 /* ========== PEDIDOS ========== */
-.h1Pedidos {
-  margin-bottom: 20px;
-}
-
-<<<<<<< HEAD
 
 .error-mensaje {
   display: none;
@@ -556,8 +539,6 @@ input.horas-input {
   margin-bottom: 20px;
 }
 
-=======
->>>>>>> Desarrollo
 .containerPedidos {
   max-width: 1000px;
   margin: 40px auto;
@@ -615,10 +596,7 @@ input.horas-input {
   font-size: 13px;
 }
 
-<<<<<<< HEAD
-=======
 /* ========== DETALLE PEDIDO ========== */
->>>>>>> Desarrollo
 .containerDetalle {
   max-width: 900px;
   margin: 40px auto;
@@ -633,13 +611,10 @@ input.horas-input {
   gap: 15px;
   margin-bottom: 10px;
   width: 100%;
-<<<<<<< HEAD
 }
 
 * {
   box-sizing: border-box;
-=======
->>>>>>> Desarrollo
 }
 
 .cardDetalle img {
