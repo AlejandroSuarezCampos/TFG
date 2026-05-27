@@ -1,16 +1,13 @@
 <?php 
 include_once("cabecera.php");
 
-if (!isset($_SESSION['usuario_id'])) {
-    header("location: login.php");
-    exit;
-}
-
 $id_ticket = $_GET["id"];
 $ticket = $db->obtenerTicket($id_ticket);
 
-// Que el usuario solo pueda ver sus propios tickets
-if (!$ticket || $ticket['id_usuario'] != $_SESSION['usuario_id']) {
+$es_propietario = $ticket['id_usuario'] == $_SESSION['usuario_id'];
+$es_admin = $_SESSION["Rol"]== 1;
+
+if (!$es_propietario && !$es_admin) {
     header("location: soporte.php");
     exit;
 }
@@ -18,20 +15,25 @@ if (!$ticket || $ticket['id_usuario'] != $_SESSION['usuario_id']) {
 
 <script>
   cargarMensajesTicket(<?=$id_ticket?>);
-      document.addEventListener("DOMContentLoaded", function () {
-      document.getElementById("mensaje").addEventListener("keydown", function (e) {
-        if (e.key === "Enter" && !e.shiftKey) {
-          e.preventDefault();
-          enviarMensajeTicket(<?=$id_ticket?>);
-        }
-      });
+
+  setInterval(function() {
+    cargarMensajesTicket(<?=$id_ticket?>);
+  }, 1000);
+
+  document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("mensaje").addEventListener("keydown", function (e) {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        enviarMensajeTicket(<?=$id_ticket?>);
+      }
+    });
   });
 </script>
 
 <div class="container py-4">
 
   <a href="soporte.php" class="backDetalle mb-4 d-inline-block">
-    ← Volver a mis tickets
+    <- Volver a mis tickets
   </a>
 
   <div class="forum-header mb-4">
@@ -50,7 +52,6 @@ if (!$ticket || $ticket['id_usuario'] != $_SESSION['usuario_id']) {
     </div>
   </div>
 
-  <!-- Solo puede responder si el ticket está abierto -->
   <?php if ($ticket['estado'] === 'abierto'): ?>
   <div class="card game-card forum-response-box mb-4">
     <div class="card-body">
@@ -61,7 +62,7 @@ if (!$ticket || $ticket['id_usuario'] != $_SESSION['usuario_id']) {
         placeholder="Describe tu problema con detalle..."></textarea>
 
       <div id="errorMensaje" class="error-mensaje">
-        El mensaje no puede estar vacío
+        El mensaje no puede estar vacio
       </div>
 
       <div class="text-end">
@@ -74,7 +75,7 @@ if (!$ticket || $ticket['id_usuario'] != $_SESSION['usuario_id']) {
   </div>
   <?php else: ?>
     <div class="exito-message mb-4">
-      Este ticket está cerrado. Si necesitas más ayuda abre uno nuevo.
+      Este ticket esta cerrado. Si necesitas mas ayuda abre uno nuevo.
     </div>
   <?php endif; ?>
 

@@ -429,7 +429,7 @@ public function obtenerMensajesTicket($id_ticket)
                 FROM msgticket m
                 INNER JOIN usuarios u ON u.id_usuario = m.id_usuario
                 WHERE m.id_ticket = :id
-                ORDER BY m.fecha ASC";
+                ORDER BY m.fecha desc";
 
     $ejecucion = $this->pdo->prepare($sentencia);
     $ejecucion->execute([

@@ -6,7 +6,9 @@ $tema = $db->obtenerTema($id_tema);
 ?>
 
 <script>
-cargarMensajes(<?= $id_tema ?>);
+setInterval(function() {
+   cargarMensajes(<?= $id_tema ?>);
+  }, 1000);
   document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("mensaje").addEventListener("keydown", function (e) {
       if (e.key === "Enter" && !e.shiftKey) {

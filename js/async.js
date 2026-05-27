@@ -630,6 +630,7 @@ function cargarMensajesTicket(id_ticket) {
     xmlhttp.open("GET", "./async/cargarMensajesTicket.php?id=" + encodeURIComponent(id_ticket), true);
     xmlhttp.send();
 }
+
 /*function cambiarHorasCarrito(valor,id) {
   let input = document.querySelector(`.horas-input[data-id="${id}"]`);
   let nueva = parseInt(input.value) + valor;
