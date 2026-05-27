@@ -1,10 +1,11 @@
 <?php 
 include_once("cabecera.php"); 
-
 if(!isset($_SESSION['usuario_id'])){
     header("location: index.php");
     exit;
 }
+$juegos=$db->listarAlquileresPorUsuario($_SESSION['usuario_id']);
+$horas=$db->totalHorasJugadas($_SESSION['usuario_id'])
 ?>
 
 <div class="container-fluid p-0">
@@ -16,7 +17,7 @@ if(!isset($_SESSION['usuario_id'])){
 
     <div class="d-flex align-items-center gap-3">
 
-      <img src=".<?=$_SESSION['foto']?>" class="avatar-circle" alt="avatar">
+      <img src="<?=$_SESSION['foto']?>" class="avatar-circle" alt="avatar">
 
       <div>
         <h2 class="fw-bold mb-0 text-white">
@@ -35,7 +36,7 @@ if(!isset($_SESSION['usuario_id'])){
       </div>
 
       <div class="text-center">
-        <div class="profile-stat-num">120h</div>
+        <div class="profile-stat-num"><?=$horas?>h</div>
         <div class="profile-stat-label">Jugadas</div>
       </div>
 
@@ -58,23 +59,20 @@ if(!isset($_SESSION['usuario_id'])){
 
     <div class="row g-4">
 
-      <?php for($i=0; $i<6; $i++){ ?>
+      <?php 
+        foreach($juegos as $juego){
+      ?>
 
       <div class="col-6 col-md-4 col-lg-3 col-xl-2">
-
-        <div class="library-card">
-
+        <div class="library-card <?= $juego['estado'] === 'activo' ? '' : 'locked' ?>">
           <div class="game-img">
             <span class="library-badge">Biblioteca</span>
-            <img src="./img/mambo.jpg" alt="Juego">
+            <img src="<?=$juego["imagen"]?>" alt="Juego">
           </div>
-
           <div class="card-body">
-            <h6 class="title">Juego Demo</h6>
+            <h6 class="title"><?=$juego["titulo"]?></h6>
           </div>
-
         </div>
-
       </div>
 
       <?php } ?>

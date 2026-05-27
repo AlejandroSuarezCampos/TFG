@@ -61,7 +61,9 @@ $total_carrito = count($_SESSION['carrito']);
           if (isset($_SESSION["usuario_id"])) {
             ?>
             <li class="nav-item ms-lg-3">
-              <a class="btn-steam btn" onclick="logOut()">Cerrar sesión</a>
+              <a class="btn-steam btn" href="/TFG/async/logOut.php">
+                Cerrar sesión
+              </a>
             </li>
             <?php
           } else {

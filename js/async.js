@@ -250,16 +250,7 @@ function ocultarTodosLosErroresLogin() {
 }
 
 function logOut() {
-    let xmlhttp = new XMLHttpRequest();
-
-    xmlhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            document.location.reload();
-        }
-    };
-
-    xmlhttp.open("GET", "./async/logOut.php", true);
-    xmlhttp.send();
+    window.location.href = "/TFG/async/logOut.php";
 }
 
 //Funciones para carrito
@@ -643,7 +634,7 @@ document.addEventListener('click', function (e) {
 });
 
 function cambiarPassword() {
-  limpiarErrores();
+  limpiarErroresPerfil();
 
   let nueva   = document.getElementById("nueva").value;
   let repetir = document.getElementById("repetir").value;
@@ -716,7 +707,7 @@ function mostrarError(tipo, mensaje) {
   }
 }
 
-function limpiarErrores() {
+function limpiarErroresPerfil() {
   ["errorCampos", "errorContrasena", "errorRepetir", "exito"].forEach(id => {
     let el = document.getElementById(id);
     el.innerText = "";

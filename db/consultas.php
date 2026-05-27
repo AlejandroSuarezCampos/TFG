@@ -5,16 +5,14 @@ class Tienda
 
 	private $pdo;
 
-	public function __construct($host, $port, $db, $user, $pass)
-	{
-
+	public function __construct($host, $port, $db, $user, $pass){
 		$this->pdo = new PDO("mysql:host=" . $host . ";port=" . $port . ";dbname=" . $db, $user, $pass);
 	}
 
 	//Función para listar los 4 productos más vendidos
 	public function listarProductosVendidos()
 	{
-		$sentencia = "SELECT * FROM juegos ORDER BY ventas DESC LIMIT 4";
+		$sentencia = "SELECT * FROM juegos ORDER BY ventas DESC LIMIT 5";
 		$ejecucion = $this->pdo->prepare($sentencia);
 		$ejecucion->execute();
 		$registros = $ejecucion->fetchAll(PDO::FETCH_ASSOC);
@@ -423,10 +421,10 @@ class Tienda
 		]);
 		return $this->pdo->lastInsertId();
 	}
-	public function insertarpedidoitem($id_pedido, $id_juego, $duracion, $precio)
+	public function insertarpedidoitem($id_pedido, $id_juego, $duracion, $precio, $codigo)
 	{
 
-		$sentencia = "INSERT INTO pedido_item (id_pedido, id_juego, duracion, precio) VALUES (:pedido, :juego, :duracion, :precio)";
+		$sentencia = "INSERT INTO pedido_item (id_pedido, id_juego, duracion, precio,codigo) VALUES (:pedido, :juego, :duracion, :precio,:codigo)";
 
 		$ejecucion = $this->pdo->prepare($sentencia);
 
@@ -434,7 +432,13 @@ class Tienda
 			":pedido" => $id_pedido,
 			":juego" => $id_juego,
 			":duracion" => $duracion,
-			"precio" => $precio
+			"precio" => $precio,
+			":codigo" => $codigo
+		]);
+		$sentencia ="UPDATE juegos SET stock = stock - 1 WHERE id_juego=:id";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute([
+			":id" => $id_juego
 		]);
 	}
 	public function reciboExiste($stripe_session_id)
@@ -526,10 +530,34 @@ class Tienda
 			":id" => $id_pedido,
 			":user" => $id_usuario
 		]);
-		$resultado=$ejecucion->fetch(PDO::FETCH_ASSOC);
+		$resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
 		return $resultado['nombre_fichero'];
 	}
 
+	public function generarCodigoFactura($longitud = 16)
+{
+    $time = microtime(true);
+    $random = bin2hex(random_bytes(8));
+
+    $base = $time . $random;
+
+    $hash = hash('sha256', $base);
+    $hash = strtoupper($hash);
+
+    $hash = preg_replace('/[^A-Z0-9]/', '', $hash);
+
+    return substr($hash, 0, $longitud);
+}
+public function TieneStock($id_juego)
+{
+    $sentencia = "SELECT stock FROM juegos WHERE id_juego = :id";
+    $ejecucion = $this->pdo->prepare($sentencia);
+    $ejecucion->execute([
+			":id" => $id_juego
+		]);
+    $resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
+	return $resultado['stock'];
+}
 	public function borrarCuenta($id){
 		$sentencia = "DELETE FROM usuarios WHERE id_usuario = :id";
 
@@ -554,6 +582,34 @@ class Tienda
 			":password"    => password_hash($nueva_pass, PASSWORD_DEFAULT),
 			":id_usuario"  => $id_usuario
 		]);
+	}
+
+	public function listarAlquileresPorUsuario($id_usuario){
+		$sentencia = "SELECT
+			a.id_juego,
+			MIN(CASE WHEN a.estado = 'activo' THEN 'activo' ELSE 'expirado' END) AS estado,
+			j.titulo,
+			j.imagen
+		FROM alquileres a
+		JOIN juegos j ON a.id_juego = j.id_juego
+		WHERE a.id_usuario = :id_usuario
+		GROUP BY a.id_juego, j.titulo, j.imagen";
+		
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute([':id_usuario' => $id_usuario]);
+		$registros = $ejecucion->fetchAll(PDO::FETCH_ASSOC);
+		return $registros;
+	}
+
+	public function totalHorasJugadas($id_usuario){
+		$sentencia = "SELECT SUM(pi.duracion) AS total_horas
+					FROM alquileres a
+					JOIN pedido_item pi ON a.id_pedido_item = pi.id_item
+					WHERE a.id_usuario = :id_usuario";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute([':id_usuario' => $id_usuario]);
+		$registro = $ejecucion->fetch(PDO::FETCH_ASSOC);
+		return $registro['total_horas'] ?? 0;
 	}
 }
 ?>

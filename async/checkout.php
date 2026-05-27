@@ -16,8 +16,8 @@ try {
     // 2. CONSTRUIR LINE ITEMS
     $line_items = [];
     $customer = \Stripe\Customer::create([
-        'email' => $db->obtenerdato($_SESSION["usuario_id"],0), // Cambia esto por el email del usuario actual
-        'name' => $db->obtenerdato($_SESSION["usuario_id"],1),
+        'email' => $db->obtenerdato($_SESSION["usuario_id"], 0), // Cambia esto por el email del usuario actual
+        'name' => $db->obtenerdato($_SESSION["usuario_id"], 1),
     ]);
 
 
@@ -30,29 +30,30 @@ try {
                     'name' => $juego['titulo'],
                     'description' => $juego['horas'] . ' horas(IVA incluido)'
                 ],
-                'unit_amount' => intval($juego['precio_alquiler']*1.21* 100),
+                'unit_amount' => intval($juego['precio_alquiler'] * 1.21 * 100),
             ],
             'quantity' => $juego['horas'],
         ];
     }
 
     // 3. CREAR SESIÓN STRIPE
-   $session = \Stripe\Checkout\Session::create([
+    $base_url = 'http://' . $_SERVER['HTTP_HOST'] . '/TFG';
+    $session = \Stripe\Checkout\Session::create([
 
-    'mode' => 'payment',
-    'line_items' => $line_items,
-    'success_url' => 'http://localhost/TFG/success.php?id={CHECKOUT_SESSION_ID}',
-    'cancel_url' => 'http://localhost/TFG/cancel.php',
-    'customer' => $customer->id,    
-    /*'invoice_creation' => [
-            'enabled' => true,
-        ],*/
-    'metadata' => [
-        'usuario_id' => $_SESSION['usuario_id'],
-        'carrito' => json_encode($_SESSION['carrito']),
-        'customer_name'=> $db->obtenerdato($_SESSION['usuario_id'],1)
-    ]
-]);
+        'mode' => 'payment',
+        'line_items' => $line_items,
+        'success_url' => $base_url . '/success.php?id={CHECKOUT_SESSION_ID}',
+        'cancel_url' => $base_url . '/cancel.php',
+        'customer' => $customer->id,
+        /*'invoice_creation' => [
+                'enabled' => true,
+            ],*/
+        'metadata' => [
+            'usuario_id' => $_SESSION['usuario_id'],
+            'carrito' => json_encode($_SESSION['carrito']),
+            'customer_name' => $db->obtenerdato($_SESSION['usuario_id'], 1)
+        ]
+    ]);
 
     // 4. DEVOLVER URL
     echo json_encode([
