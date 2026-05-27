@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 05-04-2026 a las 12:28:11
+-- Tiempo de generación: 27-05-2026 a las 00:25:00
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -31,10 +31,11 @@ CREATE TABLE `alquileres` (
   `id_alquiler` int(11) NOT NULL,
   `id_usuario` int(11) DEFAULT NULL,
   `id_juego` int(11) DEFAULT NULL,
-  `id_codigo` varchar(25) NOT NULL,
   `fecha_inicio` datetime DEFAULT current_timestamp(),
   `fecha_fin` datetime DEFAULT NULL,
-  `estado` enum('activo','expirado') DEFAULT 'activo'
+  `estado` enum('activo','expirado') DEFAULT 'activo',
+  `id_pedido_item` int(11) NOT NULL,
+  `id_pedido` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -85,18 +86,6 @@ INSERT INTO `categorias` (`id_categoria`, `nombre`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `codigos`
---
-
-CREATE TABLE `codigos` (
-  `id_codigo` varchar(25) NOT NULL,
-  `id_juego` int(11) NOT NULL,
-  `Canjeado` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `foros`
 --
 
@@ -105,6 +94,13 @@ CREATE TABLE `foros` (
   `nombre` varchar(150) DEFAULT NULL,
   `descripcion` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `foros`
+--
+
+INSERT INTO `foros` (`id_foro`, `nombre`, `descripcion`) VALUES
+(1, 'CANA GAY', 'APOYAMOS A QUE CANA ES GAY');
 
 -- --------------------------------------------------------
 
@@ -150,7 +146,8 @@ INSERT INTO `juegos` (`id_juego`, `titulo`, `descripcion`, `precio_alquiler`, `i
 (21, 'Uncharted 3', 'Aventura de acción lanzada en 2011 para PS3.', 2.00, './img/uncharted_3.jpg', 0, 10),
 (22, 'Uncharted 4', 'Aventura de acción lanzada en 2016 para PS4.', 2.50, './img/uncharted_4.jpg', 0, 10),
 (23, 'The Last of Us', 'Juego de acción y supervivencia lanzado en 2013 para PS3.', 2.50, './img/the_last_of_us.jpg', 0, 10),
-(24, 'The Last of Us Part II', 'Juego de acción y supervivencia lanzado en 2020 para PlayStation 4.', 3.50, './img/the_last_of_us_part_2.jpg', 0, 10);
+(24, 'The Last of Us Part II', 'Juego de acción y supervivencia lanzado en 2020 para PlayStation 4.', 3.50, './img/the_last_of_us_part_2.jpg', 0, 10),
+(39, 'asfasf', 'asfasf', 0.99, 'img/DragonLegacy.png', 2, 0);
 
 -- --------------------------------------------------------
 
@@ -242,6 +239,14 @@ CREATE TABLE `metodo_pago` (
   `descripcion` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `metodo_pago`
+--
+
+INSERT INTO `metodo_pago` (`id_metodo`, `descripcion`) VALUES
+(1, 'Tarjeta de crédito'),
+(2, 'PayPal');
+
 -- --------------------------------------------------------
 
 --
@@ -252,8 +257,21 @@ CREATE TABLE `pedido` (
   `id_pedido` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL,
   `Fecha` datetime NOT NULL,
-  `metodo_pago` int(11) NOT NULL
+  `metodo_pago` int(11) NOT NULL,
+  `estado` enum('pagado','reembolsado') NOT NULL DEFAULT 'pagado',
+  `fecha_reembolso` datetime DEFAULT NULL,
+  `motivo_reembolso` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `pedido`
+--
+
+INSERT INTO `pedido` (`id_pedido`, `id_usuario`, `Fecha`, `metodo_pago`, `estado`, `fecha_reembolso`, `motivo_reembolso`) VALUES
+(24, 3, '2026-05-25 23:37:02', 1, 'pagado', NULL, NULL),
+(32, 3, '2026-05-26 00:07:48', 1, 'pagado', NULL, NULL),
+(33, 3, '2026-05-26 18:19:49', 1, 'pagado', NULL, NULL),
+(34, 3, '2026-05-26 18:44:42', 1, 'pagado', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -266,8 +284,52 @@ CREATE TABLE `pedido_item` (
   `id_pedido` int(11) NOT NULL,
   `id_juego` int(11) NOT NULL,
   `duracion` int(11) NOT NULL,
-  `precio` decimal(10,2) NOT NULL
+  `precio` decimal(10,2) NOT NULL,
+  `canjeado` tinyint(1) NOT NULL,
+  `codigo` char(16) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `pedido_item`
+--
+
+INSERT INTO `pedido_item` (`id_item`, `id_pedido`, `id_juego`, `duracion`, `precio`, `canjeado`, `codigo`) VALUES
+(414956, 24, 4, 4, 1.50, 0, 'A5DEFFD21EBEFDB0'),
+(414957, 24, 18, 1, 2.50, 0, '2A66DEAF91DFFB27'),
+(414970, 32, 8, 6, 3.00, 0, '619168F580C55BB0'),
+(414971, 32, 13, 7, 2.50, 0, '3F48731AEAAEB0E6'),
+(414972, 33, 3, 10, 2.00, 0, '82CD0CD0353D185F'),
+(414973, 33, 4, 3, 1.50, 0, 'F6AF417044B3BE3C'),
+(414974, 33, 2, 4, 2.50, 0, '94F478C9928EC703'),
+(414975, 33, 8, 5, 3.00, 0, 'F2A225F02F74702D'),
+(414976, 34, 3, 3, 2.00, 0, '9406317988D959C9');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `recibos`
+--
+
+CREATE TABLE `recibos` (
+  `id_recibo` int(11) NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `numero_factura` varchar(50) NOT NULL,
+  `nombre_fichero` varchar(255) NOT NULL,
+  `estado` enum('pagado','cancelado','reembolsado') DEFAULT 'pagado',
+  `stripe_session_id` varchar(255) DEFAULT NULL,
+  `fecha_emision` datetime DEFAULT current_timestamp(),
+  `id_pedido` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `recibos`
+--
+
+INSERT INTO `recibos` (`id_recibo`, `id_usuario`, `numero_factura`, `nombre_fichero`, `estado`, `stripe_session_id`, `fecha_emision`, `id_pedido`) VALUES
+(2, 3, 'FAC-20260525233702', 'FAC-20260525233702.pdf', 'pagado', 'cs_test_b1Sg2qvij5oiXFRNB78VZThjPY4e296LLqXxrPyuge7QherKDZ8yht3EYh', '2026-05-25 23:37:04', 24),
+(10, 3, 'FAC-20260526000748', 'FAC-20260526000748.pdf', 'pagado', 'cs_test_b1ksFslOmNrF7xtx4aENa66mNX0hFVzgudDQXpmlro9Q5zTXazrEusGPqc', '2026-05-26 00:07:51', 32),
+(11, 3, 'FAC-20260526181949', 'FAC-20260526181949.pdf', 'pagado', 'cs_test_b14t0f43yLJtbjOFLqDC2J8Q8YPuJSUXGWq4ceA4etrbXeFm3DvGyYPtV9', '2026-05-26 18:19:53', 33),
+(12, 3, 'FAC-20260526184442', 'FAC-20260526184442.pdf', 'pagado', 'cs_test_a1AdSiwkfcSMVQ9TsoB56THffMshBd5GhusXnVPRsKmrWQ2NbmQKpIhnLu', '2026-05-26 18:44:44', 34);
 
 -- --------------------------------------------------------
 
@@ -282,6 +344,14 @@ CREATE TABLE `respuestas` (
   `id_usuario` int(11) DEFAULT NULL,
   `fecha_respuesta` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `respuestas`
+--
+
+INSERT INTO `respuestas` (`id_respuesta`, `contenido`, `id_tema`, `id_usuario`, `fecha_respuesta`) VALUES
+(1, 'JAJAJA ES VERDAD', 1, 3, '2026-05-17 17:10:33'),
+(2, 'XD', 1, 3, '2026-05-17 17:10:43');
 
 -- --------------------------------------------------------
 
@@ -315,6 +385,13 @@ CREATE TABLE `temas` (
   `id_usuario` int(11) DEFAULT NULL,
   `fecha_creacion` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `temas`
+--
+
+INSERT INTO `temas` (`id_tema`, `titulo`, `id_foro`, `id_usuario`, `fecha_creacion`) VALUES
+(1, 'XD', 1, 3, '2026-05-17 17:10:20');
 
 -- --------------------------------------------------------
 
@@ -355,8 +432,7 @@ CREATE TABLE `usuarios` (
 
 INSERT INTO `usuarios` (`id_usuario`, `nombre`, `email`, `password`, `foto`, `nivel`, `estado`, `id_rol`, `fecha_registro`) VALUES
 (1, 'canaGay', 'canagay@gmail.com', '$2y$10$GGDD98gmL1CGoNrXhHcIJuR7PBs5W2Io4eoRDElMJR0eJd3jOzKtq', NULL, 1, 'activo', 0, '2026-03-11 10:50:10'),
-(2, 'admin', 'admin@gmail.com', '$2y$10$b.irHkaAC5m.qNZf013HjegsF9tswv7OuUYPX7dfYHD6/P2/Y3woi', NULL, 1, 'activo', 1, '2026-03-11 11:59:53'),
-(3, 'ADMINISTRADOR', 'ADMINISTRADOR@gmail.com', '$2y$10$kWgaWC02Blg5JYbWTy4R0OwvfgjE/dttxKE.qqNJKHNsShlm/9qeS', NULL, 1, 'activo', 1, '2026-03-30 14:45:24');
+(3, 'ADMINISTRADOR', 'felipe777gaymer@gmail.com', '$2y$10$kWgaWC02Blg5JYbWTy4R0OwvfgjE/dttxKE.qqNJKHNsShlm/9qeS', NULL, 1, 'activo', 1, '2026-03-30 14:45:24');
 
 -- --------------------------------------------------------
 
@@ -379,16 +455,17 @@ CREATE TABLE `usuarios_logros` (
 --
 ALTER TABLE `alquileres`
   ADD PRIMARY KEY (`id_alquiler`),
-  ADD KEY `fk_usuario_alquiler` (`id_usuario`),
-  ADD KEY `fk_juego_alquiler` (`id_juego`),
-  ADD KEY `fk_codigo_alquiler` (`id_codigo`);
+  ADD KEY `idx_usuario` (`id_usuario`),
+  ADD KEY `idx_juego` (`id_juego`),
+  ADD KEY `idx_pedido_item` (`id_pedido_item`),
+  ADD KEY `idx_pedido` (`id_pedido`);
 
 --
 -- Indices de la tabla `carrito_item`
 --
 ALTER TABLE `carrito_item`
   ADD PRIMARY KEY (`id_carrito`),
-  ADD KEY `fk_carrito_usuario` (`id_usuario`),
+  ADD UNIQUE KEY `unique_usuario_juego` (`id_usuario`,`id_juego`),
   ADD KEY `fk_carrito_juego` (`id_juego`);
 
 --
@@ -396,13 +473,6 @@ ALTER TABLE `carrito_item`
 --
 ALTER TABLE `categorias`
   ADD PRIMARY KEY (`id_categoria`);
-
---
--- Indices de la tabla `codigos`
---
-ALTER TABLE `codigos`
-  ADD PRIMARY KEY (`id_codigo`),
-  ADD KEY `fk_juego_codigo` (`id_juego`);
 
 --
 -- Indices de la tabla `foros`
@@ -448,8 +518,18 @@ ALTER TABLE `pedido`
 --
 ALTER TABLE `pedido_item`
   ADD PRIMARY KEY (`id_item`),
+  ADD UNIQUE KEY `uq_codigo` (`codigo`),
   ADD KEY `fk_pitems_pedido` (`id_pedido`),
   ADD KEY `fk_pitems_juego` (`id_juego`);
+
+--
+-- Indices de la tabla `recibos`
+--
+ALTER TABLE `recibos`
+  ADD PRIMARY KEY (`id_recibo`),
+  ADD UNIQUE KEY `numero_factura` (`numero_factura`),
+  ADD KEY `id_usuario` (`id_usuario`),
+  ADD KEY `idx_id_pedido` (`id_pedido`);
 
 --
 -- Indices de la tabla `respuestas`
@@ -509,7 +589,7 @@ ALTER TABLE `alquileres`
 -- AUTO_INCREMENT de la tabla `carrito_item`
 --
 ALTER TABLE `carrito_item`
-  MODIFY `id_carrito` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_carrito` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=245;
 
 --
 -- AUTO_INCREMENT de la tabla `categorias`
@@ -521,13 +601,13 @@ ALTER TABLE `categorias`
 -- AUTO_INCREMENT de la tabla `foros`
 --
 ALTER TABLE `foros`
-  MODIFY `id_foro` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_foro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `juegos`
 --
 ALTER TABLE `juegos`
-  MODIFY `id_juego` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id_juego` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT de la tabla `logros`
@@ -539,25 +619,31 @@ ALTER TABLE `logros`
 -- AUTO_INCREMENT de la tabla `metodo_pago`
 --
 ALTER TABLE `metodo_pago`
-  MODIFY `id_metodo` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_metodo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `pedido`
 --
 ALTER TABLE `pedido`
-  MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT de la tabla `pedido_item`
 --
 ALTER TABLE `pedido_item`
-  MODIFY `id_item` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_item` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=414977;
+
+--
+-- AUTO_INCREMENT de la tabla `recibos`
+--
+ALTER TABLE `recibos`
+  MODIFY `id_recibo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `respuestas`
 --
 ALTER TABLE `respuestas`
-  MODIFY `id_respuesta` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_respuesta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `roles`
@@ -569,7 +655,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT de la tabla `temas`
 --
 ALTER TABLE `temas`
-  MODIFY `id_tema` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_tema` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `tickets`
@@ -591,9 +677,10 @@ ALTER TABLE `usuarios`
 -- Filtros para la tabla `alquileres`
 --
 ALTER TABLE `alquileres`
-  ADD CONSTRAINT `fk_codigo_alquiler` FOREIGN KEY (`id_codigo`) REFERENCES `codigos` (`id_codigo`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_juego_alquiler` FOREIGN KEY (`id_juego`) REFERENCES `juegos` (`id_juego`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_usuario_alquiler` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_juegos_alquileres` FOREIGN KEY (`id_juego`) REFERENCES `juegos` (`id_juego`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_pedido_alquileres` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id_pedido`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_pedidoitem_alquileres` FOREIGN KEY (`id_pedido_item`) REFERENCES `pedido_item` (`id_item`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_usuario_alquileres` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `carrito_item`
@@ -601,12 +688,6 @@ ALTER TABLE `alquileres`
 ALTER TABLE `carrito_item`
   ADD CONSTRAINT `fk_carrito_juego` FOREIGN KEY (`id_juego`) REFERENCES `juegos` (`id_juego`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_carrito_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `codigos`
---
-ALTER TABLE `codigos`
-  ADD CONSTRAINT `fk_juego_codigo` FOREIGN KEY (`id_juego`) REFERENCES `juegos` (`id_juego`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `juego_categoria`
@@ -628,6 +709,13 @@ ALTER TABLE `pedido`
 ALTER TABLE `pedido_item`
   ADD CONSTRAINT `fk_pitems_juego` FOREIGN KEY (`id_juego`) REFERENCES `juegos` (`id_juego`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_pitems_pedido` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id_pedido`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `recibos`
+--
+ALTER TABLE `recibos`
+  ADD CONSTRAINT `fk_recibos_pedido` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id_pedido`),
+  ADD CONSTRAINT `recibos_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`);
 
 --
 -- Filtros para la tabla `respuestas`
@@ -666,3 +754,4 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
