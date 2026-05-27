@@ -16,7 +16,7 @@ try {
 
         $stock = $db->TieneStock($juego['id_juego']);
 
-        if ($stock>=0) {
+        if ($stock<=0) {
 
             echo json_encode([
                 "error" => true,
