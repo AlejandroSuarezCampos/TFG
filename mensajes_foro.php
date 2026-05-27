@@ -6,10 +6,11 @@ $tema = $db->obtenerTema($id_tema);
 ?>
 
 <script>
-setInterval(function() {
-   cargarMensajes(<?= $id_tema ?>);
-  }, 1000);
-  document.addEventListener("DOMContentLoaded", function () {
+  setInterval(function() {
+    cargarMensajes(<?= $id_tema ?>);
+  }, 5000);
+  
+    document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("mensaje").addEventListener("keydown", function (e) {
       if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();

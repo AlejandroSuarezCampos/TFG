@@ -18,7 +18,7 @@ if (!$es_propietario && !$es_admin) {
 
   setInterval(function() {
     cargarMensajesTicket(<?=$id_ticket?>);
-  }, 1000);
+  }, 5000);
 
   document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("mensaje").addEventListener("keydown", function (e) {
