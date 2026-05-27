@@ -1,11 +1,6 @@
 <?php
   include_once("PanelIndex.php");
 
-   if(isset($_GET["borrar"])){
-      $db->eliminarCat($_GET["borrar"]);
-	}
-
-
  $listaCategorias=$db->listarCategorias();
 ?>
 
