@@ -889,3 +889,34 @@ function limpiarErrores() {
         errorDiv.innerText = "Error de conexión. Inténtalo de nuevo.";
     });
 }
+
+function confirmarBorrarCuenta() {
+    Swal.fire({
+        title: 'Eliminar cuenta',
+        text: '¿Seguro que quieres eliminar tu cuenta? Esta acción no se puede deshacer.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Eliminar',
+        cancelButtonText: 'Cancelar',
+        customClass: {
+            popup: 'steam-popup',
+            confirmButton: 'steam-btn-primary',
+            cancelButton: 'steam-btn-secondary'
+        },
+        buttonsStyling: false
+    }).then((result) => {
+        if (!result.isConfirmed) return;
+
+        // Si confirma, envía el formulario PHP normalmente
+        let form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '';  // Misma página
+        let input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'borrar';
+        input.value = '1';
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+    });
+}

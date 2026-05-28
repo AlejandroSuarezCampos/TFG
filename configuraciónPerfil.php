@@ -12,6 +12,20 @@ if (isset($_POST['borrar'])) {
     $db->borrarCuenta($id_usu);
 }
 ?>
+
+<?php if (isset($_POST['borrar'])): ?>
+    <script>
+        // Se ejecuta cuando el formulario ya fue enviado y la cuenta borrada
+        Swal.fire({
+            icon: 'success',
+            title: 'Cuenta eliminada',
+            text: 'Tu cuenta ha sido eliminada correctamente.',
+            customClass: { popup: 'steam-popup' }
+        }).then(() => {
+            window.location.href = '../index.php'; // Redirige tras confirmar
+        });
+    </script>
+<?php endif; ?>
 <script src="./js/async.js"></script>
 <div class="container py-5">
 
@@ -49,11 +63,9 @@ if (isset($_POST['borrar'])) {
   <div class="settings-card danger">
     <h5 class="settings-title text-danger">Zona peligrosa</h5>
     <p class="settings-text">Eliminar tu cuenta es permanente y no se puede deshacer.</p>
-    <form method="POST">
-      <button type="submit" class="btn btn-danger w-100" name="borrar">
-        Borrar cuenta
-      </button>
-    </form>
+      <button type="button" class="btn btn-danger w-100" onclick="confirmarBorrarCuenta()">
+      Borrar cuenta
+    </button>
   </div>
 
 </div>
