@@ -65,6 +65,9 @@ $total_carrito = count($_SESSION['carrito']);
                 Cerrar sesión
               </a>
             </li>
+            <li class="nav-item ms-lg-3">
+              <a class="btn btn-steam" href="mispedidos.php">Mis</a>
+            </li>
             <?php
           } else {
             ?>

@@ -578,6 +578,7 @@ function enviarMensaje(id_tema) {
     input.value = nueva;
   }
 }*/
+//Escuchador para lanzar el evento de redirigir a la pasarela, con validaciones de stcok y error
 document.addEventListener('click', function (e) {
     if (e.target && e.target.id === 'pagar') {
         // Mostrar loading
@@ -607,7 +608,7 @@ document.addEventListener('click', function (e) {
                         }, 3000);
                     } else {
                         let mensaje = "Ha ocurrido un error inesperado";
-
+                        //Si es error de stock se muestra un mensaje claro respecto al stock del juego
                         if (data.type === "stock") {
                             mensaje = data.message;
                         }

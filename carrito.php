@@ -2,23 +2,19 @@
 include_once("cabecera.php");
 include_once("./db/consultas.php");
 
+$recomendados = $db->obtenerJuegosRecomendados($_SESSION['carrito']);
 ?>
-<div>
-  <div>
 
-    <main class="caja_carrito">
+<main class="container-fluid px-4 flex-grow-1">
 
-      <section id="carrito" class="carrito">
+  <main class="caja_carrito">
 
-       
+    <section id="carrito" class="carrito">
+     
+    </section>
 
-      </section>
+  </main>
+</main>
+  
 
-    </main>
-
-  </div>
-</div>
-
-<?php
-include_once("pie.php");
-?>
+<?php include_once("pie.php"); ?>

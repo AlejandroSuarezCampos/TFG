@@ -23,7 +23,7 @@
 
     }
     list($ancho, $alto) = getimagesize($_FILES["imagen"]["tmp_name"]);
-
+   //Predefinimos un tamaño de imagen
     if ($ancho != 600 || $alto != 900) {
 
         echo json_encode([
@@ -59,6 +59,7 @@
                 "mensaje"=>"El juego ya esta registrado"
             ];
         }else{
+            //Ruta establecida y subimos la futo a la carpeta para después subirla a bbdd
             $DIR="c:\\xampp\\htdocs\\TFG\\";
             $nombreImagen=$_FILES["imagen"]["name"];
             $rutaDestino = $DIR."/img/" . $nombreImagen;
