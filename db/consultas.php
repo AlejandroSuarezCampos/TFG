@@ -5,7 +5,8 @@ class Tienda
 
 	private $pdo;
 
-	public function __construct($host, $port, $db, $user, $pass){
+	public function __construct($host, $port, $db, $user, $pass)
+	{
 		$this->pdo = new PDO("mysql:host=" . $host . ";port=" . $port . ";dbname=" . $db, $user, $pass);
 	}
 
@@ -99,7 +100,7 @@ class Tienda
 				":nombre" => $nombre,
 				":email" => $email,
 				":password" => password_hash($pass, PASSWORD_DEFAULT),
-				":foto" => "/img/foto_usu.png"
+				":foto" => "./img/foto_usu.png"
 			)
 		);
 	}
@@ -503,7 +504,7 @@ public function crearMensajeTicket($id_usuario, $id_ticket, $mensaje)
 			"precio" => $precio,
 			":codigo" => $codigo
 		]);
-		$sentencia ="UPDATE juegos SET stock = stock - 1 WHERE id_juego=:id";
+		$sentencia = "UPDATE juegos SET stock = stock - 1,ventas = ventas + 1 WHERE id_juego=:id";
 		$ejecucion = $this->pdo->prepare($sentencia);
 		$ejecucion->execute([
 			":id" => $id_juego
@@ -603,55 +604,59 @@ public function crearMensajeTicket($id_usuario, $id_ticket, $mensaje)
 	}
 
 	public function generarCodigoFactura($longitud = 16)
-{
-    $time = microtime(true);
-    $random = bin2hex(random_bytes(8));
+	{
+		$time = microtime(true);
+		$random = bin2hex(random_bytes(8));
 
-    $base = $time . $random;
+		$base = $time . $random;
 
-    $hash = hash('sha256', $base);
-    $hash = strtoupper($hash);
+		$hash = hash('sha256', $base);
+		$hash = strtoupper($hash);
 
-    $hash = preg_replace('/[^A-Z0-9]/', '', $hash);
+		$hash = preg_replace('/[^A-Z0-9]/', '', $hash);
 
-    return substr($hash, 0, $longitud);
-}
-public function TieneStock($id_juego)
-{
-    $sentencia = "SELECT stock FROM juegos WHERE id_juego = :id";
-    $ejecucion = $this->pdo->prepare($sentencia);
-    $ejecucion->execute([
+		return substr($hash, 0, $longitud);
+	}
+	public function TieneStock($id_juego)
+	{
+		$sentencia = "SELECT stock FROM juegos WHERE id_juego = :id";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute([
 			":id" => $id_juego
 		]);
-    $resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
-	return $resultado['stock'];
-}
-	public function borrarCuenta($id){
+		$resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
+		return $resultado['stock'];
+	}
+	public function borrarCuenta($id)
+	{
 		$sentencia = "DELETE FROM usuarios WHERE id_usuario = :id";
 
 		$ejecucion = $this->pdo->prepare($sentencia);
 
 		$ejecucion->execute([
-			":id" => $id	
+			":id" => $id
 		]);
 
-        // cerrar sesión
-        session_unset();
-        session_destroy();
+		// cerrar sesión
+		session_unset();
+		session_destroy();
 
-        header("location: index.php?cuenta=borrada");
-        exit;
+		header("location: index.php?cuenta=borrada");
+		exit;
 	}
 
-	public function cambiarPassword($id_usuario, $nueva_pass){
+	public function cambiarPassword($id_usuario, $nueva_pass)
+	{
 		$sentencia = "UPDATE usuarios SET password = :password WHERE id_usuario = :id_usuario";
 		$ejecucion = $this->pdo->prepare($sentencia);
 		$ejecucion->execute([
-			":password"    => password_hash($nueva_pass, PASSWORD_DEFAULT),
-			":id_usuario"  => $id_usuario
+			":password" => password_hash($nueva_pass, PASSWORD_DEFAULT),
+			":id_usuario" => $id_usuario
 		]);
 	}
-	public function listarAlquileresPorUsuario($id_usuario){
+
+	public function listarAlquileresPorUsuario($id_usuario)
+	{
 		$sentencia = "SELECT
 			a.id_juego,
 			MIN(CASE WHEN a.estado = 'activo' THEN 'activo' ELSE 'expirado' END) AS estado,
@@ -661,7 +666,7 @@ public function TieneStock($id_juego)
 		JOIN juegos j ON a.id_juego = j.id_juego
 		WHERE a.id_usuario = :id_usuario
 		GROUP BY a.id_juego, j.titulo, j.imagen";
-		
+
 		$ejecucion = $this->pdo->prepare($sentencia);
 		$ejecucion->execute([':id_usuario' => $id_usuario]);
 		$registros = $ejecucion->fetchAll(PDO::FETCH_ASSOC);
@@ -821,6 +826,41 @@ public function modificarTema($modificar, $titulo)
 	public function eliminarMensaje($id_respuesta) {
 		$stmt = $this->pdo->prepare("DELETE FROM respuestas WHERE id_respuesta = ?");
 		return $stmt->execute([$id_respuesta]);
+	}
+	function obtenerJuegosRecomendados( $carrito, $limite = 4)
+	{
+		$idsCarrito = array_keys($carrito);
+
+		if (empty($idsCarrito)) {
+			$sql = "
+            SELECT j.*
+            FROM juegos j
+            LEFT JOIN pedido_item pi ON pi.id_juego = j.id_juego
+            GROUP BY j.id_juego
+            ORDER BY COUNT(pi.id_juego) DESC
+            LIMIT $limite
+        ";
+
+			$stmt = $this->pdo->query($sql);
+			return $stmt->fetchAll(PDO::FETCH_ASSOC);
+		}
+
+		$placeholders = implode(',', array_fill(0, count($idsCarrito), '?'));
+
+		$sql = "
+        SELECT j.*
+        FROM juegos j
+        LEFT JOIN pedido_item pi ON pi.id_juego = j.id_juego
+        WHERE j.id_juego NOT IN ($placeholders)
+        GROUP BY j.id_juego
+        ORDER BY COUNT(pi.id_juego) DESC
+        LIMIT $limite
+    ";
+
+		$stmt =$this->pdo->prepare($sql);
+		$stmt->execute($idsCarrito);
+
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
 	}
 }
 

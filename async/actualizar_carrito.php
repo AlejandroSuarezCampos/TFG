@@ -25,7 +25,7 @@ if (isset($_POST['id']) && isset($_POST['horas'])) {
         $_SESSION['carrito'][$id] = $horas;
     }
 
-    // Recalcular total de artículos (no es fiable usar count para total real)
+    // Recalcular total de artículos
     $_SESSION['carrito_total'] = count($_SESSION['carrito']);
 foreach ($_SESSION['carrito'] as $id => $horas) {
     $precio = $db->obtenerPrecio($id); // desde BD

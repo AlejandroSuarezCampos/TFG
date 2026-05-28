@@ -7,7 +7,7 @@
 });
 */
 const MIN_HORAS = 1;
-const MAX_HORAS = 50;
+const MAX_HORAS = 100;
 document.addEventListener("DOMContentLoaded", function () {
     const buscador = document.getElementById("buscador");
 
@@ -253,9 +253,7 @@ function logOut() {
     window.location.href = "/TFG/async/logOut.php";
 }
 
-//Funciones para carrito
-
-
+//Funciones para cargar el carrito de forma asíncrona
 function cargarCarrito() {
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
@@ -263,8 +261,6 @@ function cargarCarrito() {
             if (xmlhttp.status === 200) {
                 const campo = document.getElementById("carrito");
                 if (!campo) return;
-
-                // 🔥 AQUÍ está la clave
                 console.log(xmlhttp.responseText);
                 let data = JSON.parse(xmlhttp.responseText);
 
@@ -286,6 +282,7 @@ function cargarCarrito() {
     // solo si realmente lo necesitas
     xmlhttp.send("valor=1");
 }
+//Añadimos el juego al carrito
 function AnadirCarrito(id) {
     let xmlhttp = new XMLHttpRequest();
     let horas = document.getElementById('horas').value
@@ -351,6 +348,7 @@ function validarHoras(valor) {
 function actualizar_contador(num) {
     document.getElementById("contador").innerText = num;
 }
+
 function eliminarCarrito(id) {
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
@@ -401,7 +399,7 @@ document.addEventListener("input", function (e) {
 
         let horas = validarHoras(e.target.value);
 
-        // 🔥 corregimos el input si se pasa
+        //  corregimos el input si se pasa
         e.target.value = horas;
         actualizarCarrito(id, horas);
     }
@@ -414,10 +412,12 @@ document.addEventListener("click", function (e) {
         let id = e.target.dataset.id;
         let input = document.querySelector(`.horas-input[data-id="${id}"]`);
 
-        input.value = parseInt(input.value) + 1;
+        let nuevoValor = parseInt(input.value) + 1;
         //input.dispatchEvent(new Event("input"));
+        if (nuevoValor > 100) nuevoValor = 100;
+        input.value = nuevoValor;
 
-        actualizarCarrito(id, input.value);
+        actualizarCarrito(id, nuevoValor);
     }
 
     // BOTON -
@@ -443,8 +443,7 @@ function actualizarCarrito(id, horas) {
         if (xmlhttp.status === 200) {
             console.log(xmlhttp.responseText);
             let respuesta = JSON.parse(xmlhttp.responseText);
-            console.log(respuesta); // 👈 DEBUG IMPORTANTE
-
+            console.log(respuesta);
             document.getElementById("total-" + id).innerText = respuesta.total_juego.toFixed(2);
             document.getElementById("total-carrito-precio").innerText = respuesta.total_precio.toFixed(2);
             document.getElementById("contador").innerText = respuesta.total_items;
@@ -455,11 +454,12 @@ function actualizarCarrito(id, horas) {
     xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xmlhttp.send("id=" + id + "&horas=" + horas);
 }
-function cambiarHoras(valor) {
+
+/*function cambiarHoras(valor){
     let input = document.getElementById('horas');
     let nueva = parseInt(input.value) + valor;
 
-    if (nueva >= 1 && nueva <= 50) {
+    if (nueva >= 1) {
         input.value = nueva;
     }
         let xmlhttp = new XMLHttpRequest();
@@ -468,7 +468,7 @@ function cambiarHoras(valor) {
             if (xmlhttp.status === 200) {
                 console.log(xmlhttp.responseText);
                 let respuesta = JSON.parse(xmlhttp.responseText);
-                 console.log(respuesta); // 👈 DEBUG IMPORTANTE
+                 console.log(respuesta); 
 
                 document.getElementById("total-" + id).innerText = respuesta.total_juego.toFixed(2);
                 document.getElementById("total-carrito-precio").innerText = respuesta.total_precio.toFixed(2);
@@ -479,14 +479,16 @@ function cambiarHoras(valor) {
         xmlhttp.open("POST", "./async/actualizar_carrito.php", true);
         xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xmlhttp.send("id=" + id + "&horas=" + input.value);
-}
-function cambiarHoras(valor) {
-  let input = document.getElementById('horas');
-  let nueva = parseInt(input.value) + valor;
+}*/
+//Comprobaciones de que no introduzcan horas negativas, y se cambian las horas
 
-  if (nueva >= 1 && nueva <= 50) {
-    input.value = nueva;
-  }
+function cambiarHoras(valor) {
+    let input = document.getElementById('horas');
+    let nueva = parseInt(input.value) + valor;
+    let horas = 0
+    if (horas = validarHoras(nueva)) {
+        input.value = horas;
+    }
 }
 
 function cargarMensajes(id_tema) {
@@ -567,7 +569,7 @@ function enviarMensaje(id_tema){
     // reset error
     error.style.display = "none";
 
-    if(contenido === ""){
+    if (contenido === "") {
         error.style.display = "block";
         return;
     }
@@ -580,7 +582,7 @@ function enviarMensaje(id_tema){
 
             let data = JSON.parse(this.responseText);
 
-            if(data.ok){
+            if (data.ok) {
                 document.getElementById("mensaje").value = "";
                 cargarMensajes(id_tema);
             }
@@ -684,6 +686,7 @@ function cargarMensajesTicket(id_ticket, id_usuario_actual) {
     input.value = nueva;
   }
 }*/
+//Escuchador para lanzar el evento de redirigir a la pasarela, con validaciones de stcok y error
 document.addEventListener('click', function (e) {
     if (e.target && e.target.id === 'pagar') {
         // Mostrar loading
@@ -712,13 +715,21 @@ document.addEventListener('click', function (e) {
                             window.location.href = data.url;
                         }, 3000);
                     } else {
+                        let mensaje = "Ha ocurrido un error inesperado";
+                        //Si es error de stock se muestra un mensaje claro respecto al stock del juego
+                        if (data.type === "stock") {
+                            mensaje = data.message;
+                        }
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: data.error || 'No se pudo iniciar el pago',
-                              customClass: {
+                            text: mensaje,
+                            confirmButtonText: 'Volver al carrito',
+                            customClass: {
                                 popup: 'steam-popup',
                             },
+                        }).then(() => {
+                            window.location.href = '/TFG/carrito.php';
                         });
                     }
                 } else {
@@ -743,77 +754,77 @@ document.addEventListener('click', function (e) {
 });
 
 function cambiarPassword() {
-  limpiarErroresPerfil();
+    limpiarErroresPerfil();
 
-  let nueva   = document.getElementById("nueva").value;
-  let repetir = document.getElementById("repetir").value;
+    let nueva = document.getElementById("nueva").value;
+    let repetir = document.getElementById("repetir").value;
 
-  // Validaciones en cliente
-  if (nueva === "" || repetir === "") {
-    mostrarError("campos_vacios", "Todos los campos son obligatorios");
-    return;
-  }
-  if (nueva !== repetir) {
-    mostrarError("contrasenas_no_coinciden", "Las contraseñas no coinciden");
-    return;
-  }
-  if (nueva.length < 8) {
-    mostrarError("contrasena_corta", "La contraseña debe tener al menos 8 caracteres");
-    return;
-  }
-
-  // Petición asíncrona
-  let xmlhttp = new XMLHttpRequest();
-  let url = "./async/cambiarContrasena.php"+"?nueva="+encodeURIComponent(nueva)+"&repetir="+encodeURIComponent(repetir);
-
-  xmlhttp.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
-      let respuesta = JSON.parse(this.responseText);
-
-      if (respuesta.exito) {
-        let exito = document.getElementById("exito");
-        exito.innerText = respuesta.mensaje;
-        exito.classList.remove("oculto");
-
-        document.getElementById("nueva").value   = "";
-        document.getElementById("repetir").value = "";
-      } else {
-        switch (respuesta.error) {
-          case "campos_vacios":
-            mostrarError("campos_vacios", respuesta.mensaje);
-            break;
-          case "contrasenas_no_coinciden":
-            mostrarError("contrasenas_no_coinciden", respuesta.mensaje);
-            break;
-          case "contrasena_corta":
-            mostrarError("contrasena_corta", respuesta.mensaje);
-            break;
-          default:
-            mostrarError("campos_vacios", respuesta.mensaje || "Error desconocido");
-        }
-      }
+    // Validaciones en cliente
+    if (nueva === "" || repetir === "") {
+        mostrarError("campos_vacios", "Todos los campos son obligatorios");
+        return;
     }
-  };
+    if (nueva !== repetir) {
+        mostrarError("contrasenas_no_coinciden", "Las contraseñas no coinciden");
+        return;
+    }
+    if (nueva.length < 8) {
+        mostrarError("contrasena_corta", "La contraseña debe tener al menos 8 caracteres");
+        return;
+    }
 
-  xmlhttp.open("GET", url, true);
-  xmlhttp.send();
+    // Petición asíncrona
+    let xmlhttp = new XMLHttpRequest();
+    let url = "./async/cambiarContrasena.php" + "?nueva=" + encodeURIComponent(nueva) + "&repetir=" + encodeURIComponent(repetir);
+
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            let respuesta = JSON.parse(this.responseText);
+
+            if (respuesta.exito) {
+                let exito = document.getElementById("exito");
+                exito.innerText = respuesta.mensaje;
+                exito.classList.remove("oculto");
+
+                document.getElementById("nueva").value = "";
+                document.getElementById("repetir").value = "";
+            } else {
+                switch (respuesta.error) {
+                    case "campos_vacios":
+                        mostrarError("campos_vacios", respuesta.mensaje);
+                        break;
+                    case "contrasenas_no_coinciden":
+                        mostrarError("contrasenas_no_coinciden", respuesta.mensaje);
+                        break;
+                    case "contrasena_corta":
+                        mostrarError("contrasena_corta", respuesta.mensaje);
+                        break;
+                    default:
+                        mostrarError("campos_vacios", respuesta.mensaje || "Error desconocido");
+                }
+            }
+        }
+    };
+
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
 }
 
 function mostrarError(tipo, mensaje) {
-  switch (tipo) {
-    case "campos_vacios":
-      document.getElementById("errorCampos").innerText = mensaje;
-      document.getElementById("errorCampos").classList.remove("oculto");
-      break;
-    case "contrasena_corta":
-      document.getElementById("errorContrasena").innerText = mensaje;
-      document.getElementById("errorContrasena").classList.remove("oculto");
-      break;
-    case "contrasenas_no_coinciden":
-      document.getElementById("errorRepetir").innerText = mensaje;
-      document.getElementById("errorRepetir").classList.remove("oculto");
-      break;
-  }
+    switch (tipo) {
+        case "campos_vacios":
+            document.getElementById("errorCampos").innerText = mensaje;
+            document.getElementById("errorCampos").classList.remove("oculto");
+            break;
+        case "contrasena_corta":
+            document.getElementById("errorContrasena").innerText = mensaje;
+            document.getElementById("errorContrasena").classList.remove("oculto");
+            break;
+        case "contrasenas_no_coinciden":
+            document.getElementById("errorRepetir").innerText = mensaje;
+            document.getElementById("errorRepetir").classList.remove("oculto");
+            break;
+    }
 }
 
 function limpiarErroresPerfil() {

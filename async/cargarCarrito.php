@@ -22,11 +22,19 @@ if (isset($_POST["valor"])) {
     }*/
 
     $juegos_carrito = $db->listarjuegoscarrito($carrito);
-    $response = '<h2 class="mb-4 text-white">Tu carrito</h2>';
+    $response = '<h2 class="mb-4 text-white">Tu carrito de la compra🛒 </h2>';
 
     if (empty($juegos_carrito)) {
         echo json_encode([
-            "html" => $response . '<p class="text-white">El carrito está vacío</p>'
+            "html" => $response . '
+                    <div class="carrito-vacio">
+                    <p class="carrito-vacio-texto">
+                        ¡¡El carrito está vacío!!
+                    </p>
+                    <span class="carrito-vacio-sub">
+                        Añade juegos para empezar tu alquiler
+                    </span>
+                    </div>'
         ]);
 
         exit;
@@ -38,8 +46,8 @@ if (isset($_POST["valor"])) {
         $total = $precio * $horas;
 
         $response .= "
-        <div class='carrito-item d-flex align-items-center mb-3 p-3 text-white'>
-            <img src='{$juego["imagen"]}' width='120' class='me-3'>
+        <div class='carrito-item d-flex flex-column flex-md-row align-items-start align-items-md-center mb-3 p-3 text-white'>
+            <img src='{$juego["imagen"]}' width='120' class='me-md-3 mb-3 mb-md-0 carrito-img'>
             <div class='flex-grow-1'>
                 <h5>{$juego["titulo"]}</h5>
                 <div class='d-flex align-items-center gap-2'>
@@ -60,9 +68,17 @@ if (isset($_POST["valor"])) {
             </button>
         </div>";
     }
-    $response .= '<h3 class="text-white mt-4"> 
-                  Total carrito: <span id="total-carrito-precio">0</span> €
-                </h3>';
+    $response .= '
+        <div class="steam-total-box">
+        <h3 class="steam-total-title m-0">
+            Total carrito:
+            <span id="total-carrito-precio">0</span> €
+        </h3>
+
+        <span class="steam-total-note">
+            Los impuestos de venta se calcularán durante el pago
+        </span>
+        </div>';
     if (isset($_SESSION["usuario_id"])) {
         $response .= '
 <div class="d-flex justify-content-center align-items-center mt-4 gap-3">
@@ -89,7 +105,6 @@ if (isset($_POST["valor"])) {
 </div>';
     }
 }
-
 
 echo json_encode([
     "html" => $response

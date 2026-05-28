@@ -317,9 +317,9 @@ class Tienda
 	}
 	public function listarPedidos()
 	{
-		$sentencia = "SELECT p.id_pedido,p.id_usuario,u.email AS email,r.nombre_fichero AS fichero,SUM(pi.precio * pi.duracion) AS total,COUNT(pi.id_item) as totales FROM pedido_item pi inner join pedido p on p.id_pedido=pi.id_pedido inner join usuarios u on u.id_usuario=p.id_usuario
+		$sentencia = "SELECT p.motivo_reembolso,p.fecha_reembolso,p.estado,p.id_pedido,p.id_usuario,u.email AS email,r.nombre_fichero AS fichero,SUM(pi.precio * pi.duracion) AS total,COUNT(pi.id_item) as totales FROM pedido_item pi inner join pedido p on p.id_pedido=pi.id_pedido inner join usuarios u on u.id_usuario=p.id_usuario
 		inner join recibos r on r.id_pedido=p.id_pedido
-		GROUP BY p.id_pedido, p.id_usuario,u.email,r.nombre_fichero";
+		GROUP BY p.id_pedido, p.id_usuario,u.email,r.nombre_fichero ORDER BY p.id_pedido DESC";
 		$ejecucion = $this->pdo->prepare($sentencia);
 		$ejecucion->execute();
 		$resultado = $ejecucion->fetchAll(PDO::FETCH_ASSOC);
@@ -330,7 +330,7 @@ class Tienda
 		$this->pdo->beginTransaction();
 
 		try {
-			$sentencia = "UPDATE pedidos SET estado = 'reembolsado',
+			$sentencia = "UPDATE pedido SET estado = 'reembolsado',
             fecha_reembolso = NOW(), motivo_reembolso = :motivo WHERE id_pedido = :id AND estado = 'pagado'";
 			$ejecucion = $this->pdo->prepare($sentencia);
 			$ejecucion->execute([
@@ -338,8 +338,17 @@ class Tienda
 				":motivo" => $motivo
 			]);
 			if ($ejecucion->rowCount() > 0) {
+				$sqlRecibo = "UPDATE recibos 
+                          SET estado = 'reembolsado'
+                          WHERE id_pedido = :id";
+
+				$stmtRecibo = $this->pdo->prepare($sqlRecibo);
+				$stmtRecibo->execute([
+					":id" => $id
+				]);
 				$this->EstablecerStock($id);
 			}
+
 			$this->pdo->commit();
 
 		} catch (Exception $e) {
@@ -350,7 +359,7 @@ class Tienda
 	function EstablecerStock($id)
 	{
 		$sentencia = "SELECT id_juego
-        FROM pedidos_item 
+        FROM pedido_item 
         WHERE id_pedido = :id";
 
 		$ejecucion = $this->pdo->prepare($sentencia);
@@ -362,7 +371,7 @@ class Tienda
 		foreach ($items as $item) {
 
 			$sqlStock = "UPDATE juegos 
-                 SET stock = stock + 1
+                 SET stock = stock + 1,ventas=ventas-1
                  WHERE id_juego = :id_juego";
 
 			$ejecucion = $this->pdo->prepare($sqlStock);
@@ -372,8 +381,9 @@ class Tienda
 		}
 
 	}
-	function GetEmail($id){
-		$sentencia ="SELECT * from usuarios where id_usuario=:id";
+	function GetEmail($id)
+	{
+		$sentencia = "SELECT u.email,u.nombre from usuarios u inner join pedido p on u.id_usuario=p.id_usuario where p.id_pedido=:id";
 		$ejecucion = $this->pdo->prepare($sentencia);
 		$ejecucion->execute([
 			":id" => $id

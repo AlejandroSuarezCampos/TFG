@@ -1,5 +1,6 @@
 <?php
 require_once("../db/conexion.php");
+require_once __DIR__ . '/../../vendor/autoload.php';
 session_start();
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -10,7 +11,7 @@ $motivo = $_POST['motivo'];
 $db->reembolsarPedido($idPedido,$motivo);
 
 $mail = new PHPMailer(true);
-$email=$db->GetEmail($_SESSION["usuario_id"]);
+$email=$db->GetEmail($idPedido);
 try {
 
     $mail->isSMTP();
@@ -18,7 +19,7 @@ try {
     $mail->SMTPAuth = true;
     $mail->Username = 'adminsteamkiller@gmail.com';
     $mail->Password = 'nxzknqelbqctuoxv';
-    $mail->SMTPSecure = 'TÑS';
+    $mail->SMTPSecure = 'tls';
     $mail->Port = 587;
 
     $mail->setFrom('adminsteamkiller@gmail.com', 'STEAMKILLER');
@@ -28,14 +29,15 @@ try {
     $mail->Subject = "Tu reembolso pedido $idPedido";
 
     ob_start();
-    include __DIR__ . "/templatesPanel/email_reembolso.php";
+    include __DIR__ . "/../templatesPanel/email_reembolso.php";
     $mail->Body = ob_get_clean();
 
     //$mail->addAttachment($pdf_path);
     //$mail->SMTPDebug = 2;
     //$mail->Debugoutput = 'html';
     $mail->send();
-
+    
+    echo "OK";
 } catch (Exception $e) {
     echo "Error email: " . $mail->ErrorInfo;
 }

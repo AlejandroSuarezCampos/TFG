@@ -10,10 +10,24 @@ require_once("./../vendor/autoload.php");
 header('Content-Type: application/json');
 $precio = 0;
 try {
-    // 1. OBTENER CARRITO
+    //OBTENER CARRITO
     $juegos_carrito = $db->listarjuegoscarrito($_SESSION["carrito"]);
+    foreach ($juegos_carrito as $juego) {
 
-    // 2. CONSTRUIR LINE ITEMS
+        $stock = $db->TieneStock($juego['id_juego']);
+
+        if ($stock<=0) {
+
+            echo json_encode([
+                "error" => true,
+                "type" => "stock",
+                "message" => "No hay stock suficiente para: " . $juego['titulo']
+            ]);
+
+            exit;
+        }
+    }
+    //CONSTRUIR ARRAY DE ITEMS
     $line_items = [];
     $customer = \Stripe\Customer::create([
         'email' => $db->obtenerdato($_SESSION["usuario_id"], 0), // Cambia esto por el email del usuario actual

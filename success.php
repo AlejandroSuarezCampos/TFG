@@ -90,7 +90,7 @@ try {
     $mail->SMTPAuth = true;
     $mail->Username = 'adminsteamkiller@gmail.com';
     $mail->Password = 'nxzknqelbqctuoxv';
-    $mail->SMTPSecure = 'TÑS';
+    $mail->SMTPSecure = 'tls';
     $mail->Port = 587;
 
     $mail->setFrom('adminsteamkiller@gmail.com', 'STEAMKILLER');
