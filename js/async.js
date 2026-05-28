@@ -489,7 +489,7 @@ function cambiarHoras(valor) {
   }
 }
 
-function cargarMensajes(id_tema){
+function cargarMensajes(id_tema) {
 
     let xmlhttp = new XMLHttpRequest();
 
@@ -501,34 +501,62 @@ function cargarMensajes(id_tema){
             let html = "";
 
             data.forEach(m => {
-
                 let foto = m.foto ? m.foto : "./img/default-user.png";
+
+                // Ahora lo lee del servidor, no del parámetro
+                let botonEliminar = m.es_admin ? `
+                    <button 
+                        onclick="eliminarMensaje(${m.id_respuesta})"
+                        class="btn btn-danger btn-sm">
+                        Eliminar
+                    </button>` : "";
 
                 html += `
                 <div class="card game-card mb-2">
                     <div class="card-body d-flex gap-3 align-items-start">
-
                         <img src="${foto}" 
                             class="rounded-circle"
                             width="45" height="45"
                             style="object-fit: cover;">
-
-                        <div>
+                        <div class="flex-grow-1">
                             <strong>${m.nombre}</strong><br>
                             <small class="forum-date">${m.fecha_respuesta}</small>
                             <p class="mb-0">${m.contenido}</p>
                         </div>
-
+                        ${botonEliminar}
                     </div>
                 </div>`;
             });
 
-            document.querySelector(".forum-messages").innerHTML = html;
+            document.querySelector(".forum-messages-list").innerHTML = html;
         }
     };
 
     xmlhttp.open("GET", "./async/cargarMensajes.php?id=" + id_tema, true);
     xmlhttp.send();
+}
+
+function eliminarMensaje(id_respuesta) {
+    if (!confirm("¿Seguro que quieres eliminar este mensaje?")) return;
+
+    const id_tema = document.querySelector(".forum-messages-list").dataset.tema;
+
+    let xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            let data = JSON.parse(this.responseText);
+            if (data.ok) {
+                cargarMensajes(id_tema);
+            } else {
+                alert("Error al eliminar: " + data.error);
+            }
+        }
+    };
+
+    xmlhttp.open("POST", "./async/eliminarMensaje.php", true);
+    xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xmlhttp.send("id=" + id_respuesta);
 }
 
 function enviarMensaje(id_tema){
@@ -567,6 +595,87 @@ function enviarMensaje(id_tema){
         "&contenido=" + encodeURIComponent(contenido)
     );
 }
+
+function enviarMensajeTicket(id_ticket) {
+
+    let contenido = document.getElementById("mensaje").value.trim();
+    let error = document.getElementById("errorMensaje");
+
+    error.style.display = "none";
+
+    if (contenido === "") {
+        error.style.display = "block";
+        return;
+    }
+
+    let xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+
+            let data = JSON.parse(this.responseText);
+
+            if (data.ok) {
+                document.getElementById("mensaje").value = "";
+                cargarMensajesTicket(id_ticket, ID_USUARIO_ACTUAL);
+            }
+        }
+    };
+
+    let respuesta = "id_ticket=" + encodeURIComponent(id_ticket)
+               + "&mensaje=" + encodeURIComponent(contenido);
+
+    xmlhttp.open("POST", "./async/enviarMensajeticket.php", true);
+    xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xmlhttp.send(respuesta);
+}
+function cargarMensajesTicket(id_ticket, id_usuario_actual) {
+    let xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+
+            let mensajes = JSON.parse(this.responseText);
+            let contenedor = document.querySelector(".forum-messages");
+
+            let estabaAbajo = contenedor.scrollTop + contenedor.clientHeight >= contenedor.scrollHeight - 10;
+
+            let html = "";
+
+            mensajes.forEach(function (msg) {
+                let esMio = msg.id_usuario == id_usuario_actual;
+
+                html += `
+                    <div class="d-flex ${esMio ? 'justify-content-end' : 'justify-content-start'} mb-3">
+                        <div style="max-width: 70%;">
+                            <div class="mb-1 ${esMio ? 'text-end' : ''}">
+                                <small class="text-secondary">${esMio ? 'Tú' : msg.nombre} · ${msg.fecha}</small>
+                            </div>
+                            <div class="chat-bubble ${esMio ? 'chat-bubble--mine' : 'chat-bubble--other'}">
+                                ${msg.mensaje}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            contenedor.innerHTML = html;
+
+            if (estabaAbajo) {
+                setTimeout(function() {
+                    contenedor.scrollTop = contenedor.scrollHeight;
+                }, 50);
+            }
+        }
+    };
+
+    let params = "id=" + encodeURIComponent(id_ticket);
+
+    xmlhttp.open("POST", "./async/cargarMensajesTicket.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send(params);
+}
+
 /*function cambiarHorasCarrito(valor,id) {
   let input = document.querySelector(`.horas-input[data-id="${id}"]`);
   let nueva = parseInt(input.value) + valor;
@@ -712,13 +821,12 @@ function limpiarErroresPerfil() {
     let el = document.getElementById(id);
     el.innerText = "";
     el.classList.add("oculto");
-  });
-}
-
+  })
+  
 function activarCodigo() {
-  const codigo    = document.getElementById('codigo').value.trim();
-  const errorDiv  = document.getElementById('errorCodigo');
-  const exitoDiv  = document.getElementById('exitoCodigo');
+  let codigo    = document.getElementById('codigo').value.trim();
+  let errorDiv  = document.getElementById('errorCodigo');
+  let exitoDiv  = document.getElementById('exitoCodigo');
 
   errorDiv.classList.add('oculto');
   exitoDiv.classList.add('oculto');
@@ -753,16 +861,16 @@ function activarCodigo() {
 }
 
 function filtrar() {
-    const texto    = document.getElementById("buscador").value.trim();
-    const categoria = document.getElementById("filtroCat").value;
-    const precio    = document.getElementById("filtroPrecio").value;
+    let texto    = document.getElementById("buscador").value.trim();
+    let categoria = document.getElementById("filtroCat").value;
+    let precio    = document.getElementById("filtroPrecio").value;
  
-    const xmlhttp = new XMLHttpRequest();
+    let xmlhttp = new XMLHttpRequest();
  
     xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            const visor = document.getElementById("visorJuegos");
-            const sinResultados = document.getElementById("sinResultados");
+            let visor = document.getElementById("visorJuegos");
+            let sinResultados = document.getElementById("sinResultados");
  
             visor.innerHTML = this.responseText;
  
@@ -777,11 +885,133 @@ function filtrar() {
         }
     };
  
-    const url = "./async/filtrar.php"
+    let url = "./async/filtrar.php"
         + "?texto="     + encodeURIComponent(texto)
         + "&categoria=" + encodeURIComponent(categoria)
         + "&precio="    + encodeURIComponent(precio);
  
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
+  
+  function eliminarTema(id_tema) {
+    Swal.fire({
+        title: 'Eliminar tema',
+        text: '¿Seguro que quieres eliminar este tema? Se borrarán todos los mensajes.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Eliminar',
+        cancelButtonText: 'Cancelar',
+        customClass: {
+            popup: 'steam-popup',
+            confirmButton: 'steam-btn-primary',
+            cancelButton: 'steam-btn-secondary'
+        },
+        buttonsStyling: false
+    }).then((result) => {
+        if (!result.isConfirmed) return;
+
+        let xmlhttp = new XMLHttpRequest();
+
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                let data = JSON.parse(this.responseText);
+                if (data.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Tema eliminado',
+                        text: 'El tema ha sido eliminado correctamente'
+                    }).then(() => {
+                        window.location.href = "foro.php";
+                    });
+                }
+            }
+        };
+
+        xmlhttp.open("POST", "async/eliminarTema.php", true);
+        xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xmlhttp.send("id_tema=" + encodeURIComponent(id_tema));
+    });
+  }
+
+  function Modificartema(modificar) {
+
+    let titulo = document.getElementById("titulo").value.trim();
+    let errorDiv = document.getElementById("errorCampos");
+
+    // Validación cliente
+    if (titulo === "" || modificar === "") {
+        errorDiv.classList.remove("oculto");
+        errorDiv.innerText = "Todos los campos son obligatorios";
+        return;
+    }
+    let formData = new FormData();
+    formData.append("titulo", titulo);
+    formData.append("modificar", modificar);
+
+    fetch("./async/editartema.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(respuesta => {
+        if (respuesta.exito) {
+            errorDiv.classList.remove("oculto");
+            errorDiv.innerText = "¡Editado correctamente!";
+            errorDiv.style.color = "#66c0f4";
+            errorDiv.style.borderColor = "#66c0f4";
+            document.getElementById("titulo").value = "";
+
+            setTimeout(function () {
+                window.location.href = "foro.php";
+            }, 2000);
+
+        } else {
+            ocultarTodosLosErroresCat();
+
+            switch (respuesta.error) {
+                case "campos_vacios":
+                    errorDiv.classList.remove("oculto");
+                    errorDiv.innerText = respuesta.mensaje;
+                    break;
+                default:
+                    errorDiv.classList.remove("oculto");
+                    errorDiv.innerText = "Error desconocido";
+            }
+        }
+    })
+    .catch(() => {
+        errorDiv.classList.remove("oculto");
+        errorDiv.innerText = "Error de conexión. Inténtalo de nuevo.";
+    });
+}
+
+function confirmarBorrarCuenta() {
+    Swal.fire({
+        title: 'Eliminar cuenta',
+        text: '¿Seguro que quieres eliminar tu cuenta? Esta acción no se puede deshacer.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Eliminar',
+        cancelButtonText: 'Cancelar',
+        customClass: {
+            popup: 'steam-popup',
+            confirmButton: 'steam-btn-primary',
+            cancelButton: 'steam-btn-secondary'
+        },
+        buttonsStyling: false
+    }).then((result) => {
+        if (!result.isConfirmed) return;
+
+        // Si confirma, envía el formulario PHP normalmente
+        let form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '';  // Misma página
+        let input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'borrar';
+        input.value = '1';
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+    });
 }

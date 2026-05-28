@@ -133,5 +133,14 @@ $categorias = $db->listarCategorias();
     </main>
   </div>
 </div>
-
+<?php if (isset($_GET['cuentaBorrada'])): ?>
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Cuenta eliminada',
+        text: 'Tu cuenta ha sido eliminada correctamente.',
+        customClass: { popup: 'steam-popup' }
+    });
+</script>
+<?php endif; ?>
 <?php include_once("pie.php"); ?>

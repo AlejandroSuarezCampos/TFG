@@ -685,3 +685,148 @@ function reembolsarPedido(idPedido) {
         );
     });
 }
+function cerrarTicket(id_ticket) {
+    Swal.fire({
+        title: 'Cerrar ticket',
+        text: '¿Seguro que quieres cerrar este ticket?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Cerrar ticket',
+        cancelButtonText: 'Cancelar',
+        customClass: {
+            popup: 'steam-popup',
+            confirmButton: 'steam-btn-primary',
+            cancelButton: 'steam-btn-secondary'
+        },
+        buttonsStyling: false
+    }).then((result) => {
+
+        if (!result.isConfirmed) return;
+
+        let xmlhttp = new XMLHttpRequest();
+
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+
+                let data = JSON.parse(this.responseText);
+
+                if (data.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Ticket cerrado',
+                        text: 'El ticket ha sido cerrado correctamente'
+                    });
+
+                    // Actualizar badge y botón sin recargar
+                    document.querySelector("#fila-" + id_ticket + " .badge").className = "badge badge-resuelto";
+                    document.querySelector("#fila-" + id_ticket + " .badge").textContent = "Cerrado";
+
+                    let btn = document.querySelector("#fila-" + id_ticket + " .btn-danger");
+                    btn.textContent = "Cerrado";
+                    btn.classList.replace("btn-danger", "btn-secondary");
+                    btn.disabled = true;
+                    btn.onclick = null;
+                }
+            }
+        };
+
+        let params = "id_ticket=" + encodeURIComponent(id_ticket);
+
+        xmlhttp.open("POST", "../async/cerrarTicket.php", true);
+        xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xmlhttp.send(params);
+    });
+}
+function Modificartema(modificar) {
+
+    const titulo = document.getElementById("titulo").value.trim();
+    const errorDiv = document.getElementById("errorCampos");
+
+    // Validación cliente
+    if (titulo === "" || modificar === "") {
+        errorDiv.classList.remove("oculto");
+        errorDiv.innerText = "Todos los campos son obligatorios";
+        return;
+    }
+
+    // Construir FormData para POST
+    const formData = new FormData();
+    formData.append("titulo", titulo);
+    formData.append("modificar", modificar);
+
+    fetch("../async/editartema.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(respuesta => {
+        if (respuesta.exito) {
+            errorDiv.classList.remove("oculto");
+            errorDiv.innerText = "¡Editado correctamente!";
+            errorDiv.style.color = "#66c0f4";
+            errorDiv.style.borderColor = "#66c0f4";
+            document.getElementById("titulo").value = "";
+
+            setTimeout(function () {
+                window.location.href = "../cuerpos/foros.php";
+            }, 2000);
+
+        } else {
+            ocultarTodosLosErroresCat();
+
+            switch (respuesta.error) {
+                case "campos_vacios":
+                    errorDiv.classList.remove("oculto");
+                    errorDiv.innerText = respuesta.mensaje;
+                    break;
+                default:
+                    errorDiv.classList.remove("oculto");
+                    errorDiv.innerText = "Error desconocido";
+            }
+        }
+    })
+    .catch(() => {
+        errorDiv.classList.remove("oculto");
+        errorDiv.innerText = "Error de conexión. Inténtalo de nuevo.";
+    });
+}
+
+function eliminarTema(id_tema) {
+    Swal.fire({
+        title: 'Eliminar tema',
+        text: '¿Seguro que quieres eliminar este tema? Se borrarán todos sus temas y mensajes.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Eliminar',
+        cancelButtonText: 'Cancelar',
+        customClass: {
+            popup: 'steam-popup',
+            confirmButton: 'steam-btn-primary',
+            cancelButton: 'steam-btn-secondary'
+        },
+        buttonsStyling: false
+    }).then((result) => {
+        if (!result.isConfirmed) return;
+
+        let xmlhttp = new XMLHttpRequest();
+
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                let data = JSON.parse(this.responseText);
+                if (data.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Foro eliminado',
+                        text: 'El tema ha sido eliminado correctamente',
+                        customClass: { popup: 'steam-popup' }
+                    });
+                    document.getElementById("fila-" + id_tema).remove();
+                }
+            }
+        };
+
+        xmlhttp.open("POST", "../async/eliminarTema.php", true);
+        xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xmlhttp.send("id_tema=" + encodeURIComponent(id_tema));
+    });
+}

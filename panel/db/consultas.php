@@ -382,5 +382,53 @@ class Tienda
 		$resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
 		return $resultado;
 	}
+	public function listarTickets()
+{
+    $sentencia = "SELECT t.*, u.nombre 
+                  FROM tickets t
+                  JOIN usuarios u ON t.id_usuario = u.id_usuario
+                  ORDER BY t.fecha DESC";
+
+    $ejecucion = $this->pdo->prepare($sentencia);
+    $ejecucion->execute();
+    return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
 }
+
+public function cerrarTicket($id_ticket)
+{
+    $sentencia = "UPDATE tickets SET estado = 'cerrado' WHERE id_ticket = :id_ticket";
+
+    $ejecucion = $this->pdo->prepare($sentencia);
+    $ejecucion->execute([":id_ticket" => $id_ticket]);
+}	
+public function listarTemas()
+{
+    $sentencia = "SELECT * FROM temas";
+    $ejecucion = $this->pdo->prepare($sentencia);
+    $ejecucion->execute();
+    return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
+}
+
+public function eliminarTema($id)
+	{
+		$sentencia = "DELETE FROM temas WHERE id_tema=:id";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute([
+			":id" => $id
+		]);
+	}
+
+	public function modificarTema($modificar, $titulo)
+	{
+		$sentencia = "UPDATE temas SET titulo=:titulo WHERE id_tema=:id_tema";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute(
+			array(
+				":titulo" => $titulo,
+				":id_tema" => $modificar
+			)
+		);
+	}
+
+}	
 ?>

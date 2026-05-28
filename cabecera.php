@@ -47,6 +47,9 @@ $total_carrito = count($_SESSION['carrito']);
           <li class="nav-item">
             <a class="nav-link" href="foro.php">Foros</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="Soporte.php">Soporte</a>
+          </li>
           <?php
           if (isset($_SESSION["Rol"]) && $_SESSION["Rol"] == 1) {
             ?>

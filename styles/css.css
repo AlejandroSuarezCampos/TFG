@@ -1297,4 +1297,41 @@ input.horas-input {
 .library-card.locked {
   filter: grayscale(100%);
   opacity: 0.45;
+  
+.forum-messages {
+  height: 500px;
+  overflow-y: scroll;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-bubble {
+  padding: 10px 14px;
+  font-size: 20px;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.chat-bubble--mine {
+  background: #1b5e8c;
+  color: #e0f0ff;
+  border-radius: 16px 4px 16px 16px;
+}
+
+.chat-bubble--other {
+  background: #2a3f52;
+  color: #cdd9e5;
+  border-radius: 4px 16px 16px 16px;
+}
+
+.chat-meta small {
+  font-size: 11px;
+}
+
+.forum-messages-list {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }

@@ -343,16 +343,17 @@ class Tienda
 	}
 
 	public function listarTemas()
-	{
-		$sentencia = "SELECT id_tema, titulo, id_foro, fecha_creacion
-					FROM temas
-					ORDER BY fecha_creacion ASC";
+{
+    $sentencia = "SELECT t.id_tema, t.titulo, t.id_foro, t.fecha_creacion, f.nombre AS nombre_foro
+                  FROM temas t
+                  JOIN foros f ON t.id_foro = f.id_foro
+                  ORDER BY t.fecha_creacion DESC";
 
-		$ejecucion = $this->pdo->prepare($sentencia);
-		$ejecucion->execute();
+    $ejecucion = $this->pdo->prepare($sentencia);
+    $ejecucion->execute();
 
-		return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
-	}
+    return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
+}
 	public function crearTema($idUser, $titulo, $foro)
 	{
 		$sentencia = "INSERT INTO temas 
@@ -368,6 +369,32 @@ class Tienda
 			":foro" => $foro
 		]);
 	}
+
+public function crearTicket($idUser, $asunto)
+{
+    $sentencia = "INSERT INTO tickets 
+                (id_usuario, asunto)
+                VALUES
+                (:idUser, :asunto)";
+
+    $ejecucion = $this->pdo->prepare($sentencia);
+
+    $ejecucion->execute([
+        ":idUser" => $idUser,
+        ":asunto" => $asunto
+    ]);
+}
+public function listarTicketsUsuario($idUser)
+{
+    $sentencia = "SELECT * FROM tickets 
+                  WHERE id_usuario = :idUser 
+                  ORDER BY fecha DESC";
+
+    $ejecucion = $this->pdo->prepare($sentencia);
+    $ejecucion->execute([":idUser" => $idUser]);
+
+    return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
+}
 	public function obtenerMensajes($id_tema)
 	{
 		$sentencia = "SELECT m.id_respuesta, m.contenido, m.fecha_respuesta, u.nombre, u.foto
@@ -383,6 +410,34 @@ class Tienda
 
 		return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
 	}
+public function obtenerTicket($id_ticket)
+{
+    $sentencia = "SELECT t.*, u.nombre 
+                  FROM tickets t
+                  JOIN usuarios u ON t.id_usuario = u.id_usuario
+                  WHERE t.id_ticket = :id";
+
+    $ejecucion = $this->pdo->prepare($sentencia);
+    $ejecucion->execute([":id" => $id_ticket]);
+
+    return $ejecucion->fetch(PDO::FETCH_ASSOC);
+}
+public function obtenerMensajesTicket($id_ticket)
+{
+    $sentencia = "SELECT m.id_ticket, m.id_usuario, m.mensaje, m.fecha, u.nombre, u.foto
+                FROM msgticket m
+                INNER JOIN usuarios u ON u.id_usuario = m.id_usuario
+                WHERE m.id_ticket = :id
+                ORDER BY m.fecha ASC";
+
+    $ejecucion = $this->pdo->prepare($sentencia);
+    $ejecucion->execute([
+        ":id" => $id_ticket
+    ]);
+
+    return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
+}
+
 	public function crearMensaje($id_tema, $id_usuario, $contenido)
 	{
 		$sentencia = "INSERT INTO respuestas (contenido, id_tema, id_usuario, fecha_respuesta)
@@ -395,20 +450,33 @@ class Tienda
 			":id_usuario" => $id_usuario
 		]);
 	}
+
+public function crearMensajeTicket($id_usuario, $id_ticket, $mensaje)
+{
+    $sentencia = "INSERT INTO msgticket (id_usuario, id_ticket, mensaje, fecha)
+                  VALUES (:id_usuario, :id_ticket, :mensaje, NOW())";
+
+    $ejecucion = $this->pdo->prepare($sentencia);
+    $ejecucion->execute([
+        ":id_usuario" => $id_usuario,
+        ":id_ticket"  => $id_ticket,
+        ":mensaje"    => $mensaje
+    ]);
+}
 	public function obtenerTema($id_tema)
-	{
-		$sentencia = "SELECT t.id_tema, t.titulo, t.id_foro, t.fecha_creacion, u.nombre
-					FROM temas t
-					INNER JOIN usuarios u ON u.id_usuario = t.id_usuario
-					WHERE t.id_tema = :id";
+{
+    $sentencia = "SELECT t.id_tema, t.titulo, t.id_foro, t.fecha_creacion, t.id_usuario, u.nombre
+                FROM temas t
+                INNER JOIN usuarios u ON u.id_usuario = t.id_usuario
+                WHERE t.id_tema = :id";
 
-		$ejecucion = $this->pdo->prepare($sentencia);
-		$ejecucion->execute([
-			":id" => $id_tema
-		]);
+    $ejecucion = $this->pdo->prepare($sentencia);
+    $ejecucion->execute([
+        ":id" => $id_tema
+    ]);
 
-		return $ejecucion->fetch(PDO::FETCH_ASSOC);
-	}
+    return $ejecucion->fetch(PDO::FETCH_ASSOC);
+}
 	public function insertarpedido($id_usuario)
 	{
 
@@ -583,7 +651,6 @@ public function TieneStock($id_juego)
 			":id_usuario"  => $id_usuario
 		]);
 	}
-
 	public function listarAlquileresPorUsuario($id_usuario){
 		$sentencia = "SELECT
 			a.id_juego,
@@ -732,5 +799,29 @@ public function comprobarLogros($id_usuario) {
 	$total_logros = $s->fetchColumn();
 	if ($total_logros >= 3) $this->otorgarLogro($id_usuario, 1); // 3 = total de logros sin contar el platino
 }
+	public function eliminarTema($id_tema)
+{
+    $sentencia = "DELETE FROM temas WHERE id_tema = :id_tema";
+    $ejecucion = $this->pdo->prepare($sentencia);
+    $ejecucion->execute([":id_tema" => $id_tema]);
 }
+
+public function modificarTema($modificar, $titulo)
+	{
+		$sentencia = "UPDATE temas SET titulo=:titulo WHERE id_tema=:id_tema";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute(
+			array(
+				":titulo" => $titulo,
+				":id_tema" => $modificar
+			)
+		);
+	}
+
+	public function eliminarMensaje($id_respuesta) {
+		$stmt = $this->pdo->prepare("DELETE FROM respuestas WHERE id_respuesta = ?");
+		return $stmt->execute([$id_respuesta]);
+	}
+}
+
 ?>

@@ -41,7 +41,7 @@ $id=$_GET["modificar"];
 
             <div class="alert error-message mt-4 oculto" id="errorContrasena"></div>
 
-            <!-- Botón De crear Usuario -->
+            <!-- Botón De editar Usuario -->
             <button type="button" class="btn btn-steam w-100 py-2 mb-3" onclick="ModificarUsu(<?=$id?>)">Editar Usuario</button>
           </form>
 
