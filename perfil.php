@@ -1,10 +1,15 @@
 <?php 
 include_once("cabecera.php"); 
-
 if(!isset($_SESSION['usuario_id'])){
     header("location: index.php");
     exit;
 }
+
+$db->comprobarLogros($_SESSION['usuario_id']);
+
+$juegos       = $db->listarAlquileresPorUsuario($_SESSION['usuario_id']);
+$estadisticas = $db->totalEstadisticasUsuario($_SESSION['usuario_id']);
+$logros       = $db->obtenerLogrosUsuario($_SESSION['usuario_id']);
 ?>
 
 <div class="container-fluid p-0">
@@ -16,7 +21,7 @@ if(!isset($_SESSION['usuario_id'])){
 
     <div class="d-flex align-items-center gap-3">
 
-      <img src=".<?=$_SESSION['foto']?>" class="avatar-circle" alt="avatar">
+      <img src="<?=$_SESSION['foto']?>" class="avatar-circle" alt="avatar">
 
       <div>
         <h2 class="fw-bold mb-0 text-white">
@@ -30,12 +35,12 @@ if(!isset($_SESSION['usuario_id'])){
     <div class="d-flex gap-4">
 
       <div class="text-center">
-        <div class="profile-stat-num">25</div>
+        <div class="profile-stat-num"><?= $estadisticas['total_juegos'] ?></div>
         <div class="profile-stat-label">Juegos</div>
       </div>
 
       <div class="text-center">
-        <div class="profile-stat-num">120h</div>
+        <div class="profile-stat-num"><?= $estadisticas['total_horas'] ?>h</div>
         <div class="profile-stat-label">Jugadas</div>
       </div>
 
@@ -58,26 +63,21 @@ if(!isset($_SESSION['usuario_id'])){
 
     <div class="row g-4">
 
-      <?php for($i=0; $i<6; $i++){ ?>
+      <?php foreach($juegos as $juego): ?>
 
       <div class="col-6 col-md-4 col-lg-3 col-xl-2">
-
-        <div class="library-card">
-
+        <div class="library-card <?= $juego['estado'] === 'activo' ? '' : 'locked' ?>">
           <div class="game-img">
             <span class="library-badge">Biblioteca</span>
-            <img src="./img/mambo.jpg" alt="Juego">
+            <img src="<?=$juego['imagen']?>" alt="Juego">
           </div>
-
           <div class="card-body">
-            <h6 class="title">Juego Demo</h6>
+            <h6 class="title"><?=$juego['titulo']?></h6>
           </div>
-
         </div>
-
       </div>
 
-      <?php } ?>
+      <?php endforeach; ?>
 
     </div>
 
@@ -88,39 +88,26 @@ if(!isset($_SESSION['usuario_id'])){
 
     <div class="row g-4">
 
-      <?php 
-      // EJEMPLO DE DATOS (luego lo conectas a BD)
-      $logros = [
-        ["nombre" => "Primer partida", "img" => "https://www.laps4.com/foro/trofeos/psntrofeos/220627_tm.PNG", "completado" => true],
-        ["nombre" => "100 horas jugadas", "img" => "https://i.psnprofiles.com/games/ec070c/trophies/1Se5d667.png", "completado" => false],
-        ["nombre" => "Completa el juego", "img" => "https://www.laps4.com/foro/trofeos/psntrofeos/109743_tm.PNG", "completado" => true],
-        ["nombre" => "Explorador", "img" => "https://i.psnprofiles.com/games/472bfe/trophies/1Sd95001.png", "completado" => false],
-      ];
-
-      foreach($logros as $logro){ 
-      ?>
+      <?php foreach($logros as $logro): ?>
 
       <div class="col-6 col-md-3 col-lg-2">
-
         <div class="achievement-card <?= $logro['completado'] ? '' : 'locked' ?>">
 
           <div class="achievement-img">
-            <img src="<?= $logro['img'] ?>" alt="logro">
+            <img src="<?= $logro['foto'] ?>" alt="logro">
           </div>
 
           <div class="achievement-body">
             <span class="achievement-title"><?= $logro['nombre'] ?></span>
-
             <span class="achievement-status">
               <?= $logro['completado'] ? 'Desbloqueado' : 'Bloqueado' ?>
             </span>
           </div>
 
         </div>
-
       </div>
 
-      <?php } ?>
+      <?php endforeach; ?>
 
     </div>
 

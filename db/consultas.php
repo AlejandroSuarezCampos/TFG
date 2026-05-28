@@ -5,9 +5,7 @@ class Tienda
 
 	private $pdo;
 
-	public function __construct($host, $port, $db, $user, $pass)
-	{
-
+	public function __construct($host, $port, $db, $user, $pass){
 		$this->pdo = new PDO("mysql:host=" . $host . ";port=" . $port . ";dbname=" . $db, $user, $pass);
 	}
 
@@ -505,7 +503,7 @@ public function crearMensajeTicket($id_usuario, $id_ticket, $mensaje)
 			"precio" => $precio,
 			":codigo" => $codigo
 		]);
-		$sentencia ="UPDATE juegos set SET stock = stock - 1 WHERE id_juego=:id";
+		$sentencia ="UPDATE juegos SET stock = stock - 1 WHERE id_juego=:id";
 		$ejecucion = $this->pdo->prepare($sentencia);
 		$ejecucion->execute([
 			":id" => $id_juego
@@ -653,6 +651,154 @@ public function TieneStock($id_juego)
 			":id_usuario"  => $id_usuario
 		]);
 	}
+	public function listarAlquileresPorUsuario($id_usuario){
+		$sentencia = "SELECT
+			a.id_juego,
+			MIN(CASE WHEN a.estado = 'activo' THEN 'activo' ELSE 'expirado' END) AS estado,
+			j.titulo,
+			j.imagen
+		FROM alquileres a
+		JOIN juegos j ON a.id_juego = j.id_juego
+		WHERE a.id_usuario = :id_usuario
+		GROUP BY a.id_juego, j.titulo, j.imagen";
+		
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute([':id_usuario' => $id_usuario]);
+		$registros = $ejecucion->fetchAll(PDO::FETCH_ASSOC);
+		return $registros;
+	}
+
+	public function totalEstadisticasUsuario($id_usuario){
+		$sentencia = "SELECT 
+						SUM(pi.duracion) AS total_horas,
+						COUNT(DISTINCT a.id_juego) AS total_juegos
+					FROM alquileres a
+					JOIN pedido_item pi ON a.id_pedido_item = pi.id_item
+					WHERE a.id_usuario = :id_usuario";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute([':id_usuario' => $id_usuario]);
+		$registro = $ejecucion->fetch(PDO::FETCH_ASSOC);
+		return $registro;
+	}
+
+	public function activarCodigo($codigo, $id_usuario){
+		$sentencia = "SELECT pi.id_item 
+					FROM pedido_item pi
+					JOIN alquileres a ON a.id_pedido_item = pi.id_item
+					WHERE pi.codigo = :codigo 
+					AND a.id_usuario = :id_usuario
+					LIMIT 1";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute([':codigo' => $codigo, ':id_usuario' => $id_usuario]);
+		$item = $ejecucion->fetch(PDO::FETCH_ASSOC);
+
+		if (!$item) {
+			return ['ok' => false, 'error' => 'Código inválido o ya usado.'];
+		}
+
+		$update = "UPDATE pedido_item SET canjeado = 1 WHERE id_item = :id_item";
+		$ejecucion = $this->pdo->prepare($update);
+		$ejecucion->execute([':id_item' => $item['id_item']]);
+
+		return ['ok' => true];
+	}
+
+	public function filtrarJuegos($texto = "", $categoria = "", $precio = ""){
+		$condiciones = [];
+		$params      = [];
+
+		$join = "";
+		if ($categoria !== "") {
+			$join = "LEFT JOIN juego_categoria ON juegos.id_juego = juego_categoria.id_juego";
+			$condiciones[] = "juego_categoria.id_categoria = :categoria";
+			$params[":categoria"] = $categoria;
+		}
+
+		if ($texto !== "") {
+			$condiciones[] = "juegos.titulo LIKE :texto";
+			$params[":texto"] = "%" . $texto . "%";
+		}
+
+		if ($precio !== "") {
+			$condiciones[] = "juegos.precio_alquiler <= :precio";
+			$params[":precio"] = $precio;
+		}
+
+		$sql = "SELECT juegos.* FROM juegos " . $join;
+
+		if (!empty($condiciones)) {
+			$sql .= " WHERE " . implode(" AND ", $condiciones);
+		}
+
+		$sql .= " ORDER BY juegos.titulo ASC";
+
+		$ejecucion = $this->pdo->prepare($sql);
+		$ejecucion->execute($params);
+
+		return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
+	}
+
+	public function buscarTema($texto = ""){
+		if ($texto === "") {
+			return $this->listarTemas();
+		}
+	
+		$sentencia = "SELECT id_tema, titulo, id_foro, fecha_creacion
+					FROM temas
+					WHERE titulo LIKE :texto
+					ORDER BY fecha_creacion ASC";
+	
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute([
+			":texto" => "%" . $texto . "%"
+		]);
+	
+		return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
+	}
+
+	public function obtenerLogrosUsuario($id_usuario) {
+    $sentencia = "SELECT l.id_logro, l.nombre, l.descripcion, l.foto,
+                  IF(ul.id_usuario IS NOT NULL, 1, 0) AS completado
+                  FROM logros l
+                  LEFT JOIN usuarios_logros ul 
+                    ON l.id_logro = ul.id_logro AND ul.id_usuario = :id_usuario";
+    $ejecucion = $this->pdo->prepare($sentencia);
+    $ejecucion->execute([':id_usuario' => $id_usuario]);
+    return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
+}
+
+public function otorgarLogro($id_usuario, $id_logro) {
+    $sentencia = "INSERT IGNORE INTO usuarios_logros (id_usuario, id_logro) 
+                  VALUES (:id_usuario, :id_logro)";
+    $ejecucion = $this->pdo->prepare($sentencia);
+    $ejecucion->execute([':id_usuario' => $id_usuario, ':id_logro' => $id_logro]);
+}
+
+public function comprobarLogros($id_usuario) {
+    // Logro 2: New begining - primera compra
+    $s = $this->pdo->prepare("SELECT COUNT(*) FROM pedido WHERE id_usuario = :id");
+    $s->execute([':id' => $id_usuario]);
+    if ($s->fetchColumn() >= 1) $this->otorgarLogro($id_usuario, 2);
+
+    // Logro 3: Consumista - gastar 50€
+	$s = $this->pdo->prepare("SELECT SUM(pi.precio * pi.duracion) FROM pedido_item pi 
+							JOIN pedido p ON pi.id_pedido = p.id_pedido 
+							WHERE p.id_usuario = :id");
+	$s->execute([':id' => $id_usuario]);
+	if ($s->fetchColumn() >= 50) $this->otorgarLogro($id_usuario, 3);
+
+    // Logro 4: Comunidad - primer tema en el foro
+    $s = $this->pdo->prepare("SELECT COUNT(*) FROM temas WHERE id_usuario = :id");
+    $s->execute([':id' => $id_usuario]);
+    if ($s->fetchColumn() >= 1) $this->otorgarLogro($id_usuario, 4);
+
+	// Logro 1: Platino - tener todos los demás logros
+	$s = $this->pdo->prepare("SELECT COUNT(*) FROM usuarios_logros 
+							WHERE id_usuario = :id");
+	$s->execute([':id' => $id_usuario]);
+	$total_logros = $s->fetchColumn();
+	if ($total_logros >= 3) $this->otorgarLogro($id_usuario, 1); // 3 = total de logros sin contar el platino
+}
 	public function eliminarTema($id_tema)
 {
     $sentencia = "DELETE FROM temas WHERE id_tema = :id_tema";

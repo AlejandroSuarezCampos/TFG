@@ -743,7 +743,7 @@ document.addEventListener('click', function (e) {
 });
 
 function cambiarPassword() {
-  limpiarErrores();
+  limpiarErroresPerfil();
 
   let nueva   = document.getElementById("nueva").value;
   let repetir = document.getElementById("repetir").value;
@@ -816,14 +816,83 @@ function mostrarError(tipo, mensaje) {
   }
 }
 
-function limpiarErrores() {
+function limpiarErroresPerfil() {
   ["errorCampos", "errorContrasena", "errorRepetir", "exito"].forEach(id => {
     let el = document.getElementById(id);
     el.innerText = "";
     el.classList.add("oculto");
-  });
+  })
+  
+function activarCodigo() {
+  let codigo    = document.getElementById('codigo').value.trim();
+  let errorDiv  = document.getElementById('errorCodigo');
+  let exitoDiv  = document.getElementById('exitoCodigo');
+
+  errorDiv.classList.add('oculto');
+  exitoDiv.classList.add('oculto');
+
+  if (!codigo) {
+    errorDiv.textContent = 'Introduce un código.';
+    errorDiv.classList.remove('oculto');
+    return;
+  }
+
+  let url = "./async/activarCodigo.php?codigo=" + encodeURIComponent(codigo);
+
+  let xhr = new XMLHttpRequest();
+  xhr.open("GET", url, true);
+
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+      let data = JSON.parse(xhr.responseText);
+
+      if (data.ok) {
+        exitoDiv.textContent = '¡Alquiler activado correctamente!';
+        exitoDiv.classList.remove('oculto');
+        document.getElementById('codigo').value = '';
+      } else {
+        errorDiv.textContent = data.error || 'Código inválido.';
+        errorDiv.classList.remove('oculto');
+      }
+    }
+  };
+
+  xhr.send();
 }
 
+function filtrar() {
+    let texto    = document.getElementById("buscador").value.trim();
+    let categoria = document.getElementById("filtroCat").value;
+    let precio    = document.getElementById("filtroPrecio").value;
+ 
+    let xmlhttp = new XMLHttpRequest();
+ 
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            let visor = document.getElementById("visorJuegos");
+            let sinResultados = document.getElementById("sinResultados");
+ 
+            visor.innerHTML = this.responseText;
+ 
+            // Mostrar mensaje si no hay resultados
+            if (visor.innerHTML.trim() === "") {
+                visor.classList.add("oculto");
+                sinResultados.classList.remove("oculto");
+            } else {
+                visor.classList.remove("oculto");
+                sinResultados.classList.add("oculto");
+            }
+        }
+    };
+ 
+    let url = "./async/filtrar.php"
+        + "?texto="     + encodeURIComponent(texto)
+        + "&categoria=" + encodeURIComponent(categoria)
+        + "&precio="    + encodeURIComponent(precio);
+ 
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+  
   function eliminarTema(id_tema) {
     Swal.fire({
         title: 'Eliminar tema',
@@ -866,8 +935,8 @@ function limpiarErrores() {
 
   function Modificartema(modificar) {
 
-    const titulo = document.getElementById("titulo").value.trim();
-    const errorDiv = document.getElementById("errorCampos");
+    let titulo = document.getElementById("titulo").value.trim();
+    let errorDiv = document.getElementById("errorCampos");
 
     // Validación cliente
     if (titulo === "" || modificar === "") {
@@ -875,9 +944,7 @@ function limpiarErrores() {
         errorDiv.innerText = "Todos los campos son obligatorios";
         return;
     }
-
-    // Construir FormData para POST
-    const formData = new FormData();
+    let formData = new FormData();
     formData.append("titulo", titulo);
     formData.append("modificar", modificar);
 
