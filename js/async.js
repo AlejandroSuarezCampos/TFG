@@ -523,7 +523,7 @@ function cargarMensajes(id_tema){
                 </div>`;
             });
 
-            document.querySelector(".forum-messages").innerHTML = html;
+            document.querySelector(".forum-messages-list").innerHTML = html;
         }
     };
 
@@ -589,7 +589,7 @@ function enviarMensajeTicket(id_ticket) {
 
             if (data.ok) {
                 document.getElementById("mensaje").value = "";
-                cargarMensajesTicket(id_ticket);
+                cargarMensajesTicket(id_ticket, ID_USUARIO_ACTUAL);
             }
         }
     };
@@ -601,7 +601,7 @@ function enviarMensajeTicket(id_ticket) {
     xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xmlhttp.send(respuesta);
 }
-function cargarMensajesTicket(id_ticket) {
+function cargarMensajesTicket(id_ticket, id_usuario_actual) {
     let xmlhttp = new XMLHttpRequest();
 
     xmlhttp.onreadystatechange = function () {
@@ -609,26 +609,43 @@ function cargarMensajesTicket(id_ticket) {
 
             let mensajes = JSON.parse(this.responseText);
             let contenedor = document.querySelector(".forum-messages");
-            contenedor.innerHTML = "";
+
+            let estabaAbajo = contenedor.scrollTop + contenedor.clientHeight >= contenedor.scrollHeight - 10;
+
+            let html = "";
 
             mensajes.forEach(function (msg) {
-                contenedor.innerHTML += `
-                    <div class="card game-card mb-3">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between mb-2">
-                                <strong>${msg.nombre}</strong>
-                                <span class="text-secondary small">${msg.fecha}</span>
+                let esMio = msg.id_usuario == id_usuario_actual;
+
+                html += `
+                    <div class="d-flex ${esMio ? 'justify-content-end' : 'justify-content-start'} mb-3">
+                        <div style="max-width: 70%;">
+                            <div class="mb-1 ${esMio ? 'text-end' : ''}">
+                                <small class="text-secondary">${esMio ? 'Tú' : msg.nombre} · ${msg.fecha}</small>
                             </div>
-                            <p class="mb-0">${msg.mensaje}</p>
+                            <div class="chat-bubble ${esMio ? 'chat-bubble--mine' : 'chat-bubble--other'}">
+                                ${msg.mensaje}
+                            </div>
                         </div>
                     </div>
                 `;
             });
+
+            contenedor.innerHTML = html;
+
+            if (estabaAbajo) {
+                setTimeout(function() {
+                    contenedor.scrollTop = contenedor.scrollHeight;
+                }, 50);
+            }
         }
     };
 
-    xmlhttp.open("GET", "./async/cargarMensajesTicket.php?id=" + encodeURIComponent(id_ticket), true);
-    xmlhttp.send();
+    let params = "id=" + encodeURIComponent(id_ticket);
+
+    xmlhttp.open("POST", "./async/cargarMensajesTicket.php", true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send(params);
 }
 
 /*function cambiarHorasCarrito(valor,id) {

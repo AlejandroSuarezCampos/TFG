@@ -1,7 +1,7 @@
 <?php 
 include_once("cabecera.php");
 
-$id_ticket = $_GET["id"];
+$id_ticket = $_GET["id"] ?? null;
 $ticket = $db->obtenerTicket($id_ticket);
 
 $es_propietario = $ticket['id_usuario'] == $_SESSION['usuario_id'];
@@ -13,22 +13,7 @@ if (!$es_propietario && !$es_admin) {
 }
 ?>
 
-<script>
-  cargarMensajesTicket(<?=$id_ticket?>);
 
-  setInterval(function() {
-    cargarMensajesTicket(<?=$id_ticket?>);
-  }, 5000);
-
-  document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("mensaje").addEventListener("keydown", function (e) {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        enviarMensajeTicket(<?=$id_ticket?>);
-      }
-    });
-  });
-</script>
 
 <div class="container py-4">
 
@@ -51,6 +36,9 @@ if (!$es_propietario && !$es_admin) {
       <span>· <?= date('d M Y', strtotime($ticket['fecha'])) ?></span>
     </div>
   </div>
+
+
+  <div class="forum-messages"></div>
 
   <?php if ($ticket['estado'] === 'abierto'): ?>
   <div class="card game-card forum-response-box mb-4">
@@ -78,9 +66,26 @@ if (!$es_propietario && !$es_admin) {
       Este ticket esta cerrado. Si necesitas mas ayuda abre uno nuevo.
     </div>
   <?php endif; ?>
-
-  <div class="forum-messages"></div>
-
 </div>
+<script>
+  const ID_USUARIO_ACTUAL = <?= (int) $_SESSION['usuario_id'] ?>;
+
+  document.addEventListener("DOMContentLoaded", function () {
+
+    cargarMensajesTicket(<?= (int) $id_ticket ?>, ID_USUARIO_ACTUAL);
+
+    setInterval(function() {
+      cargarMensajesTicket(<?= (int) $id_ticket ?>, ID_USUARIO_ACTUAL);
+    }, 5000);
+
+    document.getElementById("mensaje").addEventListener("keydown", function (e) {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        enviarMensajeTicket(<?= (int) $id_ticket ?>);
+      }
+    });
+
+  });
+</script>
 
 <?php include_once("pie.php"); ?>

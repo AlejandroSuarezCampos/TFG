@@ -425,11 +425,11 @@ public function obtenerTicket($id_ticket)
 }
 public function obtenerMensajesTicket($id_ticket)
 {
-    $sentencia = "SELECT m.id_ticket, m.mensaje, m.fecha, u.nombre, u.foto
+    $sentencia = "SELECT m.id_ticket, m.id_usuario, m.mensaje, m.fecha, u.nombre, u.foto
                 FROM msgticket m
                 INNER JOIN usuarios u ON u.id_usuario = m.id_usuario
                 WHERE m.id_ticket = :id
-                ORDER BY m.fecha desc";
+                ORDER BY m.fecha ASC";
 
     $ejecucion = $this->pdo->prepare($sentencia);
     $ejecucion->execute([

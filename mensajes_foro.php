@@ -6,6 +6,7 @@ $tema = $db->obtenerTema($id_tema);
 ?>
 
 <script>
+  cargarMensajes(<?= $id_tema ?>);
   setInterval(function() {
     cargarMensajes(<?= $id_tema ?>);
   }, 5000);
@@ -69,7 +70,7 @@ $tema = $db->obtenerTema($id_tema);
     </div>
   </div>
 
-  <div class="forum-messages"></div>
+  <div class="forum-messages-list"></div>
 
 </div>
 

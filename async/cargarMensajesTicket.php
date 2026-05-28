@@ -5,7 +5,7 @@ header("Content-Type: application/json; charset=UTF-8");
 
 try {
 
-    $id_ticket = $_GET["id"] ?? null;
+    $id_ticket = $_POST["id"] ?? null;
 
     if (!$id_ticket) {  // ← era $id_tema, corregido
         echo json_encode([]);
