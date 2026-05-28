@@ -13,7 +13,7 @@ try {
         exit;
     }
 
-    $es_admin = isset($_SESSION['Rol']) && $_SESSION['Rol'] == 1;
+    $es_admin = isset($_SESSION['Rol']) && in_array($_SESSION['Rol'], [1, 2]); 
     $mensajes = $db->obtenerMensajes($id_tema);
 
     foreach ($mensajes as &$m) {

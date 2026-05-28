@@ -5,6 +5,11 @@ if (isset($_GET["cerrar"])) {
     $db->cerrarTicket($_GET["cerrar"]);
 }
 
+  if ($_SESSION["Rol"] !== 1 && $_SESSION["Rol"] !== 7) {
+    header("location: PanelIndex.php");
+    exit;
+  }
+
 $listaTickets = $db->listarTickets();
 ?>
 

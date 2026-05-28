@@ -1,6 +1,11 @@
 <?php
 include_once("PanelIndex.php");
 
+  if ($_SESSION["Rol"] !== 1 && $_SESSION["Rol"] !== 2) {
+    header("location: PanelIndex.php");
+    exit;
+}
+
 $listaTemas = $db->listarTemas();
 ?>
 

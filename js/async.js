@@ -539,26 +539,40 @@ function cargarMensajes(id_tema) {
 }
 
 function eliminarMensaje(id_respuesta) {
-    if (!confirm("¿Seguro que quieres eliminar este mensaje?")) return;
+    Swal.fire({
+        title: 'Eliminar mensaje',
+        text: '¿Seguro que quieres eliminar este mensaje?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Eliminar',
+        cancelButtonText: 'Cancelar',
+        customClass: {
+            popup: 'steam-popup',
+            confirmButton: 'steam-btn-primary',
+            cancelButton: 'steam-btn-secondary'
+        },
+        buttonsStyling: false
+    }).then((result) => {
+        if (!result.isConfirmed) return;
 
-    const id_tema = document.querySelector(".forum-messages-list").dataset.tema;
+        const id_tema = document.querySelector(".forum-messages-list").dataset.tema;
 
-    let xmlhttp = new XMLHttpRequest();
+        let xmlhttp = new XMLHttpRequest();
 
-    xmlhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            let data = JSON.parse(this.responseText);
-            if (data.ok) {
-                cargarMensajes(id_tema);
-            } else {
-                alert("Error al eliminar: " + data.error);
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                let data = JSON.parse(this.responseText);
+                if (data.ok) {
+                    cargarMensajes(id_tema);
+                } else {
+                    alert("Error al eliminar: " + data.error);
+                }
             }
-        }
-    };
-
-    xmlhttp.open("POST", "./async/eliminarMensaje.php", true);
-    xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xmlhttp.send("id=" + id_respuesta);
+        };
+        xmlhttp.open("POST", "./async/eliminarMensaje.php", true);
+        xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xmlhttp.send("id=" + id_respuesta);
+    });
 }
 
 function enviarMensaje(id_tema){

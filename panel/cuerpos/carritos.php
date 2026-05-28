@@ -1,5 +1,9 @@
 <?php
 include_once("PanelIndex.php");
+if ($_SESSION["Rol"] !== 1 && $_SESSION["Rol"] !== 4) {
+    header("location: PanelIndex.php");
+    exit;
+}
 $listaPedidos = $db->listarPedidos();
 ?>
 
@@ -13,8 +17,7 @@ $listaPedidos = $db->listarPedidos();
     <th>Email</th>
     <th>Recibos</th>
     <th>Items</th>
-    <th>Estado</th>
-    <th>Acciones/Información reembolso</th>
+    <th>Acciones</th>
   </tr>
   <?php
   foreach ($listaPedidos as $pedido) {
@@ -28,22 +31,12 @@ $listaPedidos = $db->listarPedidos();
         <a href="../../facturas/<?= $pedido['fichero'] ?>" target="_blank"> 📄 Ver factura</a>
       </td>
       <td><?= $pedido["totales"] ?></td>
-      <td><?= $pedido["estado"] ?></td>
       <td>
-        <!--Si el pedido está pagado habilitamos la botonera de reembolso sino añadimos la info respecto al reembolso-->
-        <?php
-        if ($pedido["estado"] == 'pagado') {
-          ?>
-          <button class="btn btn-sm btn-warning" onclick="reembolsarPedido(<?= $pedido['id_pedido'] ?>)">
-            Reembolsar
-          </button>
-          <?php
-        } else {
-          ?>
-          A fecha '<i><?= $pedido["fecha_reembolso"] ?></i>' => <?= $pedido["motivo_reembolso"] ?>
-          <?php
-        }
-        ?>
+        <button class="btn btn-sm btn-danger"
+         onclick="reembolsarPedido(<?= $pedido['id_pedido'] ?>)">Eliminar
+        </button>
+        <button class="btn btn-sm btn-warning" onclick="eliminarCategoria(<?= $categoria['id_categoria'] ?>)">Eliminar y
+          reembolsar</button>
       </td>
       <?php
   }

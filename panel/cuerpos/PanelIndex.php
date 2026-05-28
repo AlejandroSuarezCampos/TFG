@@ -1,6 +1,7 @@
 <?php
 require_once("../db/conexion.php");
 require_once("puerta.php");
+
 ?>
 <!DOCTYPE html>
 <html lang="es">

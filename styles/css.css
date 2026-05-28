@@ -18,8 +18,6 @@ body {
   font-family: 'Noto Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  display: flex;
-  flex-direction: column;
 }
 
 .main-content {
@@ -397,16 +395,12 @@ input[type="password"].modern-input {
   align-items: center;
   gap: 20px;
   width: 100%;
-  justify-content: center;
-  padding: 20px;
 }
 
 .carrito {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  width: 100%;
-  align-items: center;
 }
 
 .carrito-item {
@@ -418,11 +412,6 @@ input[type="password"].modern-input {
   padding: 15px;
   display: flex;
   gap: 15px;
-}
-.carrito-img {
-    width: 120px;
-    height: auto;
-    object-fit: cover;
 }
 
 .carrito-item .flex-grow-1 {
@@ -501,43 +490,6 @@ input.horas-input {
 }
 
 /* ========== PEDIDOS ========== */
-
-.error-mensaje {
-  display: none;
-  background: linear-gradient(90deg, rgba(255, 0, 0, 0.2), rgba(255, 80, 80, 0.2));
-  border: 1px solid #ff3b3b;
-  color: #fff;
-  padding: 14px;
-  border-radius: 10px;
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 12px;
-  text-align: center;
-  animation: shake 0.3s ease;
-}
-
-@keyframes shake {
-  0% {
-    transform: translateX(0);
-  }
-
-  25% {
-    transform: translateX(-4px);
-  }
-
-  50% {
-    transform: translateX(4px);
-  }
-
-  75% {
-    transform: translateX(-4px);
-  }
-
-  100% {
-    transform: translateX(0);
-  }
-}
-
 .h1Pedidos {
   margin-bottom: 20px;
 }
@@ -584,10 +536,7 @@ input.horas-input {
   background: #22c55e;
   color: black;
 }
-.reembolsado{
-  background: orange;
-  color: black;
-}
+
 .cancelado {
   background: red;
   color: black;
@@ -619,10 +568,6 @@ input.horas-input {
   width: 100%;
 }
 
-* {
-  box-sizing: border-box;
-}
-
 .cardDetalle img {
   width: 80px;
   border-radius: 8px;
@@ -641,26 +586,7 @@ input.horas-input {
   color: white;
   text-decoration: none;
 }
-@media (max-width: 768px) {
 
-    .carrito-item {
-        text-align: center;
-    }
-
-    .carrito-img {
-        width: 100%;
-        max-width: 200px;
-        margin: 0 auto;
-    }
-
-    .horas-input {
-        width: 80px;
-    }
-
-    .btn {
-        width: 100%;
-    }
-  }
 /* ========== HERO ========== */
 .hero-section {
   position: relative;
@@ -1368,10 +1294,6 @@ input.horas-input {
   .carrusel-slide--logro { flex: 0 0 85%; }
 }
 
-.library-card.locked {
-  filter: grayscale(100%);
-  opacity: 0.45;
-}
 .forum-messages {
   height: 500px;
   overflow-y: scroll;
@@ -1408,49 +1330,4 @@ input.horas-input {
   display: flex;
   flex-direction: column;
   gap: 30px;
-}
-.steam-total-box {
-  margin-top: 20px;
-  padding: 15px 20px;
-
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
-
-  display: flex;
-    flex-direction: column;
-
-  justify-content: space-between;
-  align-items: center;
-
-  backdrop-filter: blur(6px);
-
-  max-width: 600px;
-  width: 100%;
-}
-.steam-total-title {
-  font-size: 20px;
-  color: #d1d1d1;
-  font-weight: 500;
-}
-
-.steam-total-title span {
-  color: #ffffff;
-  font-weight: 600;
-}
-
-.steam-total-note {
-  font-size: 12px;
-  color: #8a8a8a;
-}
-.carrito-vacio-sub {
-  display: block;
-  margin-top: 6px;
-  font-size: 18px;
-  color: #666;
-}
-.carrito-vacio-texto {
-  display: block;
-  margin-top: 6px;
-  font-size: 25px;
 }

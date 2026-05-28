@@ -3,8 +3,7 @@ include_once("cabecera.php");
 
 $id_tema = $_GET["id"];
 $tema = $db->obtenerTema($id_tema);
-$es_admin = isset($_SESSION['Rol']) && $_SESSION['Rol']==1;
-
+$es_admin = isset($_SESSION['Rol']) && in_array($_SESSION['Rol'], [1, 2]);
 ?>
 
 <script>
