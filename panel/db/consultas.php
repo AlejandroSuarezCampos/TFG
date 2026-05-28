@@ -319,7 +319,7 @@ class Tienda
 	{
 		$sentencia = "SELECT p.motivo_reembolso,p.fecha_reembolso,p.estado,p.id_pedido,p.id_usuario,u.email AS email,r.nombre_fichero AS fichero,SUM(pi.precio * pi.duracion) AS total,COUNT(pi.id_item) as totales FROM pedido_item pi inner join pedido p on p.id_pedido=pi.id_pedido inner join usuarios u on u.id_usuario=p.id_usuario
 		inner join recibos r on r.id_pedido=p.id_pedido
-		GROUP BY p.id_pedido, p.id_usuario,u.email,r.nombre_fichero";
+		GROUP BY p.id_pedido, p.id_usuario,u.email,r.nombre_fichero ORDER BY p.id_pedido DESC";
 		$ejecucion = $this->pdo->prepare($sentencia);
 		$ejecucion->execute();
 		$resultado = $ejecucion->fetchAll(PDO::FETCH_ASSOC);
