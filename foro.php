@@ -47,7 +47,7 @@ $posts = $db->listarTemas();
 
             <div class="col-md-3 text-md-center">
               <span class="badge bg-primary">
-                Foro <?= $post["id_foro"] ?>
+                Foro: <?= $post["nombre_foro"] ?>
               </span>
             </div>
 

@@ -345,16 +345,17 @@ class Tienda
 	}
 
 	public function listarTemas()
-	{
-		$sentencia = "SELECT id_tema, titulo, id_foro, fecha_creacion
-					FROM temas
-					ORDER BY fecha_creacion ASC";
+{
+    $sentencia = "SELECT t.id_tema, t.titulo, t.id_foro, t.fecha_creacion, f.nombre AS nombre_foro
+                  FROM temas t
+                  JOIN foros f ON t.id_foro = f.id_foro
+                  ORDER BY t.fecha_creacion DESC";
 
-		$ejecucion = $this->pdo->prepare($sentencia);
-		$ejecucion->execute();
+    $ejecucion = $this->pdo->prepare($sentencia);
+    $ejecucion->execute();
 
-		return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
-	}
+    return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
+}
 	public function crearTema($idUser, $titulo, $foro)
 	{
 		$sentencia = "INSERT INTO temas 
