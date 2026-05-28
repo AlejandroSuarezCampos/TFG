@@ -5,6 +5,7 @@ include_once("../db/conexion.php");
 header("Content-Type: application/json; charset=UTF-8");
 
 try {
+    
     $id_tema = $_GET["id"] ?? null;
 
     if (!$id_tema) {

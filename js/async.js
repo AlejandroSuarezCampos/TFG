@@ -822,7 +822,7 @@ function limpiarErroresPerfil() {
     el.innerText = "";
     el.classList.add("oculto");
   })
-  
+}
 function activarCodigo() {
   let codigo    = document.getElementById('codigo').value.trim();
   let errorDiv  = document.getElementById('errorCodigo');
@@ -884,14 +884,9 @@ function filtrar() {
             }
         }
     };
- 
-    let url = "./async/filtrar.php"
-        + "?texto="     + encodeURIComponent(texto)
-        + "&categoria=" + encodeURIComponent(categoria)
-        + "&precio="    + encodeURIComponent(precio);
- 
-    xmlhttp.open("GET", url, true);
-    xmlhttp.send();
+    
+}
+    
   
   function eliminarTema(id_tema) {
     Swal.fire({
