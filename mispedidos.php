@@ -17,8 +17,10 @@ $pedidos = $db->getPedidosUsuario($id_usuario);
 
     <div class="containerPedidos main-content">
 
-        <h1 class="h1Pedidos">🎮 Mis pedidos</h1>
-
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h1Pedidos">🎮 Mis pedidos</h1>
+        <a href="perfil.php" class="btn btn-outline-steam btn-sm">← Volver al perfil</a>
+        </div>
         <?php foreach ($pedidos as $p): ?>
 
             <div class="cardPedidos">
@@ -53,6 +55,6 @@ $pedidos = $db->getPedidosUsuario($id_usuario);
         <?php endforeach; ?>
 
     </div>
-<?php
-include_once("pie.php");
-?>
+    <?php
+    include_once("pie.php");
+    ?>

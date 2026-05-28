@@ -27,7 +27,11 @@ $logros       = $db->obtenerLogrosUsuario($_SESSION['usuario_id']);
         <h2 class="fw-bold mb-0 text-white">
           <?=$_SESSION['usuario_nombre']?>
         </h2>
-        <small style="color:#8aa6bf;">Biblioteca personal</small>
+                    
+              <a class="btn-steam btn" href="mispedidos.php">
+                Mis pedidos
+              </a>
+           
       </div>
 
     </div>
