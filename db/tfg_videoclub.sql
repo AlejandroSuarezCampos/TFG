@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-05-2026 a las 00:25:00
+-- Tiempo de generación: 28-05-2026 a las 15:58:07
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -37,6 +37,19 @@ CREATE TABLE `alquileres` (
   `id_pedido_item` int(11) NOT NULL,
   `id_pedido` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `alquileres`
+--
+
+INSERT INTO `alquileres` (`id_alquiler`, `id_usuario`, `id_juego`, `fecha_inicio`, `fecha_fin`, `estado`, `id_pedido_item`, `id_pedido`) VALUES
+(1, 1, 1, '2026-05-27 16:56:44', NULL, 'activo', 414977, 35),
+(2, 1, 3, '2026-05-27 17:00:22', NULL, 'expirado', 414978, 36),
+(3, 1, 14, '2026-05-27 17:00:22', NULL, 'activo', 414979, 36),
+(4, 1, 1, '2026-05-27 17:04:45', NULL, 'expirado', 414980, 37),
+(5, 1, 3, '2026-05-27 17:10:39', NULL, 'activo', 414981, 38),
+(6, 1, 6, '2026-05-27 17:10:39', NULL, 'expirado', 414982, 38),
+(7, 1, 24, '2026-05-27 17:43:03', NULL, 'activo', 414973, 39);
 
 -- --------------------------------------------------------
 
@@ -123,12 +136,12 @@ CREATE TABLE `juegos` (
 --
 
 INSERT INTO `juegos` (`id_juego`, `titulo`, `descripcion`, `precio_alquiler`, `imagen`, `ventas`, `stock`) VALUES
-(1, 'Inazuma Eleven 2: Ventisca Eterna', 'RPG de fútbol lanzado en 2009 para Nintendo DS.', 1.50, './img/inazuma_eleven_2_ventisca_eterna.jpg', 0, 10),
+(1, 'Inazuma Eleven 2: Ventisca Eterna', 'RPG de fútbol lanzado en 2009 para Nintendo DS.', 1.50, './img/inazuma_eleven_2_ventisca_eterna.jpg', 10, 8),
 (2, 'FIFA 19', 'Simulador de fútbol lanzado en 2018 para PS4, Xbox One y PC.', 2.50, './img/fifa_19.jpg', 0, 10),
-(3, 'Star Wars Battlefront', 'Shooter en primera persona lanzado en 2015 para PS4, Xbox One y PC.', 2.00, './img/star_wars_battlefront.jpg', 0, 10),
+(3, 'Star Wars Battlefront', 'Shooter en primera persona lanzado en 2015 para PS4, Xbox One y PC.', 2.00, './img/star_wars_battlefront.jpg', 0, 8),
 (4, 'Need for Speed Most Wanted', 'Juego de carreras arcade lanzado en 2005 para múltiples plataformas.', 1.50, './img/need_for_speed_most_wanted.jpg', 0, 10),
 (5, 'PES 2015', 'Simulador de fútbol lanzado en 2014 para PS3, PS4, Xbox y PC.', 2.00, './img/pes_2015.jpg', 0, 10),
-(6, 'Overcooked', 'Juego cooperativo de cocina lanzado en 2016 para consolas y PC.', 2.00, './img/overcooked.jpg', 0, 10),
+(6, 'Overcooked', 'Juego cooperativo de cocina lanzado en 2016 para consolas y PC.', 2.00, './img/overcooked.jpg', 0, 9),
 (7, 'Hollow Knight', 'Metroidvania indie lanzado en 2017 para PC y consolas.', 2.50, './img/hollow_knight.jpg', 0, 10),
 (8, 'Call of Duty: Black Ops III', 'Shooter en primera persona lanzado en 2015 para PS4, Xbox One y PC.', 3.00, './img/call_of_duty_black_ops_iii.jpg', 0, 10),
 (9, 'Cyberpunk 2077', 'RPG de mundo abierto lanzado en 2020 para consolas y PC.', 3.50, './img/cyberpunk_2077.jpg', 0, 10),
@@ -136,7 +149,7 @@ INSERT INTO `juegos` (`id_juego`, `titulo`, `descripcion`, `precio_alquiler`, `i
 (11, 'GTA San Andreas', 'Juego de acción en mundo abierto lanzado en 2004.', 1.50, './img/gta_san_andreas.jpg', 0, 10),
 (12, 'Outlast', 'Juego de terror en primera persona lanzado en 2013.', 2.00, './img/outlast.jpg', 0, 10),
 (13, 'Until Dawn', 'Juego de terror narrativo lanzado en 2015 para PS4.', 2.50, './img/until_dawn.jpg', 0, 10),
-(14, 'Persona 3 Reload', 'Remake del JRPG clásico lanzado en 2024 para consolas y PC.', 3.50, './img/persona_3_reload.jpg', 0, 10),
+(14, 'Persona 3 Reload', 'Remake del JRPG clásico lanzado en 2024 para consolas y PC.', 3.50, './img/persona_3_reload.jpg', 0, 9),
 (15, 'Persona 4 Golden', 'JRPG lanzado originalmente en 2012 y relanzado en PC y consolas.', 2.50, './img/persona_4_golden.jpg', 0, 10),
 (16, 'Persona 5 Royal', 'JRPG lanzado en 2020 para PS4 y otras plataformas.', 3.00, './img/persona_5_royal.jpg', 0, 10),
 (17, 'Plantas Contra Zombies', 'Juego de estrategia y defensa de torres lanzado en 2009.', 1.50, './img/plantas_contra_zombies.jpg', 0, 10),
@@ -146,7 +159,7 @@ INSERT INTO `juegos` (`id_juego`, `titulo`, `descripcion`, `precio_alquiler`, `i
 (21, 'Uncharted 3', 'Aventura de acción lanzada en 2011 para PS3.', 2.00, './img/uncharted_3.jpg', 0, 10),
 (22, 'Uncharted 4', 'Aventura de acción lanzada en 2016 para PS4.', 2.50, './img/uncharted_4.jpg', 0, 10),
 (23, 'The Last of Us', 'Juego de acción y supervivencia lanzado en 2013 para PS3.', 2.50, './img/the_last_of_us.jpg', 0, 10),
-(24, 'The Last of Us Part II', 'Juego de acción y supervivencia lanzado en 2020 para PlayStation 4.', 3.50, './img/the_last_of_us_part_2.jpg', 0, 10),
+(24, 'The Last of Us Part II', 'Juego de acción y supervivencia lanzado en 2020 para PlayStation 4.', 3.50, './img/the_last_of_us_part_2.jpg', 0, 9),
 (39, 'asfasf', 'asfasf', 0.99, 'img/DragonLegacy.png', 2, 0);
 
 -- --------------------------------------------------------
@@ -225,8 +238,19 @@ INSERT INTO `juego_categoria` (`id_juego`, `id_categoria`) VALUES
 CREATE TABLE `logros` (
   `id_logro` int(11) NOT NULL,
   `nombre` varchar(100) DEFAULT NULL,
-  `descripcion` text DEFAULT NULL
+  `descripcion` text DEFAULT NULL,
+  `foto` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `logros`
+--
+
+INSERT INTO `logros` (`id_logro`, `nombre`, `descripcion`, `foto`) VALUES
+(1, 'Platino', 'Consigue todos los logros', 'https://www.laps4.com/foro/trofeos/psntrofeos/220627_tm.PNG'),
+(2, 'New begining', 'Haz tu primera compra', 'https://i.psnprofiles.com/games/ec070c/trophies/1Se5d667.png'),
+(3, 'Consumista', 'Gasta 50€ en la web', 'https://www.laps4.com/foro/trofeos/psntrofeos/109743_tm.PNG'),
+(4, 'Comunidad', 'Crea tu primer tema', 'https://i.psnprofiles.com/games/472bfe/trophies/1Sd95001.png');
 
 -- --------------------------------------------------------
 
@@ -271,7 +295,12 @@ INSERT INTO `pedido` (`id_pedido`, `id_usuario`, `Fecha`, `metodo_pago`, `estado
 (24, 3, '2026-05-25 23:37:02', 1, 'pagado', NULL, NULL),
 (32, 3, '2026-05-26 00:07:48', 1, 'pagado', NULL, NULL),
 (33, 3, '2026-05-26 18:19:49', 1, 'pagado', NULL, NULL),
-(34, 3, '2026-05-26 18:44:42', 1, 'pagado', NULL, NULL);
+(34, 3, '2026-05-26 18:44:42', 1, 'pagado', NULL, NULL),
+(35, 1, '2026-05-27 16:16:55', 1, 'pagado', NULL, NULL),
+(36, 1, '2026-05-27 16:58:37', 1, 'pagado', NULL, NULL),
+(37, 1, '2026-05-27 17:03:10', 1, 'pagado', NULL, NULL),
+(38, 1, '2026-05-27 17:09:33', 1, 'pagado', NULL, NULL),
+(39, 1, '2026-05-27 17:42:00', 1, 'pagado', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -302,7 +331,14 @@ INSERT INTO `pedido_item` (`id_item`, `id_pedido`, `id_juego`, `duracion`, `prec
 (414973, 33, 4, 3, 1.50, 0, 'F6AF417044B3BE3C'),
 (414974, 33, 2, 4, 2.50, 0, '94F478C9928EC703'),
 (414975, 33, 8, 5, 3.00, 0, 'F2A225F02F74702D'),
-(414976, 34, 3, 3, 2.00, 0, '9406317988D959C9');
+(414976, 34, 3, 3, 2.00, 0, '9406317988D959C9'),
+(414977, 35, 1, 1, 1.50, 0, '7BAA9854CFA16E58'),
+(414978, 36, 3, 3, 2.00, 0, '12DE04B771594E03'),
+(414979, 36, 14, 5, 3.50, 0, 'DC9CB06A1F9DDF59'),
+(414980, 37, 1, 3, 1.50, 0, '17AF9E8764403B12'),
+(414981, 38, 3, 2, 2.00, 0, '466E519BE60B30F6'),
+(414982, 38, 6, 23, 2.00, 1, 'B80901A90D5A8F42'),
+(414983, 39, 24, 10, 3.50, 0, '9DADBFCCA2B209B0');
 
 -- --------------------------------------------------------
 
@@ -329,7 +365,12 @@ INSERT INTO `recibos` (`id_recibo`, `id_usuario`, `numero_factura`, `nombre_fich
 (2, 3, 'FAC-20260525233702', 'FAC-20260525233702.pdf', 'pagado', 'cs_test_b1Sg2qvij5oiXFRNB78VZThjPY4e296LLqXxrPyuge7QherKDZ8yht3EYh', '2026-05-25 23:37:04', 24),
 (10, 3, 'FAC-20260526000748', 'FAC-20260526000748.pdf', 'pagado', 'cs_test_b1ksFslOmNrF7xtx4aENa66mNX0hFVzgudDQXpmlro9Q5zTXazrEusGPqc', '2026-05-26 00:07:51', 32),
 (11, 3, 'FAC-20260526181949', 'FAC-20260526181949.pdf', 'pagado', 'cs_test_b14t0f43yLJtbjOFLqDC2J8Q8YPuJSUXGWq4ceA4etrbXeFm3DvGyYPtV9', '2026-05-26 18:19:53', 33),
-(12, 3, 'FAC-20260526184442', 'FAC-20260526184442.pdf', 'pagado', 'cs_test_a1AdSiwkfcSMVQ9TsoB56THffMshBd5GhusXnVPRsKmrWQ2NbmQKpIhnLu', '2026-05-26 18:44:44', 34);
+(12, 3, 'FAC-20260526184442', 'FAC-20260526184442.pdf', 'pagado', 'cs_test_a1AdSiwkfcSMVQ9TsoB56THffMshBd5GhusXnVPRsKmrWQ2NbmQKpIhnLu', '2026-05-26 18:44:44', 34),
+(13, 1, 'FAC-20260527161655', 'FAC-20260527161655.pdf', 'pagado', 'cs_test_a1JycEpveTX8VkDiWJELwbVvQEWy8Whth4VJxv42WqGjmB8CYnthCNm1IW', '2026-05-27 16:16:59', 35),
+(14, 1, 'FAC-20260527165837', 'FAC-20260527165837.pdf', 'pagado', 'cs_test_b1xXchHn0yDF80wOmobuuNdudv4KagtkYHnvUlPc0TCA1IACmqbiHUgkEb', '2026-05-27 16:58:40', 36),
+(15, 1, 'FAC-20260527170310', 'FAC-20260527170310.pdf', 'pagado', 'cs_test_a1h34qY3YI6YViUdROZOUWuH8cqdQHjx2rKzTmYfX9ox7yHtCM7xTs7m7Q', '2026-05-27 17:03:13', 37),
+(16, 1, 'FAC-20260527170933', 'FAC-20260527170933.pdf', 'pagado', 'cs_test_b1xHe9o62h0p4ptKE5wChs2AD4CLBQBO8X9OcizA4AWAC63D32AteOjMs8', '2026-05-27 17:09:36', 38),
+(17, 1, 'FAC-20260527174200', 'FAC-20260527174200.pdf', 'pagado', 'cs_test_a1WWLLvXdxIcBjNngn5Y0PWTyIyVVe63ZX2llXGbTMmvEyHZkgNghDbWS7', '2026-05-27 17:42:03', 39);
 
 -- --------------------------------------------------------
 
@@ -431,7 +472,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id_usuario`, `nombre`, `email`, `password`, `foto`, `nivel`, `estado`, `id_rol`, `fecha_registro`) VALUES
-(1, 'admin', 'alejandro.suarez.campos.06@gmail.com', '$2y$10$GGDD98gmL1CGoNrXhHcIJuR7PBs5W2Io4eoRDElMJR0eJd3jOzKtq', NULL, 1, 'activo', 0, '2026-03-11 10:50:10'),
+(1, 'admin', 'alejandro.suarez.campos.06@gmail.com', '$2y$10$GGDD98gmL1CGoNrXhHcIJuR7PBs5W2Io4eoRDElMJR0eJd3jOzKtq', './img/foto_usu.png', 1, 'activo', 0, '2026-03-11 10:50:10'),
 (3, 'ADMINISTRADOR', 'felipe777gaymer@gmail.com', '$2y$10$kWgaWC02Blg5JYbWTy4R0OwvfgjE/dttxKE.qqNJKHNsShlm/9qeS', NULL, 1, 'activo', 1, '2026-03-30 14:45:24');
 
 -- --------------------------------------------------------
@@ -583,13 +624,13 @@ ALTER TABLE `usuarios_logros`
 -- AUTO_INCREMENT de la tabla `alquileres`
 --
 ALTER TABLE `alquileres`
-  MODIFY `id_alquiler` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_alquiler` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `carrito_item`
 --
 ALTER TABLE `carrito_item`
-  MODIFY `id_carrito` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=245;
+  MODIFY `id_carrito` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=254;
 
 --
 -- AUTO_INCREMENT de la tabla `categorias`
@@ -613,7 +654,7 @@ ALTER TABLE `juegos`
 -- AUTO_INCREMENT de la tabla `logros`
 --
 ALTER TABLE `logros`
-  MODIFY `id_logro` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_logro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `metodo_pago`
@@ -625,19 +666,19 @@ ALTER TABLE `metodo_pago`
 -- AUTO_INCREMENT de la tabla `pedido`
 --
 ALTER TABLE `pedido`
-  MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT de la tabla `pedido_item`
 --
 ALTER TABLE `pedido_item`
-  MODIFY `id_item` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=414977;
+  MODIFY `id_item` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=414984;
 
 --
 -- AUTO_INCREMENT de la tabla `recibos`
 --
 ALTER TABLE `recibos`
-  MODIFY `id_recibo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_recibo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de la tabla `respuestas`
@@ -754,4 +795,3 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-

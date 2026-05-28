@@ -16,8 +16,31 @@ if (isset($_POST['borrar'])) {
 <div class="container py-5">
 
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h4 class="section-heading m-0">Configuración de perfil</h4>
+    <h4 class="section-heading m-0">Activar Códigos</h4>
     <a href="perfil.php" class="btn btn-outline-steam btn-sm">← Volver al perfil</a>
+  </div>
+
+  <div class="settings-card mb-4">
+    <h5 class="settings-title">Activación</h5>
+    <p class="settings-text">Introduce el código alfanumérico para activar tu alquiler.</p>
+
+    <div id="errorCodigo" class="error-message mb-3 oculto"></div>
+    <div id="exitoCodigo" class="exito-message mb-3 oculto"></div>
+
+    <div class="mb-3">
+      <label class="form-label">Código de activación</label>
+      <input type="text" id="codigo" class="modern-input" 
+            placeholder="Ej: A1B2C3D4E5F6G7H8"
+            maxlength="16">
+    </div>
+
+    <button class="btn btn-steam" onclick="activarCodigo()">
+      Activar
+    </button>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="section-heading m-0">Configuración de perfil</h4>
   </div>
 
   <div class="settings-card mb-4">

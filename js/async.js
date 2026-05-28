@@ -714,3 +714,74 @@ function limpiarErroresPerfil() {
     el.classList.add("oculto");
   });
 }
+
+function activarCodigo() {
+  const codigo    = document.getElementById('codigo').value.trim();
+  const errorDiv  = document.getElementById('errorCodigo');
+  const exitoDiv  = document.getElementById('exitoCodigo');
+
+  errorDiv.classList.add('oculto');
+  exitoDiv.classList.add('oculto');
+
+  if (!codigo) {
+    errorDiv.textContent = 'Introduce un código.';
+    errorDiv.classList.remove('oculto');
+    return;
+  }
+
+  let url = "./async/activarCodigo.php?codigo=" + encodeURIComponent(codigo);
+
+  let xhr = new XMLHttpRequest();
+  xhr.open("GET", url, true);
+
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+      let data = JSON.parse(xhr.responseText);
+
+      if (data.ok) {
+        exitoDiv.textContent = '¡Alquiler activado correctamente!';
+        exitoDiv.classList.remove('oculto');
+        document.getElementById('codigo').value = '';
+      } else {
+        errorDiv.textContent = data.error || 'Código inválido.';
+        errorDiv.classList.remove('oculto');
+      }
+    }
+  };
+
+  xhr.send();
+}
+
+function filtrar() {
+    const texto    = document.getElementById("buscador").value.trim();
+    const categoria = document.getElementById("filtroCat").value;
+    const precio    = document.getElementById("filtroPrecio").value;
+ 
+    const xmlhttp = new XMLHttpRequest();
+ 
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            const visor = document.getElementById("visorJuegos");
+            const sinResultados = document.getElementById("sinResultados");
+ 
+            visor.innerHTML = this.responseText;
+ 
+            // Mostrar mensaje si no hay resultados
+            if (visor.innerHTML.trim() === "") {
+                visor.classList.add("oculto");
+                sinResultados.classList.remove("oculto");
+            } else {
+                visor.classList.remove("oculto");
+                sinResultados.classList.add("oculto");
+            }
+        }
+    };
+ 
+    const url = "./async/filtrar.php"
+        + "?texto="     + encodeURIComponent(texto)
+        + "&categoria=" + encodeURIComponent(categoria)
+        + "&precio="    + encodeURIComponent(precio);
+ 
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+}
