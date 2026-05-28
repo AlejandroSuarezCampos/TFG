@@ -3,13 +3,15 @@ include_once("cabecera.php");
 
 $id_tema = $_GET["id"];
 $tema = $db->obtenerTema($id_tema);
+$es_admin = isset($_SESSION['Rol']) && $_SESSION['Rol']==1;
+
 ?>
 
 <script>
-  cargarMensajes(<?= $id_tema ?>);
+  cargarMensajes(<?= $id_tema ?>, <?= $es_admin ? 'true' : 'false' ?>);
   setInterval(function() {
-    cargarMensajes(<?= $id_tema ?>);
-  }, 5000);
+    cargarMensajes(<?= $id_tema ?>, <?= $es_admin ? 'true' : 'false' ?>);
+  }, 20000);
   
     document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("mensaje").addEventListener("keydown", function (e) {
@@ -70,8 +72,7 @@ $tema = $db->obtenerTema($id_tema);
     </div>
   </div>
 
-  <div class="forum-messages-list"></div>
-
+<div class="forum-messages-list" data-tema="<?= $id_tema ?>"></div>
 </div>
 
 <?php include_once("pie.php"); ?>

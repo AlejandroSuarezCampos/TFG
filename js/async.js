@@ -489,7 +489,7 @@ function cambiarHoras(valor) {
   }
 }
 
-function cargarMensajes(id_tema){
+function cargarMensajes(id_tema) {
 
     let xmlhttp = new XMLHttpRequest();
 
@@ -501,24 +501,29 @@ function cargarMensajes(id_tema){
             let html = "";
 
             data.forEach(m => {
-
                 let foto = m.foto ? m.foto : "./img/default-user.png";
+
+                // Ahora lo lee del servidor, no del parámetro
+                let botonEliminar = m.es_admin ? `
+                    <button 
+                        onclick="eliminarMensaje(${m.id_respuesta})"
+                        class="btn btn-danger btn-sm">
+                        Eliminar
+                    </button>` : "";
 
                 html += `
                 <div class="card game-card mb-2">
                     <div class="card-body d-flex gap-3 align-items-start">
-
                         <img src="${foto}" 
                             class="rounded-circle"
                             width="45" height="45"
                             style="object-fit: cover;">
-
-                        <div>
+                        <div class="flex-grow-1">
                             <strong>${m.nombre}</strong><br>
                             <small class="forum-date">${m.fecha_respuesta}</small>
                             <p class="mb-0">${m.contenido}</p>
                         </div>
-
+                        ${botonEliminar}
                     </div>
                 </div>`;
             });
@@ -529,6 +534,29 @@ function cargarMensajes(id_tema){
 
     xmlhttp.open("GET", "./async/cargarMensajes.php?id=" + id_tema, true);
     xmlhttp.send();
+}
+
+function eliminarMensaje(id_respuesta) {
+    if (!confirm("¿Seguro que quieres eliminar este mensaje?")) return;
+
+    const id_tema = document.querySelector(".forum-messages-list").dataset.tema;
+
+    let xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            let data = JSON.parse(this.responseText);
+            if (data.ok) {
+                cargarMensajes(id_tema);
+            } else {
+                alert("Error al eliminar: " + data.error);
+            }
+        }
+    };
+
+    xmlhttp.open("POST", "./async/eliminarMensaje.php", true);
+    xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xmlhttp.send("id=" + id_respuesta);
 }
 
 function enviarMensaje(id_tema){

@@ -670,6 +670,11 @@ public function modificarTema($modificar, $titulo)
 			)
 		);
 	}
+
+	public function eliminarMensaje($id_respuesta) {
+		$stmt = $this->pdo->prepare("DELETE FROM respuestas WHERE id_respuesta = ?");
+		return $stmt->execute([$id_respuesta]);
+	}
 }
 
 ?>
