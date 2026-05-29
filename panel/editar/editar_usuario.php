@@ -33,8 +33,6 @@ $id=$_GET["modificar"];
               <label for="password" class="form-label text">Contraseña</label>  
               <div class="input-group">
                 <input type="password" class="form-control modern-input" id="password" placeholder="••••••••">
-                <button class="btn btn-outline-secondary" type="button" onclick="togglePass('password', 'iconoOjoLogin')">
-                  <i class="bi bi-eye text-white" id="iconoOjoLogin"></i>
                 </button>
               </div>
             </div>
