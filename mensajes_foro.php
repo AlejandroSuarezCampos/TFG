@@ -71,7 +71,7 @@ $es_admin = isset($_SESSION['Rol']) && in_array($_SESSION['Rol'], [1, 2]);
     </div>
   </div>
 
-<div class="forum-messages-list" data-tema="<?= $id_tema ?>"></div>
+<div class="forum-messages-list mt-4" data-tema="<?= $id_tema ?>"></div>
 </div>
 
 <?php include_once("pie.php"); ?>
