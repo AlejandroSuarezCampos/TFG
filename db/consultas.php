@@ -548,8 +548,8 @@ public function crearMensajeTicket($id_usuario, $id_ticket, $mensaje)
 	}
 	public function getPedidosUsuario($id_usuario)
 	{
-		$sentencia = "SELECT p.id_pedido, p.fecha, p.metodo_pago,
-                   r.numero_factura, r.nombre_fichero, r.estado
+		$sentencia = "SELECT p.estado,p.id_pedido, p.fecha, p.metodo_pago,
+                   r.numero_factura, r.nombre_fichero
             FROM pedido p
             LEFT JOIN recibos r ON p.id_pedido = r.id_pedido
             WHERE p.id_usuario = :id_usuario
