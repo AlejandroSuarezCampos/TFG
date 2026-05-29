@@ -744,22 +744,23 @@ public function activarCodigo($codigo, $id_usuario){
 	}
 
 	public function buscarTema($texto = ""){
-		if ($texto === "") {
-			return $this->listarTemas();
-		}
-	
-		$sentencia = "SELECT id_tema, titulo, id_foro, fecha_creacion
-					FROM temas
-					WHERE titulo LIKE :texto
-					ORDER BY fecha_creacion ASC";
-	
-		$ejecucion = $this->pdo->prepare($sentencia);
-		$ejecucion->execute([
-			":texto" => "%" . $texto . "%"
-		]);
-	
-		return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
-	}
+    if ($texto === "") {
+        return $this->listarTemas();
+    }
+
+    $sentencia = "SELECT t.id_tema, t.titulo, t.id_foro, t.fecha_creacion, f.nombre AS nombre_foro
+                  FROM temas t
+                  JOIN foros f ON t.id_foro = f.id_foro
+                  WHERE t.titulo LIKE :texto
+                  ORDER BY t.fecha_creacion DESC";
+
+    $ejecucion = $this->pdo->prepare($sentencia);
+    $ejecucion->execute([
+        ":texto" => "%" . $texto . "%"
+    ]);
+
+    return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
+}
 
 	public function obtenerLogrosUsuario($id_usuario) {
     $sentencia = "SELECT l.id_logro, l.nombre, l.descripcion, l.foto,

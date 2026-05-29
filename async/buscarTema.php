@@ -22,7 +22,7 @@ foreach ($temas as $post) {
                 </div>
 
                 <div class='col-md-3 text-md-center'>
-                    <span class='badge bg-primary'>Foro {$post['id_foro']}</span>
+                    <span class='badge bg-primary'>Foro {$post['nombre_foro']}</span>
                 </div>
 
                 <div class='col-md-3 text-md-center text-secondary'>

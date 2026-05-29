@@ -56,7 +56,7 @@ $es_admin = isset($_SESSION['Rol']) && in_array($_SESSION['Rol'], [1, 2]);
 
   </div>
 
-  <div class="card game-card forum-response-box">
+  <div class="settings-card forum-response-box">
     <div class="card-body">
       <h4 class="mb-4">Escribir respuesta</h4>
       <textarea id="mensaje" class="form-control forum-textarea mb-4" rows="6"></textarea>

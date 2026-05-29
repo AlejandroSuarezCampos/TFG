@@ -41,7 +41,7 @@ if (!$es_propietario && !$es_admin) {
   <div class="forum-messages"></div>
 
   <?php if ($ticket['estado'] === 'abierto'): ?>
-  <div class="card game-card forum-response-box mb-4">
+  <div class="settings-card forum-response-box">
     <div class="card-body">
 
       <h4 class="mb-4">Escribir mensaje</h4>

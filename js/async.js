@@ -1035,3 +1035,29 @@ function confirmarBorrarCuenta() {
         form.submit();
     });
 }
+
+function buscarTema() {
+    const texto = document.getElementById("buscadorTema").value.trim();
+
+    const xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            const visor = document.getElementById("visorTemas");
+            const sinResultados = document.getElementById("sinResultados");
+
+            visor.innerHTML = this.responseText;
+
+            if (visor.innerHTML.trim() === "") {
+                visor.classList.add("oculto");
+                sinResultados.classList.remove("oculto");
+            } else {
+                visor.classList.remove("oculto");
+                sinResultados.classList.add("oculto");
+            }
+        }
+    };
+
+    xmlhttp.open("GET", "./async/buscarTema.php?texto=" + encodeURIComponent(texto), true);
+    xmlhttp.send();
+}
