@@ -7,7 +7,19 @@ use PHPMailer\PHPMailer\Exception;
 
 $idPedido = $_POST['id_pedido'];
 $motivo = $_POST['motivo'];
+header('Content-Type: application/json');
+//revisar que no este ya canejado en un alquiler
+if($db->pedidoYacanjeado($idPedido)>0){
+  echo json_encode([
+                "error" => true,
+                "type" => "canjeado",
+                "message" => "Este pedido ya tiene código canjeado "
+            ]);
+
+            exit;
+}
 // 1. Marcar pedido como reembolsado
+
 $db->reembolsarPedido($idPedido,$motivo);
 
 $mail = new PHPMailer(true);
@@ -36,9 +48,15 @@ try {
     //$mail->SMTPDebug = 2;
     //$mail->Debugoutput = 'html';
     $mail->send();
-    
-    echo "OK";
+     echo json_encode([
+                "exito"=>true,
+                "message" => "Reembolsado correctamente"
+            ]);
 } catch (Exception $e) {
-    echo "Error email: " . $mail->ErrorInfo;
+    echo json_encode([
+                "error" => true,
+                "type" => "canjeado",
+                "message" => "Este pedido ya tiene código canjeado "
+            ]);
 }
 ?>

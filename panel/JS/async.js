@@ -291,7 +291,7 @@ function eliminarCategoria(id) {
         if (result.isConfirmed) {
 
             let xmlhttp = new XMLHttpRequest();
-            xmlhttp.onreadystatechange = function() {
+            xmlhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
                     let respuesta = JSON.parse(this.responseText);
                     if (respuesta.exito) {
@@ -330,7 +330,7 @@ function EliminarUsuario(id) {
         if (result.isConfirmed) {
 
             let xmlhttp = new XMLHttpRequest();
-            xmlhttp.onreadystatechange = function() {
+            xmlhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
                     let respuesta = JSON.parse(this.responseText);
                     if (respuesta.exito) {
@@ -453,7 +453,7 @@ function EliminarJuego(id) {
         if (result.isConfirmed) {
 
             let xmlhttp = new XMLHttpRequest();
-            xmlhttp.onreadystatechange = function() {
+            xmlhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
                     console.log(this.responseText);
                     let respuesta = JSON.parse(this.responseText);
@@ -662,17 +662,32 @@ function reembolsarPedido(idPedido) {
         console.log("ENVIANDO REEMBOLSO", idPedido, result.value);
         xmlhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                console.log("STATE:", this.readyState, "STATUS:", this.status);
-                console.log("RESPUESTA:", this.responseText);
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Reembolsado',
-                    text: 'El pedido ha sido reembolsado correctamente'
-                });
+                console.log(xmlhttp.responseText);
+                let data = JSON.parse(xmlhttp.responseText);
+                if (data.exito) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Reembolsado',
+                        text: 'El pedido ha sido reembolsado correctamente'
+                    });
 
-                setTimeout(() => {
-                    location.reload();
-                }, 3000);
+                    setTimeout(() => {
+                        location.reload();
+                    }, 3000);
+                }else{
+                    Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: data.message,
+                            confirmButtonText: 'Volver',
+                            customClass: {
+                                popup: 'steam-popup',
+                            },
+                        })
+                }
+
+                //console.log("STATE:", this.readyState, "STATUS:", this.status);
+                //console.log("RESPUESTA:", this.responseText);
             }
         };
 
@@ -758,37 +773,37 @@ function Modificartema(modificar) {
         method: "POST",
         body: formData
     })
-    .then(res => res.json())
-    .then(respuesta => {
-        if (respuesta.exito) {
-            errorDiv.classList.remove("oculto");
-            errorDiv.innerText = "¡Editado correctamente!";
-            errorDiv.style.color = "#66c0f4";
-            errorDiv.style.borderColor = "#66c0f4";
-            document.getElementById("titulo").value = "";
+        .then(res => res.json())
+        .then(respuesta => {
+            if (respuesta.exito) {
+                errorDiv.classList.remove("oculto");
+                errorDiv.innerText = "¡Editado correctamente!";
+                errorDiv.style.color = "#66c0f4";
+                errorDiv.style.borderColor = "#66c0f4";
+                document.getElementById("titulo").value = "";
 
-            setTimeout(function () {
-                window.location.href = "../cuerpos/foros.php";
-            }, 2000);
+                setTimeout(function () {
+                    window.location.href = "../cuerpos/foros.php";
+                }, 2000);
 
-        } else {
-            ocultarTodosLosErroresCat();
+            } else {
+                ocultarTodosLosErroresCat();
 
-            switch (respuesta.error) {
-                case "campos_vacios":
-                    errorDiv.classList.remove("oculto");
-                    errorDiv.innerText = respuesta.mensaje;
-                    break;
-                default:
-                    errorDiv.classList.remove("oculto");
-                    errorDiv.innerText = "Error desconocido";
+                switch (respuesta.error) {
+                    case "campos_vacios":
+                        errorDiv.classList.remove("oculto");
+                        errorDiv.innerText = respuesta.mensaje;
+                        break;
+                    default:
+                        errorDiv.classList.remove("oculto");
+                        errorDiv.innerText = "Error desconocido";
+                }
             }
-        }
-    })
-    .catch(() => {
-        errorDiv.classList.remove("oculto");
-        errorDiv.innerText = "Error de conexión. Inténtalo de nuevo.";
-    });
+        })
+        .catch(() => {
+            errorDiv.classList.remove("oculto");
+            errorDiv.innerText = "Error de conexión. Inténtalo de nuevo.";
+        });
 }
 
 function eliminarTema(id_tema) {

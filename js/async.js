@@ -721,7 +721,7 @@ document.addEventListener('click', function (e) {
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState === 4) {
                 if (xmlhttp.status === 200) {
-                    console.log(xmlhttp.responseText);
+                    //console.log(xmlhttp.responseText);
                     let data = JSON.parse(xmlhttp.responseText);
                     if (data.url) {
                         // Pequeña espera para que se vea el efecto
