@@ -615,26 +615,26 @@ public function TieneStock($id_juego)
 	}
 
 	public function activarCodigo($codigo, $id_usuario){
-		$sentencia = "SELECT pi.id_item 
-					FROM pedido_item pi
-					JOIN alquileres a ON a.id_pedido_item = pi.id_item
-					WHERE pi.codigo = :codigo 
-					AND a.id_usuario = :id_usuario
-					LIMIT 1";
-		$ejecucion = $this->pdo->prepare($sentencia);
-		$ejecucion->execute([':codigo' => $codigo, ':id_usuario' => $id_usuario]);
-		$item = $ejecucion->fetch(PDO::FETCH_ASSOC);
+    $sentencia = "SELECT pi.id_item 
+                  FROM pedido_item pi
+                  JOIN pedido p ON p.id_pedido = pi.id_pedido
+                  WHERE pi.codigo = :codigo 
+                  AND p.id_usuario = :id_usuario
+                  LIMIT 1";
+    $ejecucion = $this->pdo->prepare($sentencia);
+    $ejecucion->execute([':codigo' => $codigo, ':id_usuario' => $id_usuario]);
+    $item = $ejecucion->fetch(PDO::FETCH_ASSOC);
 
-		if (!$item) {
-			return ['ok' => false, 'error' => 'Código inválido o ya usado.'];
-		}
+    if (!$item) {
+        return ['ok' => false, 'error' => 'Código inválido o ya usado.'];
+    }
 
-		$update = "UPDATE pedido_item SET canjeado = 1 WHERE id_item = :id_item";
-		$ejecucion = $this->pdo->prepare($update);
-		$ejecucion->execute([':id_item' => $item['id_item']]);
+    $update = "UPDATE pedido_item SET canjeado = 1 WHERE id_item = :id_item";
+    $ejecucion = $this->pdo->prepare($update);
+    $ejecucion->execute([':id_item' => $item['id_item']]);
 
-		return ['ok' => true];
-	}
+    return ['ok' => true];
+}
 
 	public function filtrarJuegos($texto = "", $categoria = "", $precio = ""){
 		$condiciones = [];
