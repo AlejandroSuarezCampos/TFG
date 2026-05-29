@@ -23,15 +23,15 @@ if($_POST){
 
   <!-- CABECERA -->
   <div class="forum-header mb-5">
-    <h1>Crear nuevo tema</h1>
+    <h1>Crear nuevo ticket</h1>
 
     <p class="text-secondary mb-0">
-      Comparte dudas, noticias o inicia una conversación con la comunidad.
+      comparte problemas con el staff para poder ayudarte.
     </p>
   </div>
 
   <!-- FORMULARIO -->
-  <div class="card game-card create-topic-card">
+  <div class="settings-card create-topic-card">
     <div class="card-body">
 
 <form action="" method="POST">

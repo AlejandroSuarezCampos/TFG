@@ -33,7 +33,7 @@ if($_POST){
   </div>
 
   <!-- FORMULARIO -->
-  <div class="card game-card create-topic-card">
+  <div class="settings-card create-topic-card">
     <div class="card-body">
 
 <form action="" method="POST">
