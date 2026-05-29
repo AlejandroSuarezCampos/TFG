@@ -828,6 +828,19 @@ class Tienda
 		);
 	}
 
+	public function BuscarTemaModificar($modificar)
+	{
+		$sentencia = "SELECT titulo from temas WHERE id_tema=:id_tema";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute(
+			array(
+				":id_tema" => $modificar
+			)
+		);
+		$resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
+		return $resultado;
+	}
+
 	public function eliminarMensaje($id_respuesta)
 	{
 		$stmt = $this->pdo->prepare("DELETE FROM respuestas WHERE id_respuesta = ?");
