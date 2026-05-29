@@ -79,24 +79,27 @@ function registrar() {
     }
 
     xmlhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            //console.log(xmlhttp.responseText);
-            let respuesta = JSON.parse(this.responseText);
-            if (respuesta.exito) {
-                document.getElementById("errorCampos").innerText = respuesta.mensaje;
-                document.getElementById("errorCampos").innerText = "¡Registro completado! Redirigiendo...";
-                document.getElementById("errorCampos").style.color = "#66c0f4";
+                        if (this.readyState == 4 && this.status == 200) {
+                            //console.log(xmlhttp.responseText);
+                            let respuesta = JSON.parse(this.responseText);
+                            if (respuesta.exito) {
+                    let msgExito = document.getElementById("errorCampos");
+                    
+                    msgExito.classList.remove("oculto");
+                    msgExito.innerText = "¡Registro completado! Redirigiendo...";
+                    msgExito.style.color = "#66c0f4";
+                    msgExito.style.backgroundColor = "#1b5e8c";
+                    msgExito.style.borderColor = "#66c0f4";
 
-                document.getElementById("username").value = "";
-                document.getElementById("email").value = "";
-                document.getElementById("password").value = "";
-                document.getElementById("confirm_password").value = "";
+                    document.getElementById("username").value = "";
+                    document.getElementById("email").value = "";
+                    document.getElementById("password").value = "";
+                    document.getElementById("confirm_password").value = "";
 
-                setTimeout(function () {
-                    window.location.href = "login.php";
-                }, 2000);
-
-            } else {
+                    setTimeout(function () {
+                        window.location.href = "login.php";
+                    }, 2000);
+                } else {
                 switch (respuesta.error) {
                     case "campos_vacios":
                         document.getElementById("errorCampos").classList.remove("oculto");

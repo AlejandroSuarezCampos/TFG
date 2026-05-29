@@ -53,7 +53,7 @@ $es_admin = isset($_SESSION['Rol']) && in_array($_SESSION['Rol'], [1, 2]);
       <h1>Tema no encontrado</h1>
 
     <?php endif; ?>
-
+      
   </div>
 
   <div class="settings-card forum-response-box">
