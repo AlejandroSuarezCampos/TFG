@@ -202,6 +202,18 @@ class Tienda
 		return $resultado['total'] > 0;
 	}
 
+	public function BuscarCat($id)
+	{
+		$sentencia = "SELECT nombre FROM categorias WHERE id_categoria = :id_Cat";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute([
+			":id_Cat" => $id
+		]);
+		$resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
+
+		return $resultado;
+	}
+
 	public function eliminarCat($id)
 	{
 		$sentencia = "DELETE FROM categorias where id_categoria=:id";
@@ -226,6 +238,17 @@ class Tienda
 		return $resultado['total'] > 0;
 	}
 
+		public function BuscarUsuario($id)
+		{
+			$sentencia = "SELECT nombre , email FROM usuarios WHERE id_usuario = :id_usu";
+			$ejecucion = $this->pdo->prepare($sentencia);
+			$ejecucion->execute([
+				":id_usu" => $id
+			]);
+			$resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
+			return $resultado;
+		}
+
 	public function eliminarUsu($id)
 	{
 		$sentencia = "DELETE FROM usuarios where id_usuario = :id_usu";
@@ -245,7 +268,7 @@ class Tienda
 			array(
 				":nombre" => $nombre,
 				":email" => $email,
-				":pass" => $contraseña,
+				":pass" => password_hash($contraseña, PASSWORD_DEFAULT),
 				":id_usu" => $modificar
 			)
 		);
@@ -438,6 +461,19 @@ class Tienda
 				":id_tema" => $modificar
 			)
 		);
+	}
+
+		public function BuscarTema($modificar)
+	{
+		$sentencia = "SELECT titulo from temas WHERE id_tema=:id_tema";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute(
+			array(
+				":id_tema" => $modificar
+			)
+		);
+		$resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
+		return $resultado;
 	}
 
 	public function pedidoYacanjeado($id)

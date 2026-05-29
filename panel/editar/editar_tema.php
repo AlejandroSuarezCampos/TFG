@@ -10,6 +10,8 @@ if(isset($_GET["modificar"])){
 if($modificar==""){
   header("Location:../cuerpos/foros.php");
 }
+
+$tema=$db->BuscarTema($modificar);
 ?>
 <div class="container mt-5">
   <div class="row justify-content-center">
@@ -29,7 +31,7 @@ if($modificar==""){
             <!-- Titulo -->
             <div class="mb-3">
               <label for="titulo" class="form-label text">Titulo nuevo del tema</label>
-              <input type="text" class="form-control modern-input" id="titulo" placeholder="titulo">
+              <input type="text" class="form-control modern-input" id="titulo" value="<?=$tema["titulo"]?>" placeholder="<?=$tema["titulo"]?>">
             </div>
             <button type="button" class="btn btn-steam w-100 py-2 mb-3" onclick="Modificartema(<?=$modificar?>)">Editar</button>
           </form>
