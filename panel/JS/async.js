@@ -379,7 +379,7 @@ function ModificarUsu(modificar) {
                 document.getElementById("password").value = "";
 
                 setTimeout(function () {
-                    window.location.href = "../cuerpos/categorias.php";
+                    window.location.href = "../cuerpos/usuarios.php";
                 }, 2000);
 
             } else {
