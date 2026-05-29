@@ -7,10 +7,10 @@ $es_admin = isset($_SESSION['Rol']) && in_array($_SESSION['Rol'], [1, 2]);
 ?>
 
 <script>
-  cargarMensajes(<?= $id_tema ?>, <?= $es_admin ? 'true' : 'false' ?>);
+    cargarMensajes(<?= $id_tema ?>, <?= $es_admin ? 'true' : 'false' ?>);
   setInterval(function() {
     cargarMensajes(<?= $id_tema ?>, <?= $es_admin ? 'true' : 'false' ?>);
-  }, 20000);
+  }, 5000);
   
     document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("mensaje").addEventListener("keydown", function (e) {
