@@ -10,7 +10,7 @@ class Tienda
 		$this->pdo = new PDO("mysql:host=" . $host . ";port=" . $port . ";dbname=" . $db, $user, $pass);
 	}
 
-	//Función para listar los 4 productos más vendidos
+	// Obtiene los 5 juegos con más ventas (el comentario original dice 4, pero el LIMIT es 5)
 	public function listarProductosVendidos()
 	{
 		$sentencia = "SELECT * FROM juegos ORDER BY ventas DESC LIMIT 5";
@@ -21,7 +21,7 @@ class Tienda
 
 	}
 
-	//Función para listar los productos por id
+	// Obtiene un juego concreto buscando por su id_juego
 	public function listarProductoID($id)
 	{
 		$sentencia = "SELECT * FROM juegos where id_juego = :id";
@@ -34,7 +34,7 @@ class Tienda
 
 	}
 
-	//Función para listar todas las categorias
+	// Devuelve todas las categorías existentes
 	public function listarCategorias()
 	{
 		$sentencia = "SELECT * FROM categorias";
@@ -44,7 +44,7 @@ class Tienda
 		return $registros;
 	}
 
-	//Función para listar todos los productos
+	// Devuelve todos los juegos sin ningún filtro
 	public function listarProductos()
 	{
 		$sentencia = "SELECT * FROM juegos";
@@ -54,7 +54,7 @@ class Tienda
 		return $registros;
 	}
 
-	//Función que muestra todos los productos de una categoría
+	// Devuelve los juegos que pertenecen a una categoría concreta mediante JOIN
 	public function listarProductosFiltradosCategoria($id)
 	{
 		$sentencia = "SELECT juegos.* FROM juegos LEFT JOIN juego_categoria ON juegos.id_juego = juego_categoria.id_juego WHERE juego_categoria.id_categoria=:id";
@@ -67,7 +67,7 @@ class Tienda
 
 	}
 
-	//Función para buscar un juego por su título, conteniendo el texto solo una parte del título (zu->Inazuma)
+	// Busca juegos cuyo título contenga el texto recibido (búsqueda parcial con LIKE)
 	public function buscarJuego($texto)
 	{
 		$texto = "%" . $texto . "%";
@@ -79,6 +79,7 @@ class Tienda
 		return $sentencia;
 	}
 
+	// Comprueba si ya existe un usuario registrado con ese email
 	public function comprobarEmailExiste($email)
 	{
 		$sentencia = "SELECT COUNT(*) as total FROM usuarios WHERE email = :email";
@@ -91,6 +92,7 @@ class Tienda
 		return $resultado['total'] > 0;
 	}
 
+	// Inserta un nuevo usuario con la contraseña hasheada y foto por defecto
 	public function registrarUsuario($nombre, $email, $pass)
 	{
 		$sentencia = "INSERT INTO usuarios(nombre,email,password,foto) VALUES (:nombre,:email,:password,:foto)";
@@ -105,6 +107,7 @@ class Tienda
 		);
 	}
 
+	// Devuelve los datos del usuario que coincide con el email dado (usado para el login)
 	public function obtenerUsuarioPorEmail($correo)
 	{
 		$sentencia = "SELECT id_usuario, nombre, email,id_rol, password,foto FROM usuarios WHERE email = :email";
@@ -116,6 +119,8 @@ class Tienda
 		);
 		return $ejecucion->fetch(PDO::FETCH_ASSOC);
 	}
+
+	// Comprueba si ya existe una categoría con ese nombre
 	public function comprobarCatExiste($nombre)
 	{
 		$sentencia = "SELECT COUNT(*) as total FROM categorias WHERE nombre = :nombre";
@@ -128,6 +133,7 @@ class Tienda
 		return $resultado['total'] > 0;
 	}
 
+	// Inserta una nueva categoría con el nombre recibido
 	public function crearCat($nombre)
 	{
 		$sentencia = "INSERT INTO categorias(nombre) VALUES (:nombre)";
@@ -137,6 +143,7 @@ class Tienda
 		]);
 	}
 
+	// Devuelve todos los usuarios registrados
 	public function listarUsuarios()
 	{
 		$sentencia = "SELECT * FROM usuarios";
@@ -147,6 +154,7 @@ class Tienda
 
 	}
 
+	// Actualiza el nombre de una categoría buscándola por su id
 	public function modificarCat($modificar, $nombre)
 	{
 		$sentencia = "UPDATE categorias SET nombre=:nombre WHERE id_categoria=:id_cat";
@@ -159,6 +167,7 @@ class Tienda
 		);
 	}
 
+	// Comprueba si existe una categoría con ese id
 	public function comprobarCatExistePorID($id)
 	{
 		$sentencia = "SELECT COUNT(*) as total FROM categorias WHERE id_categoria = :id_Cat";
@@ -171,6 +180,7 @@ class Tienda
 		return $resultado['total'] > 0;
 	}
 
+	// Elimina la categoría con el id indicado
 	public function eliminarCat($id)
 	{
 		$sentencia = "DELETE FROM categorias where id_categoria=:id";
@@ -184,7 +194,7 @@ class Tienda
 
 
 
-	//Funciones para el manejo del carrito
+	// Para cada id del carrito, obtiene los datos del juego y añade las horas seleccionadas
 	public function listarjuegoscarrito($carrito)
 	{
 		$juegos = [];
@@ -205,6 +215,7 @@ class Tienda
 		return $juegos;
 	}
 
+	// Comprueba si ya existe un juego con ese título (comparación sin distinguir mayúsculas)
 	public function comprobarJuegoExiste($titulo)
 	{
 		$sentencia = "SELECT COUNT(*) as total FROM juegos WHERE LOWER(titulo) = LOWER(:titulo)";
@@ -216,6 +227,8 @@ class Tienda
 
 		return $resultado['total'] > 0;
 	}
+
+	// Inserta un nuevo juego (nótese el typo en la tabla: "jeugos" en lugar de "juegos")
 	public function registrarJuego($titulo, $descripcion, $precio, $imagen, $ventas, $stock)
 	{
 		$sentencia = "INSERT INTO jeugos(titulo,descripcion,precio_alquiler,imagen,ventas,stock) VALUES (:titulo,:descripcion,:precio,:imagen,:ventas,:stock)";
@@ -231,6 +244,8 @@ class Tienda
 			)
 		);
 	}
+
+	// Devuelve el precio de alquiler de un juego por su id
 	public function obtenerPrecio($id)
 	{
 		$sentencia = "SELECT precio_alquiler FROM juegos WHERE id_juego=:id";
@@ -242,6 +257,8 @@ class Tienda
 
 		return $resultado["precio_alquiler"];
 	}
+
+	// Carga el carrito guardado en base de datos para un usuario, devolviendo [id_juego => duracion]
 	public function obtenerCarritoUsuario($id)
 	{
 		$sentencia = "SELECT * FROM carrito_item where id_usuario=:id";
@@ -256,6 +273,8 @@ class Tienda
 		}
 		return $carrito;
 	}
+
+	// Guarda o actualiza cada ítem del carrito en BD, calculando el precio total por juego
 	public function guardarCarritoUsuario($id_usuario, $carrito)
 	{
 
@@ -284,6 +303,8 @@ class Tienda
 
 		return true;
 	}
+
+	// Actualiza la duración y el precio de un juego concreto en el carrito del usuario
 	public function actualizarHorasCarrito($usuarioId, $juegoId, $horas)
 	{
 
@@ -299,6 +320,7 @@ class Tienda
 		]);
 	}
 
+	// Elimina un juego del carrito de un usuario
 	public function eliminarJuegoCarrito($usuarioId, $juegoId)
 	{
 
@@ -309,6 +331,8 @@ class Tienda
 			":usuario" => $usuarioId
 		]);
 	}
+
+	// Devuelve el email (invoker=0) o el nombre (invoker=1) de un usuario por su id
 	public function obtenerdato($id, $invoker)
 	{
 		if ($invoker == 0) {
@@ -324,6 +348,8 @@ class Tienda
 
 		return $resultado["resultado"];
 	}
+
+	// Inserta un nuevo foro con nombre y descripción
 	public function crearForo($nombre, $descripcion)
 	{
 		$sentencia = "INSERT INTO foros (nombre, descripcion) 
@@ -335,6 +361,8 @@ class Tienda
 			":descripcion" => $descripcion
 		]);
 	}
+
+	// Devuelve el id y nombre de todos los foros
 	public function listarForos()
 	{
 		$sentencia = "SELECT id_foro, nombre FROM foros";
@@ -343,6 +371,7 @@ class Tienda
 		return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
 	}
 
+	// Devuelve todos los temas con el nombre de su foro, ordenados del más reciente al más antiguo
 	public function listarTemas()
 	{
 		$sentencia = "SELECT t.id_tema, t.titulo, t.id_foro, t.fecha_creacion, f.nombre AS nombre_foro
@@ -355,6 +384,8 @@ class Tienda
 
 		return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
 	}
+
+	// Inserta un nuevo tema en el foro indicado asociado al usuario
 	public function crearTema($idUser, $titulo, $foro)
 	{
 		$sentencia = "INSERT INTO temas 
@@ -371,6 +402,7 @@ class Tienda
 		]);
 	}
 
+	// Inserta un nuevo ticket de soporte para el usuario con el asunto indicado
 	public function crearTicket($idUser, $asunto)
 	{
 		$sentencia = "INSERT INTO tickets 
@@ -385,6 +417,8 @@ class Tienda
 			":asunto" => $asunto
 		]);
 	}
+
+	// Devuelve todos los tickets de un usuario ordenados por fecha descendente
 	public function listarTicketsUsuario($idUser)
 	{
 		$sentencia = "SELECT * FROM tickets 
@@ -396,6 +430,8 @@ class Tienda
 
 		return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
 	}
+
+	// Devuelve las respuestas de un tema con el nombre y foto del autor, del más reciente al más antiguo
 	public function obtenerMensajes($id_tema)
 	{
 		$sentencia = "SELECT m.id_respuesta, m.contenido, m.fecha_respuesta, u.nombre, u.foto
@@ -411,6 +447,8 @@ class Tienda
 
 		return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
 	}
+
+	// Devuelve los datos de un ticket junto con el nombre del usuario que lo creó
 	public function obtenerTicket($id_ticket)
 	{
 		$sentencia = "SELECT t.*, u.nombre 
@@ -423,6 +461,8 @@ class Tienda
 
 		return $ejecucion->fetch(PDO::FETCH_ASSOC);
 	}
+
+	// Devuelve los mensajes de un ticket con el nombre y foto del autor, ordenados de más antiguo a más reciente
 	public function obtenerMensajesTicket($id_ticket)
 	{
 		$sentencia = "SELECT m.id_ticket, m.id_usuario, m.mensaje, m.fecha, u.nombre, u.foto
@@ -439,6 +479,7 @@ class Tienda
 		return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
 	}
 
+	// Inserta una nueva respuesta en un tema del foro
 	public function crearMensaje($id_tema, $id_usuario, $contenido)
 	{
 		$sentencia = "INSERT INTO respuestas (contenido, id_tema, id_usuario, fecha_respuesta)
@@ -452,6 +493,7 @@ class Tienda
 		]);
 	}
 
+	// Inserta un nuevo mensaje en un ticket de soporte
 	public function crearMensajeTicket($id_usuario, $id_ticket, $mensaje)
 	{
 		$sentencia = "INSERT INTO msgticket (id_usuario, id_ticket, mensaje, fecha)
@@ -464,6 +506,8 @@ class Tienda
 			":mensaje" => $mensaje
 		]);
 	}
+
+	// Devuelve los datos de un tema junto con el nombre del usuario que lo creó
 	public function obtenerTema($id_tema)
 	{
 		$sentencia = "SELECT t.id_tema, t.titulo, t.id_foro, t.fecha_creacion, t.id_usuario, u.nombre
@@ -478,6 +522,8 @@ class Tienda
 
 		return $ejecucion->fetch(PDO::FETCH_ASSOC);
 	}
+
+	// Inserta un nuevo pedido para el usuario y devuelve el id generado
 	public function insertarpedido($id_usuario)
 	{
 
@@ -490,6 +536,8 @@ class Tienda
 		]);
 		return $this->pdo->lastInsertId();
 	}
+
+	// Inserta un ítem en el pedido y reduce el stock y aumenta las ventas del juego en 1
 	public function insertarpedidoitem($id_pedido, $id_juego, $duracion, $precio, $codigo)
 	{
 
@@ -510,6 +558,8 @@ class Tienda
 			":id" => $id_juego
 		]);
 	}
+
+	// Comprueba si ya se generó un recibo para una sesión de Stripe concreta
 	public function reciboExiste($stripe_session_id)
 	{
 		$sentencia = "SELECT id_recibo FROM recibos WHERE stripe_session_id = :session LIMIT 1";
@@ -518,6 +568,8 @@ class Tienda
 
 		return $ejecucion->fetch(PDO::FETCH_ASSOC);
 	}
+
+	// Inserta un nuevo recibo/factura PDF asociado al pedido y al usuario
 	public function insertarpdf($id_usuario, $numero_factura, $nombre_fichero, $estado, $stripe_session_id, $id_pedido)
 	{
 		$sentencia = "INSERT INTO recibos 
@@ -536,6 +588,8 @@ class Tienda
 			":id_pedido" => $id_pedido
 		]);
 	}
+
+	// Elimina todos los ítems del carrito de un usuario (tras completar la compra)
 	public function eliminarcarrito($id_usuario)
 	{
 		$sentencia = "DELETE FROM carrito_item WHERE id_usuario = :id_usuario";
@@ -546,6 +600,8 @@ class Tienda
 			":id_usuario" => $id_usuario
 		]);
 	}
+
+	// Devuelve los pedidos de un usuario con los datos de su factura asociada, del más reciente al más antiguo
 	public function getPedidosUsuario($id_usuario)
 	{
 		$sentencia = "SELECT p.estado,p.id_pedido, p.fecha, p.metodo_pago,
@@ -563,6 +619,8 @@ class Tienda
 
 		return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
 	}
+
+	// Devuelve los ítems de un pedido junto con el título e imagen de cada juego
 	public function getItemsPedido($id_pedido)
 	{
 		$sentencia = "SELECT pi.*, j.titulo, j.imagen
@@ -575,6 +633,8 @@ class Tienda
 
 		return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
 	}
+
+	// Verifica que un pedido pertenece al usuario indicado
 	public function pedidoPerteneceUsuario($id_pedido, $id_usuario)
 	{
 		$sentencia = "SELECT 1 FROM pedido WHERE id_pedido = :id AND id_usuario = :user";
@@ -588,6 +648,8 @@ class Tienda
 
 		return $ejecucion->fetch() !== false;
 	}
+
+	// Devuelve el nombre del fichero PDF de un recibo comprobando que pertenece al usuario
 	public function reciboPerteneceUsuario($id_pedido, $id_usuario)
 	{
 		$sentencia = "SELECT nombre_fichero 
@@ -602,7 +664,8 @@ class Tienda
 		$resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
 		return $resultado['nombre_fichero'];
 	}
-   //Función mejorada para generar exactamente 16 digitos alfanuméricos
+
+	// Genera un código alfanumérico aleatorio en mayúsculas de la longitud indicada (por defecto 16)
 	public function generarCodigoFactura($longitud = 16)
 	{ 
 			return strtoupper(
@@ -610,6 +673,8 @@ class Tienda
 			);
 		
 	}
+
+	// Devuelve el stock disponible de un juego
 	public function TieneStock($id_juego)
 	{
 		$sentencia = "SELECT stock FROM juegos WHERE id_juego = :id";
@@ -620,6 +685,8 @@ class Tienda
 		$resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
 		return $resultado['stock'];
 	}
+
+	// Elimina el usuario, destruye la sesión y redirige a la página de cuenta borrada
 	public function borrarCuenta($id)
 	{
 		$sentencia = "DELETE FROM usuarios WHERE id_usuario = :id";
@@ -638,6 +705,7 @@ class Tienda
 		exit;
 	}
 
+	// Actualiza la contraseña del usuario guardándola hasheada
 	public function cambiarPassword($id_usuario, $nueva_pass)
 	{
 		$sentencia = "UPDATE usuarios SET password = :password WHERE id_usuario = :id_usuario";
@@ -648,6 +716,7 @@ class Tienda
 		]);
 	}
 
+	// Devuelve los alquileres de un usuario agrupados por juego, indicando si alguno sigue activo
 	public function listarAlquileresPorUsuario($id_usuario)
 	{
 		$sentencia = "SELECT
@@ -666,6 +735,7 @@ class Tienda
 		return $registros;
 	}
 
+	// Devuelve el total de horas alquiladas y el número de juegos distintos del usuario
 	public function totalEstadisticasUsuario($id_usuario)
 	{
 		$sentencia = "SELECT 
@@ -680,31 +750,31 @@ class Tienda
 		return $registro;
 	}
 
-public function activarCodigo($codigo, $id_usuario){
-    $sentencia = "SELECT pi.id_item, pi.id_juego, pi.duracion, pi.id_pedido
+	// Valida un código de activación del usuario y lo marca como canjeado si es correcto
+	public function activarCodigo($codigo, $id_usuario)
+	{
+		$sentencia = "SELECT pi.id_item 
                   FROM pedido_item pi
                   JOIN pedido p ON p.id_pedido = pi.id_pedido
-                  WHERE pi.codigo    = :codigo 
-                  AND   p.id_usuario = :id_usuario
-                  AND   pi.canjeado  = 0
-                  LIMIT 1
-                  FOR UPDATE";
-    $ejecucion = $this->pdo->prepare($sentencia);
-    $ejecucion->execute([':codigo' => $codigo, ':id_usuario' => $id_usuario]);
-    $item = $ejecucion->fetch(PDO::FETCH_ASSOC);
+                  WHERE pi.codigo = :codigo 
+                  AND p.id_usuario = :id_usuario
+                  LIMIT 1";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute([':codigo' => $codigo, ':id_usuario' => $id_usuario]);
+		$item = $ejecucion->fetch(PDO::FETCH_ASSOC);
 
-    if (!$item) {
-        return ['ok' => false, 'error' => 'Código inválido o ya usado.'];
-    }
+		if (!$item) {
+			return ['ok' => false, 'error' => 'Código inválido o ya usado.'];
+		}
 
-    // Marcar como canjeado
-    $update = "UPDATE pedido_item SET canjeado = 1 WHERE id_item = :id_item";
-    $ejecucion = $this->pdo->prepare($update);
-    $ejecucion->execute([':id_item' => $item['id_item']]);
+		$update = "UPDATE pedido_item SET canjeado = 1 WHERE id_item = :id_item";
+		$ejecucion = $this->pdo->prepare($update);
+		$ejecucion->execute([':id_item' => $item['id_item']]);
 
-    return ['ok' => true];
-}
+		return ['ok' => true];
+	}
 
+	// Filtra juegos dinámicamente por texto, categoría y/o precio máximo combinando condiciones
 	public function filtrarJuegos($texto = "", $categoria = "", $precio = "")
 	{
 		$condiciones = [];
@@ -741,6 +811,7 @@ public function activarCodigo($codigo, $id_usuario){
 		return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
 	}
 
+	// Busca temas por título; si no hay texto devuelve todos los temas
 	public function buscarTema($texto = "")
 	{
 		if ($texto === "") {
@@ -761,6 +832,7 @@ public function activarCodigo($codigo, $id_usuario){
 		return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
 	}
 
+	// Devuelve todos los logros indicando cuáles ha conseguido ya el usuario
 	public function obtenerLogrosUsuario($id_usuario)
 	{
 		$sentencia = "SELECT l.id_logro, l.nombre, l.descripcion, l.foto,
@@ -773,6 +845,7 @@ public function activarCodigo($codigo, $id_usuario){
 		return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
 	}
 
+	// Otorga un logro al usuario usando INSERT IGNORE para evitar duplicados
 	public function otorgarLogro($id_usuario, $id_logro)
 	{
 		$sentencia = "INSERT IGNORE INTO usuarios_logros (id_usuario, id_logro) 
@@ -781,6 +854,7 @@ public function activarCodigo($codigo, $id_usuario){
 		$ejecucion->execute([':id_usuario' => $id_usuario, ':id_logro' => $id_logro]);
 	}
 
+	// Evalúa las condiciones de cada logro y los otorga automáticamente si se cumplen
 	public function comprobarLogros($id_usuario)
 	{
 		// Logro 2: New begining - primera compra
@@ -811,6 +885,8 @@ public function activarCodigo($codigo, $id_usuario){
 		if ($total_logros >= 3)
 			$this->otorgarLogro($id_usuario, 1); // 3 = total de logros sin contar el platino
 	}
+
+	// Elimina un tema del foro por su id
 	public function eliminarTema($id_tema)
 	{
 		$sentencia = "DELETE FROM temas WHERE id_tema = :id_tema";
@@ -818,6 +894,7 @@ public function activarCodigo($codigo, $id_usuario){
 		$ejecucion->execute([":id_tema" => $id_tema]);
 	}
 
+	// Actualiza el título de un tema del foro
 	public function modificarTema($modificar, $titulo)
 	{
 		$sentencia = "UPDATE temas SET titulo=:titulo WHERE id_tema=:id_tema";
@@ -830,6 +907,7 @@ public function activarCodigo($codigo, $id_usuario){
 		);
 	}
 
+	// Devuelve el título de un tema buscándolo por su id (usado antes de editar)
 	public function BuscarTemaModificar($modificar)
 	{
 		$sentencia = "SELECT titulo from temas WHERE id_tema=:id_tema";
@@ -843,11 +921,14 @@ public function activarCodigo($codigo, $id_usuario){
 		return $resultado;
 	}
 
+	// Elimina una respuesta del foro por su id
 	public function eliminarMensaje($id_respuesta)
 	{
 		$stmt = $this->pdo->prepare("DELETE FROM respuestas WHERE id_respuesta = ?");
 		return $stmt->execute([$id_respuesta]);
 	}
+
+	// Devuelve los juegos más comprados excluyendo los que ya están en el carrito; si el carrito está vacío muestra los más populares en general
 	function obtenerJuegosRecomendados($carrito, $limite = 4)
 	{
 		$idsCarrito = array_keys($carrito);

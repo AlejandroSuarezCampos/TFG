@@ -1,13 +1,4 @@
-/*document.addEventListener("DOMContentLoaded", function(){
-    document.getElementById("buscador").addEventListener("keydown", function(e){
-        if (e.key === "Enter") {
-            buscarJuego();
-        }
-    });
-});
-*/
-const MIN_HORAS = 1;
-const MAX_HORAS = 100;
+// Al cargar la página, activa el buscador con Enter (si existe) y carga el carrito
 document.addEventListener("DOMContentLoaded", function () {
     const buscador = document.getElementById("buscador");
 
@@ -21,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
     cargarCarrito();
 });
 
+// Filtra los juegos por categoría y vuelca el resultado en el visor
 function filtrarCat(id) {
     let xmlhttp = new XMLHttpRequest();
 
@@ -34,6 +26,7 @@ function filtrarCat(id) {
     xmlhttp.send();
 }
 
+// Busca juegos por el texto del input y vuelca el resultado en el visor
 function buscarJuego() {
     let xmlhttp = new XMLHttpRequest();
 
@@ -53,6 +46,7 @@ function buscarJuego() {
     }
 }
 
+// Valida el formulario de registro en cliente y envía los datos al servidor; gestiona los mensajes de error o éxito
 function registrar() {
     limpiarErrores();
 
@@ -80,7 +74,6 @@ function registrar() {
 
     xmlhttp.onreadystatechange = function () {
                         if (this.readyState == 4 && this.status == 200) {
-                            //console.log(xmlhttp.responseText);
                             let respuesta = JSON.parse(this.responseText);
                             if (respuesta.exito) {
                     let msgExito = document.getElementById("errorCampos");
@@ -133,6 +126,7 @@ function registrar() {
     xmlhttp.send("nombre=" + encodeURIComponent(nombre) + "&correo=" + encodeURIComponent(correo) + "&contrasena=" + encodeURIComponent(contrasena) + "&contrasena2=" + encodeURIComponent(contrasena2));
 }
 
+// Muestra el mensaje de error de registro en el elemento correspondiente según el tipo de error
 function mostrarErrorRegistro(cadena) {
     switch (cadena) {
         case "Todos los campos son obligatorios":
@@ -150,6 +144,7 @@ function mostrarErrorRegistro(cadena) {
     }
 }
 
+// Oculta y vacía todos los mensajes de error del formulario de registro
 function limpiarErrores() {
     document.getElementById("errorCampos").innerText = "";
     document.getElementById("errorCampos").classList.add("oculto");
@@ -163,6 +158,7 @@ function limpiarErrores() {
     document.getElementById("errorCampos").style.color = "#ff4444";
 }
 
+// Valida el formulario de login en cliente, envía las credenciales y gestiona la respuesta del servidor
 function iniciarSesion() {
     limpiarErroresLogin();
 
@@ -178,7 +174,6 @@ function iniciarSesion() {
 
     xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            //console.log(this.responseText);
             let respuesta = JSON.parse(this.responseText);
 
             console.log("Respuesta del servidor:", respuesta);
@@ -228,6 +223,7 @@ function iniciarSesion() {
     xmlhttp.send();
 }
 
+// Muestra el error de login en el elemento adecuado según el tipo recibido
 function mostrarErrorLogin(tipo, mensaje) {
     ocultarTodosLosErroresLogin();
 
@@ -239,24 +235,26 @@ function mostrarErrorLogin(tipo, mensaje) {
     }
 }
 
+// Oculta todos los errores del login y resetea el color del mensaje general
 function limpiarErroresLogin() {
     ocultarTodosLosErroresLogin();
     document.getElementById("errorCampos").style.color = "#ff4444";
     document.getElementById("errorCampos").style.borderColor = "#ff4444";
 }
 
-
+// Oculta todos los divs de error del formulario de login
 function ocultarTodosLosErroresLogin() {
     document.getElementById("errorCampos").classList.add("oculto");
     document.getElementById("errorEmail").classList.add("oculto");
     document.getElementById("errorContrasena").classList.add("oculto");
 }
 
+// Redirige al script de cierre de sesión
 function logOut() {
     window.location.href = "/TFG/async/logOut.php";
 }
 
-//Funciones para cargar el carrito de forma asíncrona
+// Pide al servidor el HTML del carrito y lo inyecta en el contenedor; luego recalcula el total
 function cargarCarrito() {
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
@@ -282,14 +280,13 @@ function cargarCarrito() {
         "Content-Type",
         "application/x-www-form-urlencoded; charset=UTF-8"
     );
-    // solo si realmente lo necesitas
     xmlhttp.send("valor=1");
 }
-//Añadimos el juego al carrito
+
+// Envía el id del juego y las horas al servidor para añadirlo al carrito; muestra confirmación con SweetAlert
 function AnadirCarrito(id) {
     let xmlhttp = new XMLHttpRequest();
     let horas = document.getElementById('horas').value
-    //alert(`El id del juego esss: ${id} y lo alquilaste por ${horas} horas`); 
 
     xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
@@ -327,6 +324,8 @@ function AnadirCarrito(id) {
     xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xmlhttp.send("id=" + encodeURIComponent(id) + "&horas=" + horas);
 }
+
+// Suma los precios de todos los ítems del carrito y actualiza el total mostrado
 function calcularTotal() {
     let total = 0;
 
@@ -339,6 +338,8 @@ function calcularTotal() {
         tot.textContent = total.toFixed(2);
     }
 }
+
+// Devuelve el valor de horas corregido si está fuera del rango permitido
 function validarHoras(valor) {
     valor = parseInt(valor);
 
@@ -348,10 +349,13 @@ function validarHoras(valor) {
 
     return valor;
 }
+
+// Actualiza el contador de ítems del carrito en el icono del header
 function actualizar_contador(num) {
     document.getElementById("contador").innerText = num;
 }
 
+// Elimina un juego del carrito y recarga el carrito y el total
 function eliminarCarrito(id) {
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
@@ -372,28 +376,8 @@ function eliminarCarrito(id) {
     xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xmlhttp.send("id=" + encodeURIComponent(id));
 }
-/*document.addEventListener("change", function (e) {
-    if (e.target.classList.contains("horas-input")) {
-        let id = e.target.dataset.id;
-        let horas = e.target.value;
 
-        let xmlhttp = new XMLHttpRequest();
-
-        xmlhttp.onload = function () {
-            if (xmlhttp.status === 200) {
-                console.log(xmlhttp.responseText);
-                let respuesta = JSON.parse(xmlhttp.responseText);
-                document.getElementById("total-" + id).innerText = respuesta.total_juego.toFixed(2);
-                document.getElementById("total-carrito-precio").innerText = respuesta.total_precio.toFixed(2);
-
-            }
-        };
-        xmlhttp.open("POST", "./async/actualizar_carrito.php", true);
-        xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xmlhttp.send("id=" + id + "&horas=" + horas);
-    }
-});*/
-//Escuchador para el manejo manual de las horas en el input de las horas en carrito
+// Escucha cambios en los inputs de horas del carrito, valida el valor y llama a actualizarCarrito
 document.addEventListener("input", function (e) {
 
     if (e.target.classList.contains("horas-input")) {
@@ -402,21 +386,20 @@ document.addEventListener("input", function (e) {
 
         let horas = validarHoras(e.target.value);
 
-        //  corregimos el input si se pasa
         e.target.value = horas;
         actualizarCarrito(id, horas);
     }
 });
-//Evento para los botones de sumar o restar horas en carrito
+
+// Escucha los clics en los botones + y - del carrito, ajusta las horas respetando límites y llama a actualizarCarrito
 document.addEventListener("click", function (e) {
-    //BOTON +
+    // BOTON +
     if (e.target.classList.contains("btn-mas")) {
 
         let id = e.target.dataset.id;
         let input = document.querySelector(`.horas-input[data-id="${id}"]`);
 
         let nuevoValor = parseInt(input.value) + 1;
-        //input.dispatchEvent(new Event("input"));
         if (nuevoValor > 100) nuevoValor = 100;
         input.value = nuevoValor;
 
@@ -434,11 +417,12 @@ document.addEventListener("click", function (e) {
         if (nuevoValor < 1) nuevoValor = 1;
 
         input.value = nuevoValor;
-        //input.dispatchEvent(new Event("input"));
 
         actualizarCarrito(id, nuevoValor);
     }
 });
+
+// Envía las horas actualizadas al servidor y refresca el precio del juego y el total del carrito
 function actualizarCarrito(id, horas) {
     let xmlhttp = new XMLHttpRequest();
 
@@ -458,33 +442,7 @@ function actualizarCarrito(id, horas) {
     xmlhttp.send("id=" + id + "&horas=" + horas);
 }
 
-/*function cambiarHoras(valor){
-    let input = document.getElementById('horas');
-    let nueva = parseInt(input.value) + valor;
-
-    if (nueva >= 1) {
-        input.value = nueva;
-    }
-        let xmlhttp = new XMLHttpRequest();
-
-        xmlhttp.onload = function () {
-            if (xmlhttp.status === 200) {
-                console.log(xmlhttp.responseText);
-                let respuesta = JSON.parse(xmlhttp.responseText);
-                 console.log(respuesta); 
-
-                document.getElementById("total-" + id).innerText = respuesta.total_juego.toFixed(2);
-                document.getElementById("total-carrito-precio").innerText = respuesta.total_precio.toFixed(2);
-                document.getElementById("contador").innerText=respuesta.total_items;
-
-            }
-        };
-        xmlhttp.open("POST", "./async/actualizar_carrito.php", true);
-        xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xmlhttp.send("id=" + id + "&horas=" + input.value);
-}*/
-//Comprobaciones de que no introduzcan horas negativas, y se cambian las horas
-
+// Incrementa o decrementa las horas del input de detalle de juego validando el rango
 function cambiarHoras(valor) {
     let input = document.getElementById('horas');
     let nueva = parseInt(input.value) + valor;
@@ -494,6 +452,7 @@ function cambiarHoras(valor) {
     }
 }
 
+// Carga los mensajes de un tema del foro y construye el HTML de cada mensaje; muestra el botón eliminar solo a admins
 function cargarMensajes(id_tema) {
 
     let xmlhttp = new XMLHttpRequest();
@@ -508,7 +467,6 @@ function cargarMensajes(id_tema) {
             data.forEach(m => {
                 let foto = m.foto ? m.foto : "./img/default-user.png";
 
-                // Ahora lo lee del servidor, no del parámetro
                 let botonEliminar = m.es_admin ? `
                     <button 
                         onclick="eliminarMensaje(${m.id_respuesta})"
@@ -541,6 +499,7 @@ function cargarMensajes(id_tema) {
     xmlhttp.send();
 }
 
+// Pide confirmación con SweetAlert y elimina un mensaje del foro recargando la lista tras el borrado
 function eliminarMensaje(id_respuesta) {
     Swal.fire({
         title: 'Eliminar mensaje',
@@ -578,12 +537,12 @@ function eliminarMensaje(id_respuesta) {
     });
 }
 
+// Valida que el textarea no esté vacío y envía el mensaje al foro recargando la lista tras el envío
 function enviarMensaje(id_tema){
 
     let contenido = document.getElementById("mensaje").value.trim();
     let error = document.getElementById("errorMensaje");
 
-    // reset error
     error.style.display = "none";
 
     if (contenido === "") {
@@ -615,6 +574,7 @@ function enviarMensaje(id_tema){
     );
 }
 
+// Valida el mensaje y lo envía al ticket de soporte; recarga los mensajes del ticket tras el envío
 function enviarMensajeTicket(id_ticket) {
 
     let contenido = document.getElementById("mensaje").value.trim();
@@ -648,6 +608,8 @@ function enviarMensajeTicket(id_ticket) {
     xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xmlhttp.send(respuesta);
 }
+
+// Carga los mensajes de un ticket y los renderiza como burbujas de chat diferenciando los propios de los ajenos
 function cargarMensajesTicket(id_ticket, id_usuario_actual) {
     let xmlhttp = new XMLHttpRequest();
 
@@ -695,18 +657,9 @@ function cargarMensajesTicket(id_ticket, id_usuario_actual) {
     xmlhttp.send(params);
 }
 
-/*function cambiarHorasCarrito(valor,id) {
-  let input = document.querySelector(`.horas-input[data-id="${id}"]`);
-  let nueva = parseInt(input.value) + valor;
-
-  if (nueva >= 1 && nueva <= 50) {
-    input.value = nueva;
-  }
-}*/
-//Escuchador para lanzar el evento de redirigir a la pasarela, con validaciones de stcok y error
+// Escucha el clic en el botón pagar, muestra un loading y redirige a Stripe; gestiona errores de stock u otros
 document.addEventListener('click', function (e) {
     if (e.target && e.target.id === 'pagar') {
-        // Mostrar loading
         Swal.fire({
             title: 'Redirigiendo al pago...',
             html: 'Conectando con la pasarela segura',
@@ -724,16 +677,13 @@ document.addEventListener('click', function (e) {
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState === 4) {
                 if (xmlhttp.status === 200) {
-                    //console.log(xmlhttp.responseText);
                     let data = JSON.parse(xmlhttp.responseText);
                     if (data.url) {
-                        // Pequeña espera para que se vea el efecto
                         setTimeout(() => {
                             window.location.href = data.url;
                         }, 3000);
                     } else {
                         let mensaje = "Ha ocurrido un error inesperado";
-                        //Si es error de stock se muestra un mensaje claro respecto al stock del juego
                         if (data.type === "stock") {
                             mensaje = data.message;
                         }
@@ -770,13 +720,13 @@ document.addEventListener('click', function (e) {
     }
 });
 
+// Valida el formulario de cambio de contraseña en cliente y envía la nueva al servidor
 function cambiarPassword() {
     limpiarErroresPerfil();
 
     let nueva = document.getElementById("nueva").value;
     let repetir = document.getElementById("repetir").value;
 
-    // Validaciones en cliente
     if (nueva === "" || repetir === "") {
         mostrarError("campos_vacios", "Todos los campos son obligatorios");
         return;
@@ -790,7 +740,6 @@ function cambiarPassword() {
         return;
     }
 
-    // Petición asíncrona
     let xmlhttp = new XMLHttpRequest();
     let url = "./async/cambiarContrasena.php" + "?nueva=" + encodeURIComponent(nueva) + "&repetir=" + encodeURIComponent(repetir);
 
@@ -827,6 +776,7 @@ function cambiarPassword() {
     xmlhttp.send();
 }
 
+// Muestra el mensaje de error del perfil en el elemento correcto según el tipo
 function mostrarError(tipo, mensaje) {
     switch (tipo) {
         case "campos_vacios":
@@ -844,6 +794,7 @@ function mostrarError(tipo, mensaje) {
     }
 }
 
+// Oculta y vacía todos los mensajes de error y éxito del formulario de perfil
 function limpiarErroresPerfil() {
   ["errorCampos", "errorContrasena", "errorRepetir", "exito"].forEach(id => {
     let el = document.getElementById(id);
@@ -851,6 +802,8 @@ function limpiarErroresPerfil() {
     el.classList.add("oculto");
   })
 }
+
+// Envía el código de activación al servidor y muestra el resultado en el div correspondiente
 function activarCodigo() {
   let codigo    = document.getElementById('codigo').value.trim();
   let errorDiv  = document.getElementById('errorCodigo');
@@ -888,6 +841,7 @@ function activarCodigo() {
   xhr.send();
 }
 
+// Recoge los filtros de texto, categoría y precio, los envía al servidor y vuelca el resultado en el visor
 function filtrar() {
     let texto    = document.getElementById("buscador").value.trim();
     let categoria = document.getElementById("filtroCat").value;
@@ -902,7 +856,6 @@ function filtrar() {
  
             visor.innerHTML = this.responseText;
  
-            // Mostrar mensaje si no hay resultados
             if (visor.innerHTML.trim() === "") {
                 visor.classList.add("oculto");
                 sinResultados.classList.remove("oculto");
@@ -915,9 +868,9 @@ function filtrar() {
     xmlhttp.open("GET", "./async/filtrar.php?texto=" + encodeURIComponent(texto) + "&categoria=" + categoria + "&precio=" + precio, true);
     xmlhttp.send();
 }
-    
-  
-  function eliminarTema(id_tema) {
+
+// Pide confirmación y elimina un tema del foro junto con todos sus mensajes; redirige al foro tras el borrado
+function eliminarTema(id_tema) {
     Swal.fire({
         title: 'Eliminar tema',
         text: '¿Seguro que quieres eliminar este tema? Se borrarán todos los mensajes.',
@@ -957,12 +910,12 @@ function filtrar() {
     });
   }
 
-  function Modificartema(modificar) {
+// Valida que el título no esté vacío y envía el nuevo título del tema al servidor; redirige al foro tras editar
+function Modificartema(modificar) {
 
     let titulo = document.getElementById("titulo").value.trim();
     let errorDiv = document.getElementById("errorCampos");
 
-    // Validación cliente
     if (titulo === "" || modificar === "") {
         errorDiv.classList.remove("oculto");
         errorDiv.innerText = "Todos los campos son obligatorios";
@@ -1009,6 +962,7 @@ function filtrar() {
     });
 }
 
+// Pide confirmación con SweetAlert y envía un formulario POST para eliminar la cuenta del usuario
 function confirmarBorrarCuenta() {
     Swal.fire({
         title: 'Eliminar cuenta',
@@ -1026,10 +980,9 @@ function confirmarBorrarCuenta() {
     }).then((result) => {
         if (!result.isConfirmed) return;
 
-        // Si confirma, envía el formulario PHP normalmente
         let form = document.createElement('form');
         form.method = 'POST';
-        form.action = '';  // Misma página
+        form.action = '';
         let input = document.createElement('input');
         input.type = 'hidden';
         input.name = 'borrar';
@@ -1040,6 +993,7 @@ function confirmarBorrarCuenta() {
     });
 }
 
+// Busca temas del foro por título y vuelca el resultado en el visor; muestra aviso si no hay resultados
 function buscarTema() {
     const texto = document.getElementById("buscadorTema").value.trim();
 

@@ -1,10 +1,4 @@
-/*document.addEventListener("DOMContentLoaded", function(){
-    document.getElementById("buscador").addEventListener("keydown", function(e){
-        if (e.key === "Enter") {
-            buscarJuego();
-        }
-    });
-});*/
+// Al cargar la página, activa el buscador con Enter si el elemento existe
 document.addEventListener("DOMContentLoaded", function () {
     const buscador = document.getElementById("buscador");
 
@@ -17,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+// Filtra los juegos por categoría y vuelca el resultado en el visor
 function filtrarCat(id) {
     let xmlhttp = new XMLHttpRequest();
 
@@ -30,6 +25,7 @@ function filtrarCat(id) {
     xmlhttp.send();
 }
 
+// Busca juegos por el texto del input y vuelca el resultado en el visor
 function buscarJuego() {
     let xmlhttp = new XMLHttpRequest();
 
@@ -49,7 +45,7 @@ function buscarJuego() {
     }
 }
 
-
+// Muestra el mensaje de error en el elemento correspondiente según el texto recibido
 function mostrarError(cadena) {
     switch (cadena) {
         case "Todos los campos son obligatorios":
@@ -67,6 +63,7 @@ function mostrarError(cadena) {
     }
 }
 
+// Oculta y vacía todos los mensajes de error del formulario general
 function limpiarErrores() {
     document.getElementById("errorCampos").innerText = "";
     document.getElementById("errorCampos").classList.add("oculto");
@@ -80,6 +77,7 @@ function limpiarErrores() {
     document.getElementById("errorCampos").style.color = "#ff4444";
 }
 
+// Valida el nombre y envía la petición para crear una nueva categoría; gestiona los mensajes de error o éxito
 function crearCat() {
     limpiarErroresCat();
 
@@ -95,16 +93,13 @@ function crearCat() {
         if (this.readyState == 4 && this.status == 200) {
             let respuesta = JSON.parse(this.responseText);
 
-
             if (respuesta.exito) {
                 document.getElementById("errorCampos").classList.remove("oculto");
                 document.getElementById("errorCampos").innerText = "¡Creado correctamente!";
                 document.getElementById("errorCampos").style.color = "#66c0f4";
                 document.getElementById("errorCampos").style.borderColor = "#66c0f4";
 
-
                 document.getElementById("nombre").value = "";
-
 
             } else {
                 ocultarTodosLosErroresCat();
@@ -120,8 +115,7 @@ function crearCat() {
                         break;
                     default:
                         document.getElementById("errorCampos").classList.remove("oculto");
-                        document.getElementById("errorCampos").innerText = respuesta.mensaje || "Error Al crear Cateogira";
-
+                        document.getElementById("errorCampos").innerText = respuesta.mensaje || "Error Al crear Categoria";
                 }
             }
         }
@@ -132,7 +126,7 @@ function crearCat() {
     xmlhttp.send();
 }
 
-
+// Muestra el error de categoría en el elemento adecuado según el tipo
 function mostrarErrorCat(tipo, mensaje) {
     ocultarTodosLosErroresCat();
     switch (tipo) {
@@ -143,20 +137,20 @@ function mostrarErrorCat(tipo, mensaje) {
     }
 }
 
-
+// Oculta todos los errores del formulario de categoría y resetea el color
 function limpiarErroresCat() {
     ocultarTodosLosErroresCat();
     document.getElementById("errorCampos").style.color = "#ff4444";
     document.getElementById("errorCampos").style.borderColor = "#ff4444";
 }
 
-
+// Oculta los divs de error del formulario de categoría
 function ocultarTodosLosErroresCat() {
     document.getElementById("errorCampos").classList.add("oculto");
     document.getElementById("errorNombre").classList.add("oculto");
 }
 
-
+// Valida los campos y envía la petición para crear un nuevo usuario desde el panel de admin
 function crearUsu() {
     limpiarErrores();
 
@@ -174,13 +168,13 @@ function crearUsu() {
         if (this.readyState == 4 && this.status == 200) {
             let respuesta = JSON.parse(this.responseText);
             if (respuesta.exito) {
-                    let msgExito = document.getElementById("errorCampos");
-                    
-                    msgExito.classList.remove("oculto");
-                    msgExito.innerText = "¡Registro completado! Redirigiendo...";
-                    msgExito.style.color = "#66c0f4";
-                    msgExito.style.backgroundColor = "#1b5e8c";
-                    msgExito.style.borderColor = "#66c0f4";
+                let msgExito = document.getElementById("errorCampos");
+
+                msgExito.classList.remove("oculto");
+                msgExito.innerText = "¡Registro completado! Redirigiendo...";
+                msgExito.style.color = "#66c0f4";
+                msgExito.style.backgroundColor = "#1b5e8c";
+                msgExito.style.borderColor = "#66c0f4";
 
             } else {
                 switch (respuesta.error) {
@@ -208,17 +202,7 @@ function crearUsu() {
     xmlhttp.send();
 }
 
-function limpiarErrores() {
-    document.getElementById("errorCampos").innerText = "";
-    document.getElementById("errorCampos").classList.add("oculto");
-    document.getElementById("errorEmail").innerText = "";
-    document.getElementById("errorEmail").classList.add("oculto");
-    document.getElementById("errorContrasena").innerText = "";
-    document.getElementById("errorContrasena").classList.add("oculto");
-
-    document.getElementById("errorCampos").style.color = "#ff4444";
-}
-
+// Valida los campos y envía el nuevo nombre de una categoría al servidor; redirige al listado tras editar
 function ModificarCat(modificar) {
     limpiarErroresCat();
 
@@ -234,7 +218,6 @@ function ModificarCat(modificar) {
         if (this.readyState == 4 && this.status == 200) {
             console.log(this.responseText)
             let respuesta = JSON.parse(this.responseText);
-
 
             if (respuesta.exito) {
                 document.getElementById("errorCampos").classList.remove("oculto");
@@ -261,8 +244,7 @@ function ModificarCat(modificar) {
                         break;
                     default:
                         document.getElementById("errorCampos").classList.remove("oculto");
-                        document.getElementById("errorCampos").innerText = respuesta.mensaje || "Error Al crear Cateogira";
-
+                        document.getElementById("errorCampos").innerText = respuesta.mensaje || "Error Al crear Categoria";
                 }
             }
         }
@@ -272,9 +254,11 @@ function ModificarCat(modificar) {
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
 }
+
+// Pide confirmación y elimina una categoría; si tiene éxito elimina la fila de la tabla sin recargar la página
 function eliminarCategoria(id) {
     Swal.fire({
-        title: 'Eliminar categoría 🗂️',
+        title: 'Eliminar categoría',
         text: '¿Estás seguro de que quieres eliminar esta categoría?',
         icon: 'warning',
         showCancelButton: true,
@@ -294,7 +278,6 @@ function eliminarCategoria(id) {
                 if (this.readyState == 4 && this.status == 200) {
                     let respuesta = JSON.parse(this.responseText);
                     if (respuesta.exito) {
-                        // Elimina la fila de la tabla sin recargar la página
                         let fila = document.getElementById("fila-" + id);
                         fila.parentNode.removeChild(fila);
                     } else {
@@ -306,14 +289,14 @@ function eliminarCategoria(id) {
             let url = "../async/eliminar_categoria.php?id=" + encodeURIComponent(id);
             xmlhttp.open("GET", url, true);
             xmlhttp.send();
-
         }
     });
 }
 
+// Pide confirmación y elimina un usuario; si tiene éxito elimina la fila de la tabla sin recargar la página
 function EliminarUsuario(id) {
     Swal.fire({
-        title: 'Eliminar usuario 👤',
+        title: 'Eliminar usuario',
         text: '¿Estás seguro de que quieres eliminar este usuario?',
         icon: 'warning',
         showCancelButton: true,
@@ -344,11 +327,11 @@ function EliminarUsuario(id) {
             let url = "../async/eliminar_Usuario.php?id=" + encodeURIComponent(id);
             xmlhttp.open("GET", url, true);
             xmlhttp.send();
-
         }
     });
 }
 
+// Valida los campos y envía los datos modificados del usuario al servidor; redirige al listado tras editar
 function ModificarUsu(modificar) {
     limpiarErroresUsu();
 
@@ -366,7 +349,6 @@ function ModificarUsu(modificar) {
         if (this.readyState == 4 && this.status == 200) {
             console.log(this.responseText)
             let respuesta = JSON.parse(this.responseText);
-
 
             if (respuesta.exito) {
                 document.getElementById("errorCampos").classList.remove("oculto");
@@ -395,8 +377,7 @@ function ModificarUsu(modificar) {
                         break;
                     default:
                         document.getElementById("errorCampos").classList.remove("oculto");
-                        document.getElementById("errorCampos").innerText = respuesta.mensaje || "Error Al crear Cateogira";
-
+                        document.getElementById("errorCampos").innerText = respuesta.mensaje || "Error Al editar usuario";
                 }
             }
         }
@@ -407,6 +388,7 @@ function ModificarUsu(modificar) {
     xmlhttp.send();
 }
 
+// Muestra el error de usuario en el elemento adecuado según el tipo
 function mostrarErrorUsu(tipo, mensaje) {
     ocultarTodosLosErroresUsu();
     switch (tipo) {
@@ -417,14 +399,14 @@ function mostrarErrorUsu(tipo, mensaje) {
     }
 }
 
-
+// Oculta todos los errores del formulario de usuario y resetea el color
 function limpiarErroresUsu() {
     ocultarTodosLosErroresUsu();
     document.getElementById("errorCampos").style.color = "#ff4444";
     document.getElementById("errorCampos").style.borderColor = "#ff4444";
 }
 
-
+// Oculta los divs de error del formulario de usuario
 function ocultarTodosLosErroresUsu() {
     document.getElementById("errorCampos").classList.add("oculto");
     document.getElementById("errorUsuario").classList.add("oculto");
@@ -432,11 +414,10 @@ function ocultarTodosLosErroresUsu() {
     document.getElementById("errorContrasena").classList.add("oculto");
 }
 
-
-//Funciones para el panel de juegos
+// Pide confirmación y elimina un juego; si tiene éxito elimina la fila de la tabla sin recargar la página
 function EliminarJuego(id) {
     Swal.fire({
-        title: 'Eliminar juego 🎮',
+        title: 'Eliminar juego',
         text: '¿Estás seguro de que quieres eliminar este juego?',
         icon: 'warning',
         showCancelButton: true,
@@ -468,10 +449,11 @@ function EliminarJuego(id) {
             xmlhttp.open("POST", "../async/eliminar_juego.php", true);
             xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xmlhttp.send("id=" + encodeURIComponent(id));
-
         }
     });
 }
+
+// Oculta y vacía los mensajes de error del formulario de juegos
 function limpiarErroresJuegos() {
     document.getElementById("errorCampos").innerText = "";
     document.getElementById("errorCampos").classList.add("oculto");
@@ -480,9 +462,9 @@ function limpiarErroresJuegos() {
     document.getElementById("errorCampos").style.color = "#ff4444";
     document.getElementById("errorImagen").innerText = "";
     document.getElementById("errorImagen").classList.add("oculto");
-
 }
 
+// Valida los campos, construye un FormData con la imagen y envía la petición para crear un nuevo juego
 function crearJuego() {
     limpiarErroresJuegos();
 
@@ -493,17 +475,19 @@ function crearJuego() {
     let precio = document.getElementById("precio").value;
     let imagenInput = document.getElementById("imagen");
     let ventas = document.getElementById("ventas").value;
-    let stock = document.getElementById("stock").value
+    let stock = document.getElementById("stock").value;
+
     if (titulo == "" || descripcion == "" || precio <= 0 || imagenInput.files.length == "") {
         mostrarError("Todos los campos son obligatorios");
         return;
     }
-    //Para poder enviar los datos recogidos de los inputs como si fueran un formulario y recoger la ruta de la img con FILES
+
+    // FormData permite enviar la imagen como archivo junto al resto de campos
     let formData = new FormData();
     formData.append("titulo", titulo);
     formData.append("descripcion", descripcion);
     formData.append("precio", precio);
-    formData.append("imagen", imagenInput.files[0]); // 👈 AQUÍ VA LA IMAGEN REAL
+    formData.append("imagen", imagenInput.files[0]);
     formData.append("ventas", ventas);
     formData.append("stock", stock);
 
@@ -550,10 +534,13 @@ function crearJuego() {
             }
         }
     };
-    //Enviamos el formdata sin la cabecera ya que el formdata se encarga de ello
+
+    // Sin cabecera Content-Type: el propio FormData la gestiona con el boundary correcto
     xmlhttp.open("POST", "../async/crearJuego.php", true);
     xmlhttp.send(formData);
 }
+
+// Valida los campos, construye un FormData (con imagen nueva o la actual) y envía la petición para editar el juego
 function editarJuego(id) {
     limpiarErroresJuegos();
 
@@ -565,21 +552,25 @@ function editarJuego(id) {
     let imagenActual = document.getElementById("imagen_actual").value;
     let imagenInput = document.getElementById("imagen");
     let ventas = document.getElementById("ventas").value;
-    let stock = document.getElementById("stock").value
+    let stock = document.getElementById("stock").value;
+
     if (titulo == "" || descripcion == "" || precio <= 0) {
         mostrarError("Todos los campos son obligatorios");
         return;
     }
-    //Para poder enviar los datos recogidos de los inputs como si fueran un formulario y recoger la ruta de la img con FILES
+
     let formData = new FormData();
     formData.append("titulo", titulo);
     formData.append("descripcion", descripcion);
     formData.append("precio", precio);
+
+    // Si se seleccionó una imagen nueva se envía; si no, se mantiene la ruta actual
     if (imagenInput.files.length > 0) {
         formData.append("imagen", imagenInput.files[0]);
     } else {
         formData.append("imagen_actual", imagenActual);
     }
+
     formData.append("ventas", ventas);
     formData.append("stock", stock);
     formData.append("id", id);
@@ -622,15 +613,17 @@ function editarJuego(id) {
                         document.getElementById("errorImagen").classList.remove("oculto");
                         document.getElementById("errorImagen").innerText = respuesta.mensaje;
                     default:
-                        document.getElementById("errorCampos").innerText = respuesta.mensaje || "Error en la creacion del juego";
+                        document.getElementById("errorCampos").innerText = respuesta.mensaje || "Error en la edicion del juego";
                 }
             }
         }
     };
-    //Enviamos el formdata sin la cabecera ya que el formdata se encarga de ello
+
     xmlhttp.open("POST", "../async/editarJuego.php", true);
     xmlhttp.send(formData);
 }
+
+// Pide un motivo mediante SweetAlert y envía la petición de reembolso al servidor; recarga la página si tiene éxito
 function reembolsarPedido(idPedido) {
 
     Swal.fire({
@@ -673,20 +666,17 @@ function reembolsarPedido(idPedido) {
                     setTimeout(() => {
                         location.reload();
                     }, 3000);
-                }else{
+                } else {
                     Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: data.message,
-                            confirmButtonText: 'Volver',
-                            customClass: {
-                                popup: 'steam-popup',
-                            },
-                        })
+                        icon: 'error',
+                        title: 'Error',
+                        text: data.message,
+                        confirmButtonText: 'Volver',
+                        customClass: {
+                            popup: 'steam-popup',
+                        },
+                    });
                 }
-
-                //console.log("STATE:", this.readyState, "STATUS:", this.status);
-                //console.log("RESPUESTA:", this.responseText);
             }
         };
 
@@ -699,6 +689,8 @@ function reembolsarPedido(idPedido) {
         );
     });
 }
+
+// Pide confirmación y marca el ticket como cerrado; actualiza el badge y el botón en la tabla sin recargar
 function cerrarTicket(id_ticket) {
     Swal.fire({
         title: 'Cerrar ticket',
@@ -731,7 +723,7 @@ function cerrarTicket(id_ticket) {
                         text: 'El ticket ha sido cerrado correctamente'
                     });
 
-                    // Actualizar badge y botón sin recargar
+                    // Actualiza el badge y deshabilita el botón sin recargar la página
                     document.querySelector("#fila-" + id_ticket + " .badge").className = "badge badge-resuelto";
                     document.querySelector("#fila-" + id_ticket + " .badge").textContent = "Cerrado";
 
@@ -751,19 +743,19 @@ function cerrarTicket(id_ticket) {
         xmlhttp.send(params);
     });
 }
+
+// Valida el título y envía el nuevo título del tema al servidor usando fetch; redirige al listado tras editar
 function Modificartema(modificar) {
 
     const titulo = document.getElementById("titulo").value.trim();
     const errorDiv = document.getElementById("errorCampos");
 
-    // Validación cliente
     if (titulo === "" || modificar === "") {
         errorDiv.classList.remove("oculto");
         errorDiv.innerText = "Todos los campos son obligatorios";
         return;
     }
 
-    // Construir FormData para POST
     const formData = new FormData();
     formData.append("titulo", titulo);
     formData.append("modificar", modificar);
@@ -805,6 +797,7 @@ function Modificartema(modificar) {
         });
 }
 
+// Pide confirmación y elimina un tema del foro; si tiene éxito elimina la fila de la tabla sin recargar
 function eliminarTema(id_tema) {
     Swal.fire({
         title: 'Eliminar tema',
