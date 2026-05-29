@@ -30,7 +30,7 @@ $categoria = $db->BuscarCat($modificar);
             <!-- nombre -->
             <div class="mb-3">
               <label for="nombre" class="form-label text">Nombre nuevo de la categoria</label>
-              <input type="text" class="form-control modern-input" id="nombre" value="<?=$categoria["nombre"]?>" placeholder="<?=$categoria["nombre"]?>">
+              <input type="text" class="form-control modern-input" id="nombre" value="<?=$categoria["nombre"]?>">
             </div>
             <div class="alert error-message mt-4 oculto" id="errorNombre"></div>
             <!-- Botón Crear Cat -->

@@ -17,7 +17,7 @@ $usuario=$db->BuscarUsuario($id);
             <!-- Nombre de usuario -->
             <div class="mb-3">
               <label for="username" class="form-label text">Nombre de usuario</label>
-              <input type="text" class="form-control modern-input" id="username" value="<?=$usuario["nombre"]?>" placeholder="<?=$usuario["nombre"]?>">
+              <input type="text" class="form-control modern-input" id="username" value="<?=$usuario["nombre"]?>">
             </div>
 
             <div class="alert error-message mt-4 oculto" id="errorUsuario"></div>
@@ -25,7 +25,7 @@ $usuario=$db->BuscarUsuario($id);
             <!-- Email -->
             <div class="mb-3">
               <label for="email" class="form-label text">Correo electrónico</label>
-              <input type="email" class="form-control modern-input" id="email" value="<?=$usuario["email"]?>" placeholder="<?=$usuario["email"]?>">
+              <input type="email" class="form-control modern-input" id="email" value="<?=$usuario["email"]?>">
             </div>
 
             <div class="alert error-message mt-4 oculto" id="errorEmail"></div>
