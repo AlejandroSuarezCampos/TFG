@@ -64,17 +64,17 @@ function registrar() {
     let contrasena2 = document.getElementById("confirm_password").value;
 
     if (nombre == "" || correo == "" || contrasena == "" || contrasena2 == "") {
-        mostrarError("Todos los campos son obligatorios");
+        mostrarErrorRegistro("Todos los campos son obligatorios");
         return;
     }
 
     if (contrasena != contrasena2) {
-        mostrarError("Las contraseñas no coinciden");
+        mostrarErrorRegistro("Las contraseñas no coinciden");
         return;
     }
 
     if (contrasena.length < 8) {
-        mostrarError("La contraseña debe tener al menos 8 caracteres");
+        mostrarErrorRegistro("La contraseña debe tener al menos 8 caracteres");
         return;
     }
 
@@ -125,24 +125,24 @@ function registrar() {
         }
     };
 
-    let url = "./async/registro.php?nombre=" + encodeURIComponent(nombre) + "&correo=" + encodeURIComponent(correo) + "&contrasena=" + encodeURIComponent(contrasena) + "&contrasena2=" + encodeURIComponent(contrasena2);
-    xmlhttp.open("GET", url, true);
-    xmlhttp.send();
+    xmlhttp.open("POST", "./async/registro.php", true);
+    xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xmlhttp.send("nombre=" + encodeURIComponent(nombre) + "&correo=" + encodeURIComponent(correo) + "&contrasena=" + encodeURIComponent(contrasena) + "&contrasena2=" + encodeURIComponent(contrasena2));
 }
 
-function mostrarError(cadena) {
+function mostrarErrorRegistro(cadena) {
     switch (cadena) {
         case "Todos los campos son obligatorios":
             document.getElementById("errorCampos").classList.remove("oculto");
-            document.getElementById("errorCampos").innerText = "Todos los campos son obligatorios";
+            document.getElementById("errorCampos").innerText = cadena;
             break;
         case "Las contraseñas no coinciden":
             document.getElementById("errorContrasena2").classList.remove("oculto");
-            document.getElementById("errorContrasena2").innerText = "Las contraseñas no coinciden";
+            document.getElementById("errorContrasena2").innerText = cadena;
             break;
         case "La contraseña debe tener al menos 8 caracteres":
             document.getElementById("errorContrasena").classList.remove("oculto");
-            document.getElementById("errorContrasena").innerText = "La contraseña debe tener al menos 8 caracteres";
+            document.getElementById("errorContrasena").innerText = cadena;
             break;
     }
 }

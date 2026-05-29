@@ -1,10 +1,10 @@
 <?php
     require_once("../db/conexion.php");
 
-    $nombre=trim($_GET["nombre"]);
-    $correo=trim($_GET["correo"]);
-    $contrasena=trim($_GET["contrasena"]);
-    $contrasena2=trim($_GET["contrasena2"]);
+    $nombre    = trim($_POST["nombre"]);
+    $correo    = trim($_POST["correo"]);
+    $contrasena  = trim($_POST["contrasena"]);
+    $contrasena2 = trim($_POST["contrasena2"]);
 
     $respuesta=[];
 
