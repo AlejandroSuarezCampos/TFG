@@ -5,7 +5,7 @@ $id_ticket = $_GET["id"] ?? null;
 $ticket = $db->obtenerTicket($id_ticket);
 
 $es_propietario = $ticket['id_usuario'] == $_SESSION['usuario_id'];
-$es_admin = $_SESSION["Rol"]== 1;
+$es_admin = isset($_SESSION['Rol']) && in_array($_SESSION['Rol'], [1, 7]);
 
 if (!$es_propietario && !$es_admin) {
     header("location: soporte.php");
