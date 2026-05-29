@@ -536,7 +536,10 @@ input.horas-input {
   background: #22c55e;
   color: black;
 }
-
+.reembolsado{
+  background: orange;
+  color: black;
+}
 .cancelado {
   background: red;
   color: black;
@@ -1330,4 +1333,52 @@ input.horas-input {
   display: flex;
   flex-direction: column;
   gap: 30px;
+}.library-card.locked {
+  filter: grayscale(100%);
+  opacity: 0.45;
+}
+.steam-total-box {
+  margin-top: 20px;
+  padding: 15px 20px;
+
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+
+  display: flex;
+    flex-direction: column;
+
+  justify-content: space-between;
+  align-items: center;
+
+  backdrop-filter: blur(6px);
+
+  max-width: 600px;
+  width: 100%;
+}
+.steam-total-title {
+  font-size: 20px;
+  color: #d1d1d1;
+  font-weight: 500;
+}
+
+.steam-total-title span {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.steam-total-note {
+  font-size: 12px;
+  color: #8a8a8a;
+}
+.carrito-vacio-sub {
+  display: block;
+  margin-top: 6px;
+  font-size: 18px;
+  color: #666;
+}
+.carrito-vacio-texto {
+  display: block;
+  margin-top: 6px;
+  font-size: 25px;
 }
