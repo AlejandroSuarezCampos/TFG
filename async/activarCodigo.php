@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once("../db/conexion.php");
+include_once("../db/conexion.php");
 
 $codigo = trim($_GET['codigo'] ?? '');
 

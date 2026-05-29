@@ -686,27 +686,42 @@ public function crearMensajeTicket($id_usuario, $id_ticket, $mensaje)
 		return $registro;
 	}
 
-	public function activarCodigo($codigo, $id_usuario){
-		$sentencia = "SELECT pi.id_item 
-					FROM pedido_item pi
-					JOIN alquileres a ON a.id_pedido_item = pi.id_item
-					WHERE pi.codigo = :codigo 
-					AND a.id_usuario = :id_usuario
-					LIMIT 1";
-		$ejecucion = $this->pdo->prepare($sentencia);
-		$ejecucion->execute([':codigo' => $codigo, ':id_usuario' => $id_usuario]);
-		$item = $ejecucion->fetch(PDO::FETCH_ASSOC);
+public function activarCodigo($codigo, $id_usuario){
+    $sentencia = "SELECT pi.id_item, pi.id_juego, pi.duracion, pi.id_pedido
+                  FROM pedido_item pi
+                  JOIN pedido p ON p.id_pedido = pi.id_pedido
+                  WHERE pi.codigo    = :codigo 
+                  AND   p.id_usuario = :id_usuario
+                  AND   pi.canjeado  = 0
+                  LIMIT 1
+                  FOR UPDATE";
+    $ejecucion = $this->pdo->prepare($sentencia);
+    $ejecucion->execute([':codigo' => $codigo, ':id_usuario' => $id_usuario]);
+    $item = $ejecucion->fetch(PDO::FETCH_ASSOC);
 
-		if (!$item) {
-			return ['ok' => false, 'error' => 'Código inválido o ya usado.'];
-		}
+    if (!$item) {
+        return ['ok' => false, 'error' => 'Código inválido o ya usado.'];
+    }
 
-		$update = "UPDATE pedido_item SET canjeado = 1 WHERE id_item = :id_item";
-		$ejecucion = $this->pdo->prepare($update);
-		$ejecucion->execute([':id_item' => $item['id_item']]);
+    // Marcar como canjeado
+    $update = "UPDATE pedido_item SET canjeado = 1 WHERE id_item = :id_item";
+    $ejecucion = $this->pdo->prepare($update);
+    $ejecucion->execute([':id_item' => $item['id_item']]);
 
-		return ['ok' => true];
-	}
+    // Crear el alquiler
+    $insert = "INSERT INTO alquileres (id_usuario, id_juego, fecha_inicio, fecha_fin, estado, id_pedido_item, id_pedido)
+               VALUES (:id_usuario, :id_juego, NOW(), DATE_ADD(NOW(), INTERVAL :duracion HOUR), 'activo', :id_item, :id_pedido)";
+    $ejecucion = $this->pdo->prepare($insert);
+    $ejecucion->execute([
+        ':id_usuario' => $id_usuario,
+        ':id_juego'   => $item['id_juego'],
+        ':duracion'   => $item['duracion'],
+        ':id_item'    => $item['id_item'],
+        ':id_pedido'  => $item['id_pedido']
+    ]);
+
+    return ['ok' => true];
+}
 
 	public function filtrarJuegos($texto = "", $categoria = "", $precio = ""){
 		$condiciones = [];
