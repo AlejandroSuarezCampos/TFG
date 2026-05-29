@@ -26,7 +26,7 @@
             $respuesta=[
                 "exito"=>false,
                 "error"=>"Usaurio_existe",
-                "mensaje"=>"El usuario ya está registrado"
+                "mensaje"=>"El correo ya está registrado"
             ];
         }else{
             $db->registrarUsuario($nombre, $correo, $contrasena);

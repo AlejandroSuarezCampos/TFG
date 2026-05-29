@@ -11,7 +11,7 @@
     //Validaciones básicas
     if ($modificar==NULL){
         header("Location: ../cuerpos/categorias.php");
-    }else if($nombre=="" || $email=="" || $pass=="" || $modificar==""){
+    }else if($nombre=="" || $email==""|| $modificar==""){
         $respuesta=[
             "exito"=>false,
             "error"=>"campos_vacios",

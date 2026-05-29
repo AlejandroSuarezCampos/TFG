@@ -262,6 +262,7 @@ class Tienda
 
 	public function modificarUsu($modificar, $nombre, $email, $contraseña)
 	{
+		if ($contraseña !==""){
 		$sentencia = "UPDATE usuarios SET nombre=:nombre,email=:email,password=:pass WHERE id_usuario=:id_usu";
 		$ejecucion = $this->pdo->prepare($sentencia);
 		$ejecucion->execute(
@@ -272,6 +273,17 @@ class Tienda
 				":id_usu" => $modificar
 			)
 		);
+		}else{
+		$sentencia = "UPDATE usuarios SET nombre=:nombre,email=:email WHERE id_usuario=:id_usu";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute(
+			array(
+				":nombre" => $nombre,
+				":email" => $email,
+				":id_usu" => $modificar
+			)
+		);
+		}
 	}
 	public function comprobarJuegoExiste($titulo)
 	{

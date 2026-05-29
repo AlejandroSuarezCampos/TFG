@@ -43,6 +43,8 @@ $usuario=$db->BuscarUsuario($id);
 
             <!-- Botón De editar Usuario -->
             <button type="button" class="btn btn-steam w-100 py-2 mb-3" onclick="ModificarUsu(<?=$id?>)">Editar Usuario</button>
+            <a href="../cuerpos/usuarios.php"><button type="button"
+                                class="btn btn-steam w-100 py-2 mb-3">Volver</button></a>
           </form>
 
           <div class="alert error-message mt-4 oculto" id="errorCampos"></div>

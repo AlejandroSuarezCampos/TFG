@@ -35,6 +35,8 @@ $categoria = $db->BuscarCat($modificar);
             <div class="alert error-message mt-4 oculto" id="errorNombre"></div>
             <!-- Botón Crear Cat -->
             <button type="button" class="btn btn-steam w-100 py-2 mb-3" onclick="ModificarCat(<?=$modificar?>)">Editar</button>
+            <a href="../cuerpos/categorias.php"><button type="button"
+                                class="btn btn-steam w-100 py-2 mb-3">Volver</button></a>
           </form>
 
           <!-- Mensaje de error -->

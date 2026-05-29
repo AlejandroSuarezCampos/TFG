@@ -174,14 +174,13 @@ function crearUsu() {
         if (this.readyState == 4 && this.status == 200) {
             let respuesta = JSON.parse(this.responseText);
             if (respuesta.exito) {
-                document.getElementById("errorCampos").innerText = respuesta.mensaje;
-                document.getElementById("errorCampos").classList.remove("oculto");
-                document.getElementById("errorCampos").innerText = "¡Creacion completada con exito!";
-                document.getElementById("errorCampos").style.color = "#66c0f4";
-
-                document.getElementById("username").value = "";
-                document.getElementById("email").value = "";
-                document.getElementById("password").value = "";
+                    let msgExito = document.getElementById("errorCampos");
+                    
+                    msgExito.classList.remove("oculto");
+                    msgExito.innerText = "¡Registro completado! Redirigiendo...";
+                    msgExito.style.color = "#66c0f4";
+                    msgExito.style.backgroundColor = "#1b5e8c";
+                    msgExito.style.borderColor = "#66c0f4";
 
             } else {
                 switch (respuesta.error) {
@@ -358,7 +357,7 @@ function ModificarUsu(modificar) {
     let Usuario = document.getElementById("username").value.trim();
     let email = document.getElementById("email").value.trim();
     let pass = document.getElementById("password").value.trim();
-    if (Usuario == "" || email == "" || pass == "" || modificar == "") {
+    if (Usuario == "" || email == "" || modificar == "") {
         mostrarErrorUsu("campos_vacios", "Todos los campos son obligatorios");
         return;
     }
@@ -402,7 +401,7 @@ function ModificarUsu(modificar) {
             }
         }
     };
-    let url = "../async/Editar_Usuario.php?modificar=" + encodeURIComponent(modificar) + "&nombre=" + encodeURIComponent(Usuario) + "&email=" + encodeURIComponent(email) + "&contraseña=" + encodeURIComponent(pass);
+    let url = "../async/editar_Usuario.php?modificar=" + encodeURIComponent(modificar) + "&nombre=" + encodeURIComponent(Usuario) + "&email=" + encodeURIComponent(email) + "&contraseña=" + encodeURIComponent(pass);
 
     xmlhttp.open("GET", url, true);
     xmlhttp.send();

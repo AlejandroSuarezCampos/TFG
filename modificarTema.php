@@ -32,7 +32,8 @@ $tema=$db->BuscarTemaModificar($modificar);
             onclick="Modificartema(<?= $modificar ?>)">
             Editar
           </button>
-
+          <a href="foro.php"><button type="button"
+                                class="btn btn-steam w-100 py-2 mb-3">Volver</button></a>
           <div class="alert error-message mt-4 oculto" id="errorCampos"></div>
 
         </div>
