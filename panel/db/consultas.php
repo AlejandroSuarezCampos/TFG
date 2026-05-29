@@ -393,33 +393,33 @@ class Tienda
 		return $resultado;
 	}
 	public function listarTickets()
-{
-    $sentencia = "SELECT t.*, u.nombre 
+	{
+		$sentencia = "SELECT t.*, u.nombre 
                   FROM tickets t
                   JOIN usuarios u ON t.id_usuario = u.id_usuario
                   ORDER BY t.fecha DESC";
 
-    $ejecucion = $this->pdo->prepare($sentencia);
-    $ejecucion->execute();
-    return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
-}
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute();
+		return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
+	}
 
-public function cerrarTicket($id_ticket)
-{
-    $sentencia = "UPDATE tickets SET estado = 'cerrado' WHERE id_ticket = :id_ticket";
+	public function cerrarTicket($id_ticket)
+	{
+		$sentencia = "UPDATE tickets SET estado = 'cerrado' WHERE id_ticket = :id_ticket";
 
-    $ejecucion = $this->pdo->prepare($sentencia);
-    $ejecucion->execute([":id_ticket" => $id_ticket]);
-}	
-public function listarTemas()
-{
-    $sentencia = "SELECT * FROM temas";
-    $ejecucion = $this->pdo->prepare($sentencia);
-    $ejecucion->execute();
-    return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
-}
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute([":id_ticket" => $id_ticket]);
+	}
+	public function listarTemas()
+	{
+		$sentencia = "SELECT * FROM temas";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute();
+		return $ejecucion->fetchAll(PDO::FETCH_ASSOC);
+	}
 
-public function eliminarTema($id)
+	public function eliminarTema($id)
 	{
 		$sentencia = "DELETE FROM temas WHERE id_tema=:id";
 		$ejecucion = $this->pdo->prepare($sentencia);
@@ -440,5 +440,18 @@ public function eliminarTema($id)
 		);
 	}
 
-}	
+	public function pedidoYacanjeado($id)
+	{
+		$sentencia = "SELECT COUNT(*) as numero from alquileres where id_pedido=:id";
+		$ejecucion = $this->pdo->prepare($sentencia);
+		$ejecucion->execute(
+			array(
+				":id"=>$id
+			)
+		);
+		$resultado= $ejecucion->fetch(PDO::FETCH_ASSOC);
+		return $resultado["numero"];
+	}
+
+}
 ?>
