@@ -602,7 +602,7 @@ class Tienda
 		$resultado = $ejecucion->fetch(PDO::FETCH_ASSOC);
 		return $resultado['nombre_fichero'];
 	}
-
+   //Función mejorada para generar exactamente 16 digitos alfanuméricos
 	public function generarCodigoFactura($longitud = 16)
 	{ 
 			return strtoupper(
