@@ -909,7 +909,8 @@ function filtrar() {
             }
         }
     };
-    
+    xmlhttp.open("GET", "./async/filtrar.php?texto=" + encodeURIComponent(texto) + "&categoria=" + categoria + "&precio=" + precio, true);
+    xmlhttp.send();
 }
     
   
