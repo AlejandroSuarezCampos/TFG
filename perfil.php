@@ -12,7 +12,7 @@ $estadisticas = $db->totalEstadisticasUsuario($_SESSION['usuario_id']);
 $logros       = $db->obtenerLogrosUsuario($_SESSION['usuario_id']);
 ?>
 
-<div class="container-fluid p-0">
+<div class="container-fluid p-0 flex-grow-1">
 
   <!-- =========================
        BANNER PERFIL

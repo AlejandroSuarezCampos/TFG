@@ -9,7 +9,7 @@ if (!isset($_SESSION['usuario_id'])) {
 $tickets = $db->listarTicketsUsuario($_SESSION['usuario_id']);
 ?>
 
-<div class="container py-4">
+<div class="container py-4 flex-grow-1">
 
   <!-- CABECERA -->
   <div class="d-flex justify-content-between align-items-center mb-4">

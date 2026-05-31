@@ -4,7 +4,7 @@ include_once("cabecera.php");
 $posts = $db->listarTemas();
 ?>
 
-<div class="container py-4">
+<div class="container py-4 flex-grow-1">
 
   <!-- CABECERA -->
   <div class="d-flex justify-content-between align-items-center mb-4">

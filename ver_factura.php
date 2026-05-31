@@ -14,7 +14,7 @@ if(!$factura){
     die("Acceso denegado");
 }
 $archivo = __DIR__ . "/facturas/" . $factura;
-/* 🔥 comprobar que existe */
+/*comprobar que existe */
 if(!file_exists($archivo)){
     die("Factura no encontrada");
 }
