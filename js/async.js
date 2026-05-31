@@ -343,9 +343,9 @@ function calcularTotal() {
 function validarHoras(valor) {
     valor = parseInt(valor);
 
-    if (isNaN(valor)) return MIN_HORAS;
-    if (valor < MIN_HORAS) return MIN_HORAS;
-    if (valor > MAX_HORAS) return MAX_HORAS;
+    if (isNaN(valor)) return 0;
+    if (valor < 0) return 0;
+    if (valor > 100) return 100;
 
     return valor;
 }
